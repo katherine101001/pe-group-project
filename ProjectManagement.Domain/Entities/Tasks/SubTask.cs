@@ -14,14 +14,14 @@ namespace ProjectManagement.Domain.Entities.Tasks
         public ProjectTask ProjectTask { get; set; } = null!; // Navigation to ProjectTask
 
 
-        public Guid AssignTo { get; set; }
-        public User User { get; set; } = null!;
+        public Guid? AssignTo { get; set; }
+        public User? User { get; set; }
 
-        public string Title { get; set; } = null!;
-        public DateTime DueDate { get; set; }
-        public string Status { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string? Title { get; set; }
+        public DateTime? DueDate { get; set; }
+        public string? Status { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
         public ICollection<SubTask> Tasks { get; set; } = new List<SubTask>();

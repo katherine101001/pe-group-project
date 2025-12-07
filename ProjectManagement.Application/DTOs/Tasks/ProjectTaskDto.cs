@@ -1,6 +1,6 @@
 namespace ProjectManagement.Application.DTOs.Tasks
 {
-    public class TaskDto
+    public class ProjectTaskDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = null!;

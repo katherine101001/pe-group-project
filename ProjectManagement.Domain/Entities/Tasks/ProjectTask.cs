@@ -15,16 +15,16 @@ namespace ProjectManagement.Domain.Entities.Tasks
         public Project Project { get; set; } = null!; // Navigation to Project
 
 
-        public Guid AssignTo { get; set; }
-        public User User { get; set; } = null!;
+        public Guid? AssignTo { get; set; }
+        public User? User { get; set; }
 
-        public string Title { get; set; } = null!;    // Goal title
-        public string Description { get; set; } = ""; // Optional description
-        public DateTime DueDate { get; set; }        // Goal deadline
-        public string Status { get; set; } = null!;
-        public string Priority { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string? Title { get; set; }    // Goal title
+        public string? Description { get; set; } = ""; // Optional description
+        public DateTime? DueDate { get; set; }        // Goal deadline
+        public string? Status { get; set; }
+        public string? Priority { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
         public ICollection<SubTask> Tasks { get; set; } = new List<SubTask>();

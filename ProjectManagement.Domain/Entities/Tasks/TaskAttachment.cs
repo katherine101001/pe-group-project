@@ -14,13 +14,13 @@ namespace ProjectManagement.Domain.Entities.Tasks
         public ProjectTask ProjectTask { get; set; } = null!; // Navigation to ProjectTask
 
 
-        public Guid UploadedBy { get; set; }
-        public User User { get; set; } = null!;
+        public Guid? UploadedBy { get; set; }
+        public User? User { get; set; }
 
-        public string Filename { get; set; } = null!;
-        public string FileURL { get; set; } = null!;
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public string? Filename { get; set; }
+        public string? FileURL { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
         public ICollection<SubTask> Tasks { get; set; } = new List<SubTask>();

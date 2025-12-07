@@ -1,0 +1,15 @@
+using AutoMapper;
+using ProjectManagement.Domain.Entities.Projects;
+using ProjectManagement.Application.DTOs.Projects;
+
+public class ProjectProfile : Profile
+{
+    public ProjectProfile()
+    {
+        // Entity -> Output DTO
+        //CreateMap<Project, ProjectDto>();
+
+        // Input DTO -> Entity
+        //CreateMap<CreateProjectDto, Project>();
+    }
+}
