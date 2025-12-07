@@ -14,7 +14,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateProject([FromBody] ProjectCreateDto dto)
+    public async Task<IActionResult> CreateProject([FromBody] ProjectDto dto)
     {
         await _projectService.CreateProjectAsync(dto);
         return Ok();
