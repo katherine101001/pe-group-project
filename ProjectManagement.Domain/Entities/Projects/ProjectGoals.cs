@@ -7,7 +7,7 @@ namespace ProjectManagement.Domain.Entities
 {
     public class ProjectGoal
     {
-        public Guid Id { get; set; }                 // Primary key
+        public Guid Id { get; set; } = Guid.NewGuid();               // Primary key
         public Guid ProjectId { get; set; }          // Foreign key
         public Project Project { get; set; } = null!; // Navigation to Project
 

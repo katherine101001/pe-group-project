@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Domain.Entities.Collaborations;
 using ProjectManagement.Infrastructure.Data;
 
@@ -16,30 +16,30 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task AddAsync(Comment comment)
         {
-            await _context.Comments.AddAsync(comment);
+            await _context.Comment.AddAsync(comment);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Comment comment)
         {
-            _context.Comments.Update(comment);
+            _context.Comment.Update(comment);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Comment comment)
         {
-            _context.Comments.Remove(comment);
+            _context.Comment.Remove(comment);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<Comment>> GetAllAsync()
         {
-            return await _context.Comments.ToListAsync();
+            return await _context.Comment.ToListAsync();
         }
 
         public async Task<Comment?> GetByIdAsync(Guid id)
         {
-            return await _context.Comments.FindAsync(id);
+            return await _context.Comment.FindAsync(id);
         }
     }
 }

@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Domain.Entities.Collaborations;
 using ProjectManagement.Infrastructure.Data;
 
@@ -16,30 +16,30 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task AddAsync(Notification notification)
         {
-            await _context.Notifications.AddAsync(notification);
+            await _context.Notification.AddAsync(notification);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Notification notification)
         {
-            _context.Notifications.Update(notification);
+            _context.Notification.Update(notification);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(Notification notification)
         {
-            _context.Notifications.Remove(notification);
+            _context.Notification.Remove(notification);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<Notification>> GetAllAsync()
         {
-            return await _context.Notifications.ToListAsync();
+            return await _context.Notification.ToListAsync();
         }
 
         public async Task<Notification?> GetByIdAsync(Guid id)
         {
-            return await _context.Notifications.FindAsync(id);
+            return await _context.Notification.FindAsync(id);
         }
     }
 }

@@ -5,6 +5,7 @@ C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.AssemblyInfoInputs.cache
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.AssemblyInfo.cs
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.csproj.CoreCompileInputs.cache
+C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.sourcelink.json
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.dll
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\refint\ProjectManagement.Domain.dll
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Domain\obj\Debug\net9.0\ProjectManagement.Domain.pdb

@@ -1,8 +1,8 @@
 using AutoMapper;
 using ProjectManagement.Application.DTOs.Tasks;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
-using ProjectManagement.Domain.Entities.Tasks;
+using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Shared.Exceptions;
 
 namespace ProjectManagement.Application.Services

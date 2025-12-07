@@ -4,13 +4,13 @@ using System.Data;
 using System.Net.Mail;
 using ProjectManagement.Domain.Entities.Collaborations;
 using ProjectManagement.Domain.Entities.Projects;
-using ProjectManagement.Domain.Entities.Tasks;
+using ProjectManagement.Domain.Entities.ProjectTasks;
 
 namespace ProjectManagement.Domain.Entities.Users
 {
     public class User
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string? Name { get; set; }
         public string Email { get; set; } = null!;
         public string Password { get; set; } = null!;

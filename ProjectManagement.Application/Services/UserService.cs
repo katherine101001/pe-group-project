@@ -1,6 +1,6 @@
 using AutoMapper;
 using ProjectManagement.Application.DTOs.Users;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
 using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Shared.Exceptions;

@@ -4,27 +4,26 @@ using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Domain.Entities.Projects;
 
 
-namespace ProjectManagement.Domain.Entities.Tasks
+namespace ProjectManagement.Domain.Entities.ProjectTasks
 {
-    public class SubTask
+    public class TaskAttachment
     {
-        public Guid Id { get; set; }                 // Primary key
+        public Guid Id { get; set; } = Guid.NewGuid();                // Primary key
 
         public Guid TaskId { get; set; }          // Foreign key
         public ProjectTask ProjectTask { get; set; } = null!; // Navigation to ProjectTask
 
 
-        public Guid? AssignTo { get; set; }
+        public Guid? UploadedBy { get; set; }
         public User? User { get; set; }
 
-        public string? Title { get; set; }
-        public DateTime? DueDate { get; set; }
-        public string? Status { get; set; }
+        public string? Filename { get; set; }
+        public string? FileURL { get; set; }
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
-        public ICollection<SubTask> Tasks { get; set; } = new List<SubTask>();
+        public ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
 
     }
 }

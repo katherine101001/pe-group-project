@@ -1,8 +1,8 @@
 
 using ProjectManagement.Domain.Entities.Collaborations;
-using ProjectManagement.Domain.Entities.Tasks;
+using ProjectManagement.Domain.Entities.ProjectTasks;
 
-namespace ProjectManagement.Application.Interfaces.Repositories
+namespace ProjectManagement.Domain.Interfaces.Repositories
 {
     public interface ICommentRepository
     {

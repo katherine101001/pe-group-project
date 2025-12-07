@@ -1,6 +1,6 @@
 using ProjectManagement.Domain.Entities.Users;
 
-namespace ProjectManagement.Application.Interfaces.Repositories
+namespace ProjectManagement.Domain.Interfaces.Repositories
 {
     public interface IUserRepository
     {

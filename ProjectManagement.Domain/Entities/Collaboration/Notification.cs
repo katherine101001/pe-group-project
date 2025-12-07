@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ProjectManagement.Domain.Entities.Tasks;
+using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Domain.Entities.Projects;
 
@@ -8,8 +8,8 @@ namespace ProjectManagement.Domain.Entities.Collaborations
 {
     public class Notification
     {
-        public Guid Id { get; set; }
-        public int UserId { get; set; }
+        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid UserId { get; set; }
         public User User { get; set; } = null!;
 
         public string? Content { get; set; }
@@ -19,7 +19,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
 
         // Nullable FKs for polymorphic references
         public Guid? TaskId { get; set; }
-        public Task? Task { get; set; }
+        public ProjectTask? ProjectTask { get; set; }
 
         public Guid? CommentId { get; set; }
         public Comment? Comment { get; set; }

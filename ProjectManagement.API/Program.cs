@@ -1,11 +1,14 @@
 using Microsoft.OpenApi.Models;
-
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Application.Mapping;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
 using ProjectManagement.Application.Services;
 using ProjectManagement.Infrastructure.Data;
 using ProjectManagement.Infrastructure.Repositories;
+using AutoMapper;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +32,15 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(
+    typeof(Program),
+ typeof(ProjectProfile),
+  typeof(CollaborationProfile),
+   typeof(ProjectTaskProfile),
+    typeof(UserProfile)
+    );
+
+
 
 // Add controllers
 builder.Services.AddControllers();

@@ -5,11 +5,11 @@ using ProjectManagement.Domain.Entities.Projects;
 using ProjectManagement.Domain.Entities.Collaborations;
 
 
-namespace ProjectManagement.Domain.Entities.Tasks
+namespace ProjectManagement.Domain.Entities.ProjectTasks
 {
     public class ProjectTask
     {
-        public Guid Id { get; set; }                 // Primary key
+        public Guid Id { get; set; } = Guid.NewGuid();                // Primary key
 
         public Guid ProjectId { get; set; }          // Foreign key
         public Project Project { get; set; } = null!; // Navigation to Project
@@ -27,7 +27,7 @@ namespace ProjectManagement.Domain.Entities.Tasks
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
 
-        public ICollection<SubTask> Tasks { get; set; } = new List<SubTask>();
+        public ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();
         public ICollection<TaskAttachment> Attachments { get; set; } = new List<TaskAttachment>();
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Application.Interfaces.Repositories;
-using ProjectManagement.Domain.Entities.Tasks;
+using ProjectManagement.Domain.Interfaces.Repositories;
+using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Infrastructure.Data;
 
 namespace ProjectManagement.Infrastructure.Repositories
@@ -16,30 +16,30 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task AddAsync(ProjectTask projectTask)
         {
-            await _context.ProjectTasks.AddAsync(projectTask);
+            await _context.ProjectTask.AddAsync(projectTask);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(ProjectTask projectTask)
         {
-            _context.ProjectTasks.Update(projectTask);
+            _context.ProjectTask.Update(projectTask);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(ProjectTask projectTask)
         {
-            _context.ProjectTasks.Remove(projectTask);
+            _context.ProjectTask.Remove(projectTask);
             await _context.SaveChangesAsync();
         }
 
         public async Task<List<ProjectTask>> GetAllAsync()
         {
-            return await _context.ProjectTasks.ToListAsync();
+            return await _context.ProjectTask.ToListAsync();
         }
 
         public async Task<ProjectTask?> GetByIdAsync(Guid id)
         {
-            return await _context.ProjectTasks.FindAsync(id);
+            return await _context.ProjectTask.FindAsync(id);
         }
     }
 }

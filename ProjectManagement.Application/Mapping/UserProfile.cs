@@ -2,15 +2,18 @@ using AutoMapper;
 using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Application.DTOs.Users;
 
-public class UserProfile : Profile
+namespace ProjectManagement.Application.Mapping
 {
-    public UserProfile()
+    public class UserProfile : Profile
     {
-        // Entity -> Output DTO
-        CreateMap<User, UserDto>();
+        public UserProfile()
+        {
+            // Entity -> Output DTO
+            CreateMap<User, UserDto>();
 
-        // Input DTO -> Entity
-        CreateMap<CreateUserDto, User>();
-        //CreateMap<UpdateUserDto, User>();
+            // Input DTO -> Entity
+            CreateMap<CreateUserDto, User>();
+            //CreateMap<UpdateUserDto, User>();
+        }
     }
 }

@@ -1,6 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Infrastructure.Data;
 
@@ -13,24 +13,24 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task AddAsync(User user)
         {
-            await _context.Users.AddAsync(user);
+            await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(User user)
         {
-            _context.Users.Update(user);
+            _context.User.Update(user);
             await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(User user)
         {
-            _context.Users.Remove(user);
+            _context.User.Remove(user);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<User>> GetAllAsync() => await _context.Users.ToListAsync();
-        public async Task<User?> GetByIdAsync(Guid id) => await _context.Users.FindAsync(id);
+        public async Task<List<User>> GetAllAsync() => await _context.User.ToListAsync();
+        public async Task<User?> GetByIdAsync(Guid id) => await _context.User.FindAsync(id);
         // public async Task<User?> GetByEmailAsync(string email)
         // {
         //     return await _context.Users

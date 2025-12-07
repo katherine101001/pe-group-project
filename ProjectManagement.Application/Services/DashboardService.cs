@@ -1,6 +1,6 @@
 using AutoMapper;
 using ProjectManagement.Application.DTOs.Dashboard;
-using ProjectManagement.Application.Interfaces.Repositories;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
 
 namespace ProjectManagement.Application.Services

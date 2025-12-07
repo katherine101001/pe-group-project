@@ -2,14 +2,18 @@ using AutoMapper;
 using ProjectManagement.Domain.Entities.Collaborations;
 using ProjectManagement.Application.DTOs.Collaboration;
 
-public class CollaborationProfile : Profile
+namespace ProjectManagement.Application.Mapping
 {
-    public CollaborationProfile()
+    public class CollaborationProfile : Profile
     {
-        // Entity -> Output DTO
-        //CreateMap<Comment, CommentDto>();
+        public CollaborationProfile()
+        {
+            // Entity -> Output DTO
+            //CreateMap<Comment, CommentDto>();
 
-        // Input DTO -> Entity
-        //CreateMap<CreateCommentDto, Comment>();
+            // Input DTO -> Entity
+            //CreateMap<CreateCommentDto, Comment>();
+        }
     }
 }
+

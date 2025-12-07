@@ -5,6 +5,7 @@ C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.AssemblyInfoInputs.cache
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.AssemblyInfo.cs
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.csproj.CoreCompileInputs.cache
+C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.sourcelink.json
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.dll
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\refint\ProjectManagement.Shared.dll
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.Shared\obj\Debug\net9.0\ProjectManagement.Shared.pdb
