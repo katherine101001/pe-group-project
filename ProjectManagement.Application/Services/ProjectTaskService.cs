@@ -18,10 +18,14 @@ namespace ProjectManagement.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ProjectTaskDto> CreateProjectTaskAsync(ProjectTaskDto dto)
+        public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateTaskDto dto)
         {
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
+
+            task.Id = Guide.NewGuid();
+            task.CreatedAt = DateTime.UtcNow;
+            task.UpdatedAt = DateTime.UtcNow;//update
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
