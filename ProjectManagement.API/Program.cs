@@ -1,3 +1,5 @@
+using Microsoft.OpenApi.Models;
+
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Application.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
@@ -34,14 +36,26 @@ builder.Services.AddControllers();
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "ProjectManagement API",
+        Version = "v1",
+        Description = "API for Project Management System"
+    });
+});
+
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "ProjectManagement API v1");
+    });
 }
 
 app.UseHttpsRedirection();
