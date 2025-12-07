@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj": {}
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.API\\ProjectManagement.API.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj": {
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.API\\ProjectManagement.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
+        "projectUniqueName": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.API\\ProjectManagement.API.csproj",
         "projectName": "ProjectManagement.API",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\obj\\",
+        "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.API\\ProjectManagement.API.csproj",
+        "packagesPath": "C:\\Users\\jians\\.nuget\\packages\\",
+        "outputPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.API\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jians\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -26,14 +26,14 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
               },
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj"
               },
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
               }
             }
           }
@@ -78,21 +78,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
+        "projectUniqueName": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
         "projectName": "ProjectManagement.Application",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\obj\\",
+        "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj",
+        "packagesPath": "C:\\Users\\jians\\.nuget\\packages\\",
+        "outputPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jians\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -104,11 +104,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
               },
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
               }
             }
           }
@@ -154,21 +154,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
+        "projectUniqueName": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
         "projectName": "ProjectManagement.Domain",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\obj\\",
+        "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
+        "packagesPath": "C:\\Users\\jians\\.nuget\\packages\\",
+        "outputPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jians\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -213,21 +213,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
+        "projectUniqueName": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
         "projectName": "ProjectManagement.Infrastructure",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\obj\\",
+        "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
+        "packagesPath": "C:\\Users\\jians\\.nuget\\packages\\",
+        "outputPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jians\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -239,11 +239,11 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Application\\ProjectManagement.Application.csproj"
               },
-              "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
-                "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
               }
             }
           }
@@ -289,21 +289,21 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
+    "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj",
+        "projectUniqueName": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj",
         "projectName": "ProjectManagement.Shared",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Shared\\obj\\",
+        "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj",
+        "packagesPath": "C:\\Users\\jians\\.nuget\\packages\\",
+        "outputPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\jians\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -348,7 +348,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

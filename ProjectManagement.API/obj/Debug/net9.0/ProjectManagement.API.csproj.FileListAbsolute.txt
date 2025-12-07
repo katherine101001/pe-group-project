@@ -166,3 +166,6 @@ C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\ne
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.pdb
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.genruntimeconfig.cache
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ref\ProjectManagement.API.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\refint\ProjectManagement.API.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.pdb

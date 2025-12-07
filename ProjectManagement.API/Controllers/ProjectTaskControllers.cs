@@ -15,10 +15,7 @@ namespace ProjectManagement.API.Controllers
             _taskService = taskService;
         }
 
-        // ===========================
-        // 创建任务
-        // POST: /api/tasks
-        // ===========================
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTaskDto dto)
         {
@@ -31,10 +28,6 @@ namespace ProjectManagement.API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = task.Id }, task);
         }
 
-        // ===========================
-        // 根据 ID 获取任务（供 CreatedAtAction 返回用）
-        // GET: /api/tasks/{id}
-        // ===========================
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
