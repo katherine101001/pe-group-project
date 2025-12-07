@@ -14,7 +14,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Add repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
-builder.Services.AddScoped<ITaskRepository, ProjectTaskRepository>();
+builder.Services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
 
