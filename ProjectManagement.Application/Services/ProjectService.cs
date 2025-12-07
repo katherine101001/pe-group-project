@@ -10,30 +10,58 @@ namespace ProjectManagement.Application.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ProjectService(IProjectRepository projectRepository, IMapper mapper)
+        public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, IMapper mapper)
         {
             _projectRepository = projectRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task CreateProjectAsync(ProjectDto dto)
+        public async Task CreateProjectAsync(CreateProjectDto dto)
         {
-            var project = _mapper.Map<Project>(dto); // Handle team lead 
+            var project = _mapper.Map<Project>(dto);
+
+            // Assign team lead
             if (dto.TeamLeadId.HasValue)
             {
                 var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
                 if (lead == null)
                     throw new NotFoundException("Team lead not found");
                 project.Leader = lead;
-            } // Handle team members 
+            }
+
+            //Assign team members
             foreach (var memberId in dto.TeamMemberIds)
             {
                 var user = await _userRepository.GetByIdAsync(memberId);
                 if (user != null)
-                { project.ProjectMembers.Add(new ProjectMember { Project = project, User = user }); }
-            } // Save project await _projectRepository.AddAsync(project);
+                {
+                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
+                }
+                else
+                {
+                    throw new NotFoundException($"User with ID {memberId} not found");
+                }
+            }
+
+            foreach (var memberId in dto.TeamMemberIds) // Guid list from dropdown
+            {
+                var user = await _userRepository.GetByIdAsync(memberId);
+                if (user != null)
+                {
+                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
+                }
+                else
+                {
+                    throw new NotFoundException($"User with ID {memberId} not found");
+                }
+            }
+
+            // Save project
+            await _projectRepository.AddAsync(project);
         }
 
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid id)

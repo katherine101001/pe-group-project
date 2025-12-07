@@ -7,11 +7,11 @@ namespace ProjectManagement.Domain.Entities.Projects
     public class ProjectMember
     {
         // Foreign key to Project
-        public int? ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
         public Project? Project { get; set; }  // Navigation property
 
         // Foreign key to User
-        public int? UserId { get; set; }
+        public Guid? UserId { get; set; }
         public User? User { get; set; }        // Navigation property
 
         // Optional: additional info for membership
