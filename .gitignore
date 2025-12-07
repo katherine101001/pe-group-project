@@ -1,9 +1,29 @@
 # Backend (.NET)
-backend/bin/
-backend/obj/
-backend/*.user
-backend/*.vs
-backend/*.suo
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code / VS
+.vscode/
+.vs/
+
+# Build output
+**/bin/
+**/obj/
+
+# NuGet packages
+*.nupkg
+packages/
+
+# Logs
+*.log
+
+# Environment files
+*.env
+
 
 # Frontend (React)
 frontend/node_modules/

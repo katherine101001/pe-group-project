@@ -1,5 +1,6 @@
 
 using ProjectManagement.Domain.Entities.Collaborations;
+using ProjectManagement.Domain.Entities.Tasks;
 
 namespace ProjectManagement.Application.Interfaces.Repositories
 {

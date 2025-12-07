@@ -15,7 +15,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
         public Guid MentionedUserId { get; set; }          // Foreign key
         public User User { get; set; } = null!; // Navigation to User
 
-        public bool Read { get; set; }
+        public bool? Read { get; set; }
 
 
     }

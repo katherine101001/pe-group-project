@@ -12,8 +12,8 @@ namespace ProjectManagement.Domain.Entities.Collaborations
         public int UserId { get; set; }
         public User User { get; set; } = null!;
 
-        public string Content { get; set; } = null!;
-        public bool IsRead { get; set; } = false;
+        public string? Content { get; set; }
+        public bool? IsRead { get; set; } = false;
 
 
 
@@ -29,7 +29,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
 
 
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }
