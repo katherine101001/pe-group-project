@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "DH4hcuYzUnE=",
-  "success": true,
+  "dgSpecHash": "QZ2IIgA+fFs=",
+  "success": false,
   "projectFilePath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\kathe\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
@@ -79,6 +79,17 @@
       "warningLevel": 1,
       "filePath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
       "libraryId": "Swashbuckle.AspNetCore",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "Warning As Error: Detected package downgrade: AutoMapper from 16.0.0 to 12.0.1. Reference the package directly from the project to select a different version. \r\n ProjectManagement.API -> ProjectManagement.Application -> AutoMapper (>= 16.0.0) \r\n ProjectManagement.API -> AutoMapper (>= 12.0.1)",
+      "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
+      "filePath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.API\\ProjectManagement.API.csproj",
+      "libraryId": "AutoMapper",
       "targetGraphs": [
         "net9.0"
       ]

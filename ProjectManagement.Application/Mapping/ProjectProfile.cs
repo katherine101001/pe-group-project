@@ -10,6 +10,6 @@ public class ProjectProfile : Profile
         //CreateMap<Project, ProjectDto>();
 
         // Input DTO -> Entity
-        //CreateMap<CreateProjectDto, Project>();
+        CreateMap<CreateProjectDto, Project>();
     }
 }

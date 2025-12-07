@@ -4,7 +4,7 @@ namespace ProjectManagement.Application.Interfaces.Services
 {
     public interface IProjectService
     {
-        Task<ProjectDto> CreateProjectAsync(ProjectDto dto);
+        Task CreateProjectAsync(CreateProjectDto dto);
         Task<ProjectDto?> GetProjectByIdAsync(Guid id);
         Task<List<ProjectDto>> GetAllProjectsAsync();
         Task UpdateProjectAsync(Guid id, ProjectDto dto);

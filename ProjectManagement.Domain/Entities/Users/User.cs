@@ -23,7 +23,8 @@ namespace ProjectManagement.Domain.Entities.Users
         // Navigation property for roles
         public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
         // Navigation property for projects if needed
-        public ICollection<Project> Projects { get; set; } = new List<Project>();
+        public ICollection<Project> LeadingProjects { get; set; } = new List<Project>();
+
         public ICollection<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();
         public ICollection<ProjectTask> ProjectTasks { get; set; } = new List<ProjectTask>();
         public ICollection<SubTask> SubTasks { get; set; } = new List<SubTask>();

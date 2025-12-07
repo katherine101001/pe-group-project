@@ -1131,7 +1131,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
-          "AutoMapper": "12.0.1",
+          "AutoMapper": "16.0.0",
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "12.0.1",
           "ProjectManagement.Domain": "1.0.0",
           "ProjectManagement.Shared": "1.0.0"
@@ -3487,6 +3487,15 @@
       "warningLevel": 1,
       "message": "ProjectManagement.API depends on Swashbuckle.AspNetCore (>= 6.6.0) but Swashbuckle.AspNetCore 6.6.0 was not found. Swashbuckle.AspNetCore 6.6.1 was resolved instead.",
       "libraryId": "Swashbuckle.AspNetCore",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    },
+    {
+      "code": "NU1605",
+      "level": "Error",
+      "message": "Warning As Error: Detected package downgrade: AutoMapper from 16.0.0 to 12.0.1. Reference the package directly from the project to select a different version. \r\n ProjectManagement.API -> ProjectManagement.Application -> AutoMapper (>= 16.0.0) \r\n ProjectManagement.API -> AutoMapper (>= 12.0.1)",
+      "libraryId": "AutoMapper",
       "targetGraphs": [
         "net9.0"
       ]

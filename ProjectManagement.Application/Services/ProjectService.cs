@@ -18,16 +18,22 @@ namespace ProjectManagement.Application.Services
             _mapper = mapper;
         }
 
-        public async Task<ProjectDto> CreateProjectAsync(ProjectDto dto)
+        public async Task CreateProjectAsync(ProjectDto dto)
         {
-            // Map DTO -> Entity
-            var project = _mapper.Map<Project>(dto);
-
-            // Save entity
-            await _projectRepository.AddAsync(project);
-
-            // Map Entity -> DTO
-            return _mapper.Map<ProjectDto>(project);
+            var project = _mapper.Map<Project>(dto); // Handle team lead 
+            if (dto.TeamLeadId.HasValue)
+            {
+                var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
+                if (lead == null)
+                    throw new NotFoundException("Team lead not found");
+                project.Leader = lead;
+            } // Handle team members 
+            foreach (var memberId in dto.TeamMemberIds)
+            {
+                var user = await _userRepository.GetByIdAsync(memberId);
+                if (user != null)
+                { project.ProjectMembers.Add(new ProjectMember { Project = project, User = user }); }
+            } // Save project await _projectRepository.AddAsync(project);
         }
 
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid id)
