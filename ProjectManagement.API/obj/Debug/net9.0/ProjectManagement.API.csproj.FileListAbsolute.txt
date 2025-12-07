@@ -92,15 +92,6 @@ C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\ne
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.pdb
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.genruntimeconfig.cache
 C:\Users\kathe\Documents\SWE310\Group Project\ProjectManagement.API\obj\Debug\net9.0\ref\ProjectManagement.API.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.csproj.AssemblyReference.cache
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\rpswa.dswa.cache.json
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.GeneratedMSBuildEditorConfig.editorconfig
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.AssemblyInfoInputs.cache
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.AssemblyInfo.cs
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.csproj.CoreCompileInputs.cache
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.MvcApplicationPartsAssemblyInfo.cs
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.MvcApplicationPartsAssemblyInfo.cache
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.sourcelink.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\appsettings.Development.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\appsettings.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\ProjectManagement.API.staticwebassets.endpoints.json
@@ -113,22 +104,16 @@ D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Azure.Core.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Azure.Identity.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Humanizer.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Data.SqlClient.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Abstractions.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
@@ -140,12 +125,12 @@ D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Mono.TextTemplating.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.ClientModel.dll
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.CodeDom.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
-D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.Drawing.Common.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\System.Memory.Data.dll
@@ -173,6 +158,15 @@ D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\ProjectManagement.Infrastructure.pdb
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\ProjectManagement.Shared.pdb
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\bin\Debug\net9.0\ProjectManagement.Domain.pdb
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.csproj.AssemblyReference.cache
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\rpswa.dswa.cache.json
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.GeneratedMSBuildEditorConfig.editorconfig
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.AssemblyInfoInputs.cache
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.AssemblyInfo.cs
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.csproj.CoreCompileInputs.cache
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.MvcApplicationPartsAssemblyInfo.cs
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.MvcApplicationPartsAssemblyInfo.cache
+D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\ProjectManagement.API.sourcelink.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\rjimswa.dswa.cache.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
 D:\Net Project\Group Assignment\pe-group-project\ProjectManagement.API\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json

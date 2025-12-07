@@ -70,11 +70,11 @@
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.0, )"
+              "version": "[7.0.11, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.6.0, )"
+              "version": "[6.6.1, )"
             }
           },
           "imports": [
@@ -149,7 +149,7 @@
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
-              "version": "[16.0.0, )"
+              "version": "[12.0.1, )"
             },
             "AutoMapper.Extensions.Microsoft.DependencyInjection": {
               "target": "Package",
@@ -197,7 +197,11 @@
         "frameworks": {
           "net9.0": {
             "targetAlias": "net9.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -215,6 +219,16 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -262,6 +276,9 @@
               },
               "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
                 "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
+              },
+              "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj": {
+                "projectPath": "D:\\Net Project\\Group Assignment\\pe-group-project\\ProjectManagement.Shared\\ProjectManagement.Shared.csproj"
               }
             }
           }
@@ -282,13 +299,27 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "AutoMapper": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[12.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[7.0.11, )"
+            },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[9.0.4, )"
+              "version": "[7.0.11, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.4, )"
+              "version": "[7.0.11, )"
             }
           },
           "imports": [
