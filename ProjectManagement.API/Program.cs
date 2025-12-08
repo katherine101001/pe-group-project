@@ -22,6 +22,9 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<INotificationRepository, NotificationRepository>();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+
 
 // Add services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -32,6 +35,9 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // Add AutoMapper
+builder.Services.AddAutoMapper(typeof(InvitationMappingProfile));
+builder.Services.AddAutoMapper(typeof(TeamMemberMappingProfile));
+
 builder.Services.AddAutoMapper(
     typeof(Program),
  typeof(ProjectProfile),
