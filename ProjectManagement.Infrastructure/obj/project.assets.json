@@ -5050,19 +5050,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kathe\\.nuget\\packages\\": {}
+    "/Users/jinnysheah/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
+      "projectUniqueName": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj",
       "projectName": "ProjectManagement.Infrastructure",
-      "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\ProjectManagement.Infrastructure.csproj",
-      "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Infrastructure\\obj\\",
+      "projectPath": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Infrastructure/ProjectManagement.Infrastructure.csproj",
+      "packagesPath": "/Users/jinnysheah/.nuget/packages/",
+      "outputPath": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Infrastructure/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "/Users/jinnysheah/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -5074,8 +5074,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
-              "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj"
+            "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj": {
+              "projectPath": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj"
             }
           }
         }
@@ -5133,7 +5133,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

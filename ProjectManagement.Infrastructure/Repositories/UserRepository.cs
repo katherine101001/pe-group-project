@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Domain.Entities.Users;
@@ -30,11 +29,15 @@ namespace ProjectManagement.Infrastructure.Repositories
         }
 
         public async Task<List<User>> GetAllAsync() => await _context.User.ToListAsync();
+
         public async Task<User?> GetByIdAsync(Guid id) => await _context.User.FindAsync(id);
-        // public async Task<User?> GetByEmailAsync(string email)
-        // {
-        //     return await _context.Users
-        //         .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
-        // }
+
+        public async Task<User?> GetByEmailAsync(string email)
+        {
+            return await _context.User
+                .Include(u => u.UserRoles)
+                    .ThenInclude(ur => ur.Role)
+                .FirstOrDefaultAsync(u => u.Email == email);
+        }
     }
 }

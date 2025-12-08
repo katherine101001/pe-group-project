@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {}
+    "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj": {
+    "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
+        "projectUniqueName": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj",
         "projectName": "ProjectManagement.Domain",
-        "projectPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\ProjectManagement.Domain.csproj",
-        "packagesPath": "C:\\Users\\kathe\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\kathe\\Documents\\SWE310\\Group Project\\ProjectManagement.Domain\\obj\\",
+        "projectPath": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/ProjectManagement.Domain.csproj",
+        "packagesPath": "/Users/jinnysheah/.nuget/packages/",
+        "outputPath": "/Users/jinnysheah/Desktop/group-assignment/ProjectManagement.Domain/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\kathe\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/jinnysheah/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -59,7 +59,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.307/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

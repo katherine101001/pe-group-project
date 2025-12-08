@@ -66,5 +66,19 @@ namespace ProjectManagement.Application.Services
 
             await _userRepository.DeleteAsync(existingUser);
         }
+
+        public async Task<UserDto?> AuthenticateAsync(string email, string password)
+        {
+            var user = await _userRepository.GetByEmailAsync(email);
+
+            if (user == null)
+                return null;
+
+            if (user.Password != password)
+                return null;
+
+            return _mapper.Map<UserDto>(user);
+        }
+
     }
 }
