@@ -2,7 +2,7 @@ namespace ProjectManagement.Application.DTOs.Projects
 {
     public class CreateProjectDto
     {
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Status { get; set; } = "PLANNING"; // default
         public string Priority { get; set; } = "MEDIUM";  // default
