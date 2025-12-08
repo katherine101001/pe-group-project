@@ -33,20 +33,6 @@ namespace ProjectManagement.Application.Services
                 project.Leader = lead;
             }
 
-            //Assign team members
-            foreach (var memberId in dto.TeamMemberIds)
-            {
-                var user = await _userRepository.GetByIdAsync(memberId);
-                if (user != null)
-                {
-                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
-                }
-                else
-                {
-                    throw new NotFoundException($"User with ID {memberId} not found");
-                }
-            }
-
             foreach (var memberId in dto.TeamMemberIds) // Guid list from dropdown
             {
                 var user = await _userRepository.GetByIdAsync(memberId);
