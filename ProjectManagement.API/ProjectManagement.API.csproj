@@ -20,7 +20,11 @@
   <ItemGroup>
     <ProjectReference Include="..\ProjectManagement.Application\ProjectManagement.Application.csproj" />
     <ProjectReference Include="..\ProjectManagement.Infrastructure\ProjectManagement.Infrastructure.csproj" />
+<<<<<<< HEAD
     <ProjectReference Include="..\ProjectManagement.Domain\ProjectManagement.Domain.csproj" />
+=======
+    <ProjectReference Include="..\ProjectManagement.Domain\ProjectManagement.Domain.csproj"/>
+>>>>>>> 3197ff62ed453f74201176dbe3ea7a4af1a985a4
     <ProjectReference Include="..\ProjectManagement.Shared\ProjectManagement.Shared.csproj" />
   </ItemGroup>
 
