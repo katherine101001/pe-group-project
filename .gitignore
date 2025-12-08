@@ -6,6 +6,8 @@
 *.userosscache
 *.sln.docstates
 
+ProjectManagement.API/appsettings.json
+
 # VS Code / Visual Studio
 .vscode/
 .vs/
