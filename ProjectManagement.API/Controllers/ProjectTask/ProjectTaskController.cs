@@ -48,4 +48,5 @@ public class ProjectTaskController : ControllerBase
         await _projectTaskService.DeleteProjectTaskAsync(id);
         return NoContent();
     }
+
 }

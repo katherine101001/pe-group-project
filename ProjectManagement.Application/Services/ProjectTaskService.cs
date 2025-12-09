@@ -20,22 +20,38 @@ namespace ProjectManagement.Application.Services
             _mapper = mapper;
         }
 
-        public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
+        // public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
+        // {
+        //     if (dto.AssignTo.HasValue)
+        //     {
+        //         var userExists = await _userRepository.GetByIdAsync(dto.AssignTo.Value);
+        //         if (userExists == null)
+        //         {
+        //             throw new NotFoundException("Assignee user not found.");
+        //         }
+        //     }
+
+        //     // Map DTO -> Entity
+        //     var task = _mapper.Map<ProjectTask>(dto);
+
+        //     // Save entity
+        //     await _projectTaskRepository.AddAsync(task);
+        // }
+
+        public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dto)
         {
             if (dto.AssignTo.HasValue)
             {
                 var userExists = await _userRepository.GetByIdAsync(dto.AssignTo.Value);
                 if (userExists == null)
-                {
                     throw new NotFoundException("Assignee user not found.");
-                }
             }
 
-            // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
-
-            // Save entity
             await _projectTaskRepository.AddAsync(task);
+
+            var createdTask = await _projectTaskRepository.GetByIdAsync(task.Id);
+            return _mapper.Map<ProjectTaskDto>(createdTask!);
         }
 
         public async Task<ProjectTaskDto?> GetProjectTaskByIdAsync(Guid id)
