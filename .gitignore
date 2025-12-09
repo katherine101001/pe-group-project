@@ -1,11 +1,37 @@
 # Backend (.NET)
-backend/bin/
-backend/obj/
-backend/*.user
-backend/*.vs
-backend/*.suo
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
-# Frontend (React)
-frontend/node_modules/
-frontend/build/
-frontend/.env
+ProjectManagement.API/appsettings.json
+
+# VS Code / Visual Studio
+.vscode/
+.vs/
+
+# NuGet packages
+*.nupkg
+packages/
+package-lock.json
+
+/node_modules
+/dist
+/build
+
+.vite/
+dist/
+
+
+# Logs
+*.log
+
+# Environment files
+*.env
+
+ProjectManagement-FrontEnd/node_modules/
+ProjectManagement-FrontEnd/.vite/
+ProjectManagement-FrontEnd/dist/
+ProjectManagement-FrontEnd/build/
