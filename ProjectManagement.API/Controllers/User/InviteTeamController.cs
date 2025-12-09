@@ -17,15 +17,17 @@ public class UserController : ControllerBase
     [HttpPost("update-role")]
     public async Task<IActionResult> UpdateUserRole([FromBody] InviteTeamDto dto)
     {
+        // 验证请求体是否为空或邮箱为空
         if (dto == null || string.IsNullOrEmpty(dto.Email))
             return BadRequest("Email is required");
 
-        
+        // 如果前端没传 Role，则默认设置为 "Member"
         if (string.IsNullOrEmpty(dto.Role))
             dto.Role = "Member";
 
         try
         {
+            // 调用业务逻辑服务，处理邀请或更新角色
             await _userService.InviteUserAsync(dto);
             return Ok(new { Message = "User role updated successfully" });
         }
