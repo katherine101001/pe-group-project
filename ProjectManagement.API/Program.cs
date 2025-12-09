@@ -124,7 +124,6 @@ builder.Services.AddAutoMapper(
 // Add controllers
 builder.Services.AddControllers();
 
-// ===== 添加 CORS 配置 =====
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -147,7 +146,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// ===== 使用 CORS =====
+
 app.UseCors("AllowAll");
 
 // if you want to create/migrate DB automatically
