@@ -13,6 +13,7 @@ public class ProjectsController : ControllerBase
         _projectService = projectService;
     }
 
+    // To create project
     [HttpPost]
     public async Task<IActionResult> CreateProject([FromBody] CreateProjectDto dto)
     {
@@ -28,6 +29,8 @@ public class ProjectsController : ControllerBase
         return Ok(project);
     }
 
+
+    // To get ALL Projects
     [HttpGet]
     public async Task<IActionResult> GetAllProjects()
     {
