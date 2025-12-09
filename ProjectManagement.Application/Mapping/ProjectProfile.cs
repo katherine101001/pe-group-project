@@ -10,6 +10,7 @@ namespace ProjectManagement.Application.Mapping
         {
             // Entity -> Output DTO
             CreateMap<Project, ProjectDto>();
+            CreateMap<Project, ProjectOverviewDto>();
 
             // Input DTO -> Entity
             CreateMap<CreateProjectDto, Project>();

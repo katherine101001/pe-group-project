@@ -20,6 +20,7 @@ namespace ProjectManagement.Application.Services
             _mapper = mapper;
         }
 
+        // Create Project (Add New project)
         public async Task CreateProjectAsync(CreateProjectDto dto)
         {
             var project = _mapper.Map<Project>(dto);
@@ -50,16 +51,31 @@ namespace ProjectManagement.Application.Services
             await _projectRepository.AddAsync(project);
         }
 
-        public async Task<ProjectDto?> GetProjectByIdAsync(Guid id)
+        public async Task<ProjectOverviewDto?> GetProjectByIdAsync(Guid id)
         {
-            var project = await _projectRepository.GetByIdAsync(id);
+            // Fetch project including related tasks and team members
+            var project = await _projectRepository.GetByIdAsync(id, includeTasks: true, includeProjectMembers: true);
 
             if (project == null)
                 return null;
 
-            return _mapper.Map<ProjectDto>(project);
+            // Map to ProjectOverviewDto manually (because we need calculated fields)
+            var overview = new ProjectOverviewDto
+            {
+                Id = project.Id,
+                Title = project.Title,
+                Status = project.Status,
+                TotalTasks = project.ProjectTasks.Count,
+                CompletedTasks = project.ProjectTasks.Count(t => t.Status == "COMPLETED"),
+                InProgressTasks = project.ProjectTasks.Count(t => t.Status == "IN_PROGRESS"),
+                TotalTeamMembers = project.ProjectMembers.Count
+            };
+
+            return overview;
         }
 
+
+        // To display ALL Projects
         public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
             var projects = await _projectRepository.GetAllAsync();
