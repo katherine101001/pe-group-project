@@ -8,8 +8,6 @@ using ProjectManagement.Infrastructure.Data;
 using ProjectManagement.Infrastructure.Repositories;
 using AutoMapper;
 
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add DbContext
@@ -34,16 +32,23 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 // Add AutoMapper
 builder.Services.AddAutoMapper(
     typeof(Program),
- typeof(ProjectProfile),
-  typeof(CollaborationProfile),
-   typeof(ProjectTaskProfile),
+    typeof(ProjectProfile),
+    typeof(CollaborationProfile),
+    typeof(ProjectTaskProfile),
     typeof(UserProfile)
-    );
-
-
+);
 
 // Add controllers
 builder.Services.AddControllers();
+
+// ===== 添加 CORS 配置 =====
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
 
 // Add Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -57,8 +62,16 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated(); // 或 db.Database.Migrate();
+}
+// ===== 使用 CORS =====
+app.UseCors("AllowAll");
+
 
 using (var scope = app.Services.CreateScope())
 {
