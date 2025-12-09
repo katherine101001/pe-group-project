@@ -8,9 +8,9 @@ import { FolderOpenIcon, LayoutDashboardIcon, SettingsIcon, UsersIcon } from 'lu
 const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
     const menuItems = [
-        { name: 'Dashboard', href: '/', icon: LayoutDashboardIcon },
-        { name: 'Projects', href: '/projects', icon: FolderOpenIcon },
-        { name: 'Team', href: '/team', icon: UsersIcon },
+        { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon },
+        { name: 'Projects', href: '/app/projects', icon: FolderOpenIcon },
+        { name: 'Team', href: '/app/team', icon: UsersIcon },
     ]
 
     const sidebarRef = useRef(null);
