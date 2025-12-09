@@ -72,13 +72,6 @@ using (var scope = app.Services.CreateScope())
 // ===== 使用 CORS =====
 app.UseCors("AllowAll");
 
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated(); // 或 db.Database.Migrate();
-}
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
