@@ -21,7 +21,7 @@ namespace ProjectManagement.Application.Services
         }
 
         // Create Task for the Project
-        public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
+        public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dto)
         {
             if (dto.AssignTo.HasValue)
             {
@@ -37,6 +37,9 @@ namespace ProjectManagement.Application.Services
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
+            
+            var createdTask = await _projectTaskRepository.GetByIdAsync(task.Id);
+            return _mapper.Map<ProjectTaskDto>(createdTask!);
         }
 
         public async Task<ProjectTaskDto?> GetProjectTaskByIdAsync(Guid id)

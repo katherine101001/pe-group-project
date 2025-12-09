@@ -1,4 +1,5 @@
 using ProjectManagement.Application.DTOs.Projects;
+using ProjectManagement.Application.DTOs.Tasks;
 
 namespace ProjectManagement.Application.Interfaces.Services
 {
