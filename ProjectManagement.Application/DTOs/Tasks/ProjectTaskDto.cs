@@ -1,4 +1,5 @@
 using System;
+using ProjectManagement.Application.DTOs.Users;
 
 namespace ProjectManagement.Application.DTOs.Tasks
 {
@@ -13,7 +14,7 @@ namespace ProjectManagement.Application.DTOs.Tasks
         public Guid ProjectId { get; set; }          
 
         public Guid? AssignTo { get; set; }         
-        public string? AssigneeName { get; set; }     
+        public UserDto? User { get; set; }   
 
         public DateTime? DueDate { get; set; }         
 
