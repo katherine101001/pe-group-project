@@ -1,5 +1,5 @@
 using AutoMapper;
-using ProjectManagement.Application.DTOs.Invitations;
+using ProjectManagement.Application.DTOs.Team;
 using ProjectManagement.Domain.Entities.Team;
 
 namespace ProjectManagement.Application.Mapping

@@ -23,7 +23,7 @@ public class TeamMember
     public User User { get; set; } = null!;
 }
 
-// Invitation 实体
+
 public class Invitation
 {
     public Guid Id { get; set; } = Guid.NewGuid();

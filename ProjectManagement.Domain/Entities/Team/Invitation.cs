@@ -5,13 +5,18 @@ using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Domain.Entities.Collaborations;
 using ProjectManagement.Domain.Entities.Projects;
 
-public class Invitation
+namespace ProjectManagement.Domain.Entities.Team
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    
-    public Guid TeamId { get; set; }          // 所属团队
-    public string Email { get; set; }         // 被邀请人的邮箱
-    public string Role { get; set; }          // 被邀请人的角色
-    public bool IsAccepted { get; set; } = false;  // 是否接受邀请
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public class Invitation
+    {
+        public Guid Id { get; set; } = Guid.NewGuid();
+
+        public required string InvitedEmail { get; set; }
+        public required string TargetRole { get; set; }
+
+        public string Token { get; set; } = null!;
+        public string Status { get; set; } = "Pending";
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddDays(7);
+    }
 }
