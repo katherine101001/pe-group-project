@@ -15,6 +15,15 @@ ProjectManagement.API/appsettings.json
 # NuGet packages
 *.nupkg
 packages/
+package-lock.json
+
+/node_modules
+/dist
+/build
+
+.vite/
+dist/
+
 
 # Logs
 *.log
@@ -22,7 +31,7 @@ packages/
 # Environment files
 *.env
 
-# Frontend (React)
-frontend/node_modules/
-frontend/build/
-frontend/.env
+ProjectManagement-FrontEnd/node_modules/
+ProjectManagement-FrontEnd/.vite/
+ProjectManagement-FrontEnd/dist/
+ProjectManagement-FrontEnd/build/

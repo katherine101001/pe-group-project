@@ -10,24 +10,32 @@ namespace ProjectManagement.Application.Services
     public class ProjectTaskService : IProjectTaskService
     {
         private readonly IProjectTaskRepository _projectTaskRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
 
-        public ProjectTaskService(IProjectTaskRepository projectTaskRepository, IMapper mapper)
+        public ProjectTaskService(IProjectTaskRepository projectTaskRepository, IUserRepository userRepository, IMapper mapper)
         {
             _projectTaskRepository = projectTaskRepository;
+            _userRepository = userRepository;
             _mapper = mapper;
         }
 
-        public async Task<ProjectTaskDto> CreateProjectTaskAsync(ProjectTaskDto dto)
+        public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
         {
+            if (dto.AssignTo.HasValue)
+            {
+                var userExists = await _userRepository.GetByIdAsync(dto.AssignTo.Value);
+                if (userExists == null)
+                {
+                    throw new NotFoundException("Assignee user not found.");
+                }
+            }
+
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
-
-            // Map Entity -> DTO
-            return _mapper.Map<ProjectTaskDto>(task);
         }
 
         public async Task<ProjectTaskDto?> GetProjectTaskByIdAsync(Guid id)
