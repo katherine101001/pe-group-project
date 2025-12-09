@@ -20,7 +20,7 @@ public class UserController : ControllerBase
         if (dto == null || string.IsNullOrEmpty(dto.Email))
             return BadRequest("Email is required");
 
-        // 如果前端没有传 Role，默认 Member
+        
         if (string.IsNullOrEmpty(dto.Role))
             dto.Role = "Member";
 
