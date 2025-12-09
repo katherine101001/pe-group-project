@@ -41,7 +41,6 @@ builder.Services.AddAutoMapper(
 // Add controllers
 builder.Services.AddControllers();
 
-// ===== 添加 CORS 配置 =====
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
@@ -64,13 +63,15 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
+
+app.UseCors("AllowAll");
+
+// if you want to create/migrate DB automatically
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated(); // 或 db.Database.Migrate();
 }
-// ===== 使用 CORS =====
-app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {

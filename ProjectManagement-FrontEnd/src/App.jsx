@@ -41,7 +41,7 @@ import Register from "./pages/Register";
 const App = () => {
   return (
     <>
-      <Toaster />
+    <Toaster />
     <Routes>
         <Route path="/" element={<Login />} />     
         <Route path="/login" element={<Login />} />
@@ -61,3 +61,5 @@ const App = () => {
 };
 
 export default App;
+
+
