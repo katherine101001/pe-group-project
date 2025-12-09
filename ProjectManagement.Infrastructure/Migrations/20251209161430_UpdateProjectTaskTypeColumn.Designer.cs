@@ -12,8 +12,8 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251207154902_Initial")]
-    partial class Initial
+    [Migration("20251209161430_UpdateProjectTaskTypeColumn")]
+    partial class UpdateProjectTaskTypeColumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -189,6 +189,9 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -316,10 +319,14 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<Guid?>("LeaderId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Priority")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")

@@ -55,5 +55,14 @@ namespace ProjectManagement.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
 
+
+        public async Task<int> CountTeamMembersAsync(Guid projectId)
+        {
+            return await _context.Project
+                .Where(p => p.Id == projectId)
+                .Select(p => p.ProjectMembers.Count)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

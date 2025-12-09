@@ -21,6 +21,7 @@ public class ProjectsController : ControllerBase
         return Ok();
     }
 
+    // To get a specific project 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProject(Guid id)
     {

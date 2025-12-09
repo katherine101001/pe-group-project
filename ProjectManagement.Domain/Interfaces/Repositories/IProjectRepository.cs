@@ -6,6 +6,10 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
     {
         Task<Project?> GetByIdAsync(Guid id, bool includeTasks = false, bool includeProjectMembers = false);
         Task<List<Project>> GetAllAsync();
+
+        Task<int> CountTeamMembersAsync(Guid projectId);
+
+
         Task AddAsync(Project project);
         Task UpdateAsync(Project project);
         Task DeleteAsync(Project project);
