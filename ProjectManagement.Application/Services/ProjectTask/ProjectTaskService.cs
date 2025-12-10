@@ -37,7 +37,7 @@ namespace ProjectManagement.Application.Services
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
-            
+
             var createdTask = await _projectTaskRepository.GetByIdAsync(task.Id);
             return _mapper.Map<ProjectTaskDto>(createdTask!);
         }
@@ -79,6 +79,22 @@ namespace ProjectManagement.Application.Services
                 throw new NotFoundException("Task not found");
 
             await _projectTaskRepository.DeleteAsync(existingTask);
+        }
+
+        public async Task<ProjectTaskDetails?> GetProjectTaskBrieflyByIdAsync(Guid id)
+        {
+            var task = await _projectTaskRepository.GetByIdAsync(id);
+
+            if (task == null)
+                return null;
+
+            return _mapper.Map<ProjectTaskDetails>(task);
+        }
+
+        public async Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync()
+        {
+            var tasks = await _projectTaskRepository.GetAllAsync();
+            return _mapper.Map<List<ProjectTaskDetails>>(tasks);
         }
     }
 }

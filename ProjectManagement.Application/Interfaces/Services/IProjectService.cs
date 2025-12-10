@@ -10,5 +10,6 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<List<ProjectDto>> GetAllProjectsAsync();
         Task UpdateProjectAsync(Guid id, ProjectDto dto);
         Task DeleteProjectAsync(Guid id);
+
     }
 }
