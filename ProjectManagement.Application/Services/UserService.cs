@@ -112,6 +112,7 @@ namespace ProjectManagement.Application.Services
         public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
         {
            var users = await _userRepository.GetAllAsync();
+           
            return users.Select(u => new DispalyTeamMemberDto
             {
                  Name = u.Name ?? "Unknown",
