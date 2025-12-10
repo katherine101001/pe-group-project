@@ -37,9 +37,6 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<Guid>("ProjectTaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -100,7 +97,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<Guid?>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("TaskId")
+                    b.Property<Guid?>("ProjectTaskId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -115,7 +112,7 @@ namespace ProjectManagement.Infrastructure.Migrations
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("TaskId");
+                    b.HasIndex("ProjectTaskId");
 
                     b.HasIndex("UserId");
 
@@ -162,7 +159,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssignTo")
+                    b.Property<Guid?>("AssignToUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -192,14 +189,11 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("ProjectId");
+                    b.HasIndex("AssignToUserId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("ProjectTask");
                 });
@@ -210,7 +204,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AssignTo")
+                    b.Property<Guid?>("AssignToUserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedAt")
@@ -231,27 +225,21 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<Guid?>("TaskAttachmentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AssignToUserId");
 
                     b.HasIndex("ProjectTaskId");
 
                     b.HasIndex("SubTaskId");
 
                     b.HasIndex("TaskAttachmentId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("SubTask");
                 });
@@ -274,23 +262,17 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<Guid>("ProjectTaskId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TaskId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("UploadedBy")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid?>("UploadedById")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProjectTaskId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UploadedById");
 
                     b.ToTable("TaskAttachments");
                 });
@@ -310,14 +292,14 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("LeadId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("LeaderId")
+                    b.Property<Guid>("LeaderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Priority")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
@@ -336,9 +318,14 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("LeaderId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Project");
                 });
@@ -452,7 +439,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "MentionedUser")
                         .WithMany("Mentions")
                         .HasForeignKey("MentionedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -460,7 +447,7 @@ namespace ProjectManagement.Infrastructure.Migrations
 
                     b.Navigation("Comment");
 
-                    b.Navigation("User");
+                    b.Navigation("MentionedUser");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.Collaborations.Notification", b =>
@@ -477,7 +464,7 @@ namespace ProjectManagement.Infrastructure.Migrations
 
                     b.HasOne("ProjectManagement.Domain.Entities.ProjectTasks.ProjectTask", "ProjectTask")
                         .WithMany("Notifications")
-                        .HasForeignKey("TaskId")
+                        .HasForeignKey("ProjectTaskId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
@@ -508,23 +495,27 @@ namespace ProjectManagement.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.ProjectTasks.ProjectTask", b =>
                 {
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "AssignToUser")
+                        .WithMany("ProjectTasks")
+                        .HasForeignKey("AssignToUserId");
+
                     b.HasOne("ProjectManagement.Domain.Entities.Projects.Project", "Project")
                         .WithMany("ProjectTasks")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
-                        .WithMany("ProjectTasks")
-                        .HasForeignKey("UserId");
+                    b.Navigation("AssignToUser");
 
                     b.Navigation("Project");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.ProjectTasks.SubTask", b =>
                 {
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "AssignToUser")
+                        .WithMany("SubTasks")
+                        .HasForeignKey("AssignToUserId");
+
                     b.HasOne("ProjectManagement.Domain.Entities.ProjectTasks.ProjectTask", "ProjectTask")
                         .WithMany("SubTasks")
                         .HasForeignKey("ProjectTaskId")
@@ -539,13 +530,9 @@ namespace ProjectManagement.Infrastructure.Migrations
                         .WithMany("SubTasks")
                         .HasForeignKey("TaskAttachmentId");
 
-                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
-                        .WithMany("SubTasks")
-                        .HasForeignKey("UserId");
+                    b.Navigation("AssignToUser");
 
                     b.Navigation("ProjectTask");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.ProjectTasks.TaskAttachment", b =>
@@ -556,20 +543,26 @@ namespace ProjectManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "UploadedBy")
                         .WithMany("Attachments")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UploadedById");
 
                     b.Navigation("ProjectTask");
 
-                    b.Navigation("User");
+                    b.Navigation("UploadedBy");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.Projects.Project", b =>
                 {
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "Leader")
+                        .WithMany()
+                        .HasForeignKey("LeaderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", null)
                         .WithMany("LeadingProjects")
-                        .HasForeignKey("LeaderId");
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Leader");
                 });
@@ -579,13 +572,13 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.HasOne("ProjectManagement.Domain.Entities.Projects.Project", "Project")
                         .WithMany("ProjectMembers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
                         .WithMany("ProjectMembers")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Project");
@@ -598,13 +591,13 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.HasOne("ProjectManagement.Domain.Entities.Users.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");

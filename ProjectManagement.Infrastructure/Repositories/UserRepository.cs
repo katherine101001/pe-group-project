@@ -39,5 +39,7 @@ namespace ProjectManagement.Infrastructure.Repositories
                     .ThenInclude(ur => ur.Role)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
+
+
     }
 }

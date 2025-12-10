@@ -42,7 +42,7 @@ namespace ProjectManagement.Infrastructure.Repositories
         //     return await _context.Project.FindAsync(id);
         // }
 
-        public async Task<Project?> GetByIdAsync(Guid id, bool includeTasks = false, bool includeProjectMembers = false)
+        public async Task<Project?> GetByIdAsync(Guid id, bool includeTasks = false, bool includeProjectMembers = false, bool includeLeader = false)
         {
             IQueryable<Project> query = _context.Project;
 
@@ -51,6 +51,9 @@ namespace ProjectManagement.Infrastructure.Repositories
 
             if (includeProjectMembers)
                 query = query.Include(p => p.ProjectMembers);
+
+            if (includeLeader)
+                query = query.Include(p => p.Leader);
 
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }

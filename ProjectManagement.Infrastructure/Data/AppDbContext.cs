@@ -37,15 +37,13 @@ namespace ProjectManagement.Infrastructure.Data
 
             modelBuilder.Entity<User>().ToTable("Users");
 
-            // Similarly for Role, Project, etc. if you like
-            // modelBuilder.Entity<Role>().ToTable("Roles");
-            // modelBuilder.Entity<Project>().ToTable("Projects");
-            // modelBuilder.Entity<Comment>().ToTable("Comments");
-            // modelBuilder.Entity<Mention>().ToTable("Mentions");
-            // modelBuilder.Entity<Notification>().ToTable("Notifications");
-            // modelBuilder.Entity<ProjectTask>().ToTable("ProjectTasks");
-            // modelBuilder.Entity<SubTask>().ToTable("SubTasks");
-            // modelBuilder.Entity<TaskAttachment>().ToTable("TaskAttachments");
+            // restrict the delete, when the project being deleted, the leader won't be deleted
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Leader)
+                .WithMany()
+                .HasForeignKey(p => p.LeaderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // -------------------------------
             // ProjectMember composite key
@@ -58,14 +56,14 @@ namespace ProjectManagement.Infrastructure.Data
                 .HasOne(pm => pm.Project)
                 .WithMany(p => p.ProjectMembers)
                 .HasForeignKey(pm => pm.ProjectId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // ProjectMember → User
             modelBuilder.Entity<ProjectMember>()
                 .HasOne(pm => pm.User)
                 .WithMany(u => u.ProjectMembers)
                 .HasForeignKey(pm => pm.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // -------------------------------
             // UserRole composite key
@@ -77,14 +75,14 @@ namespace ProjectManagement.Infrastructure.Data
                 .HasOne(ur => ur.User)
                 .WithMany(u => u.UserRoles)
                 .HasForeignKey(ur => ur.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // UserRole → Role
             modelBuilder.Entity<UserRole>()
                 .HasOne(ur => ur.Role)
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             // -------------------------------
             // ProjectTask key
@@ -96,7 +94,7 @@ namespace ProjectManagement.Infrastructure.Data
             // Mentions
             // -------------------------------
             modelBuilder.Entity<Mention>()
-                .HasOne(m => m.User)
+                .HasOne(m => m.MentionedUser)
                 .WithMany(u => u.Mentions) // navigation collection in User
                 .HasForeignKey(m => m.MentionedUserId)
                 .OnDelete(DeleteBehavior.Restrict); // prevent multiple cascade paths
@@ -120,7 +118,7 @@ namespace ProjectManagement.Infrastructure.Data
             modelBuilder.Entity<Notification>()
                 .HasOne(n => n.ProjectTask)
                 .WithMany(t => t.Notifications)
-                .HasForeignKey(n => n.TaskId)
+                .HasForeignKey(n => n.ProjectTaskId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Notification>()

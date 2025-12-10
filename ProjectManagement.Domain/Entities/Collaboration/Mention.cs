@@ -13,7 +13,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
         public Comment Comment { get; set; } = null!; // Navigation to Comment
 
         public Guid MentionedUserId { get; set; }          // Foreign key
-        public User User { get; set; } = null!; // Navigation to User
+        public User MentionedUser { get; set; } = null!; // Navigation to User
 
         public bool? Read { get; set; }
 
