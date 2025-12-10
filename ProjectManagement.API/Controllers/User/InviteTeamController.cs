@@ -46,7 +46,7 @@ public class UserController : ControllerBase
         var users = await _userService.GetAllUsersSimpleAsync();
         return Ok(users);
     }
-
+    //api/user/search?keyword=Alex(sample)
     [HttpGet("search")]
     public async Task<IActionResult> SearchUsers([FromQuery] string keyword)
     {
