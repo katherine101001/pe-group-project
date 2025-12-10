@@ -14,6 +14,8 @@ public class UserController : ControllerBase
     {
         _userService = userService;
     }
+
+    //api/user/update-role
     [HttpPost("update-role")]
     public async Task<IActionResult> UpdateUserRole([FromBody] InviteTeamDto dto)
     {
@@ -35,5 +37,13 @@ public class UserController : ControllerBase
         {
             return BadRequest(new { Message = ex.Message });
         }
+    }
+
+    //api/user/Team-Memberlist
+    [HttpGet("Team-Memberlist")]
+    public async Task<IActionResult> GetAllUsersSimple()
+    {
+        var users = await _userService.GetAllUsersSimpleAsync();
+        return Ok(users);
     }
 }
