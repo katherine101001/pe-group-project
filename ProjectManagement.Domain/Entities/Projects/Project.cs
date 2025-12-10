@@ -14,6 +14,7 @@ namespace ProjectManagement.Domain.Entities.Projects
         public string Status { get; set; } = "PLANNING";
 
         public string? Priority { get; set; }
+        public int Progress { get; set; } = 0;
 
         public string? Description { get; set; }
         public DateTime? StartDate { get; set; }
@@ -22,7 +23,7 @@ namespace ProjectManagement.Domain.Entities.Projects
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        public Guid? LeadId { get; set; }
+        public Guid LeaderId { get; set; }
         public User? Leader { get; set; }
         // Navigation property for users 
         public ICollection<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();

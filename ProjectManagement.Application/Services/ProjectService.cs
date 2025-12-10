@@ -51,6 +51,7 @@ namespace ProjectManagement.Application.Services
             await _projectRepository.AddAsync(project);
         }
 
+        // When clicking into the project overview
         public async Task<ProjectOverviewDto?> GetProjectByIdAsync(Guid id)
         {
             // Fetch project including related tasks and team members
@@ -75,25 +76,72 @@ namespace ProjectManagement.Application.Services
         }
 
 
-        // To display ALL Projects
+        // To display ALL Projects when clicking at the project button at side bar
         public async Task<List<ProjectDto>> GetAllProjectsAsync()
         {
             var projects = await _projectRepository.GetAllAsync();
             return _mapper.Map<List<ProjectDto>>(projects);
         }
 
-        public async Task UpdateProjectAsync(Guid id, ProjectDto dto)
-        {
-            var existingProject = await _projectRepository.GetByIdAsync(id);
 
-            if (existingProject == null)
+        // Fetch the project details to fill in the form for Project Setting Page
+        public async Task<GetUpdateProjectDto> GetUpdateProjectByIdAsync(Guid id)
+        {
+            var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true, includeLeader: true);
+            if (project == null)
                 throw new NotFoundException("Project not found");
 
-            // Map updated values from DTO to entity
-            _mapper.Map(dto, existingProject);
+            var dto = _mapper.Map<GetUpdateProjectDto>(project);
 
-            await _projectRepository.UpdateAsync(existingProject);
+            // Include team members
+            dto.TeamMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToList();
+            dto.TeamLeadId = project.Leader?.Id;
+
+            return dto;
         }
+
+
+        // Update project with nullable DTO fields
+        public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
+        {
+            var project = await _projectRepository.GetByIdAsync(id);
+            if (project == null)
+                throw new NotFoundException("Project not found");
+
+            // Update fields only if provided
+            if (dto.Title != null) project.Title = dto.Title;
+            if (dto.Description != null) project.Description = dto.Description;
+            if (dto.Status != null) project.Status = dto.Status;
+            if (dto.Priority != null) project.Priority = dto.Priority;
+            if (dto.StartDate.HasValue) project.StartDate = dto.StartDate;
+            if (dto.EndDate.HasValue) project.EndDate = dto.EndDate;
+
+            // Update team lead if provided
+            if (dto.TeamLeadId.HasValue)
+            {
+                var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
+                if (lead == null)
+                    throw new NotFoundException("Team lead not found");
+                project.Leader = lead;
+            }
+
+            // Update team members if provided
+            if (dto.TeamMemberIds != null)
+            {
+                // Remove all previous members (optional: except lead)
+                //project.ProjectMembers.Clear();
+
+                foreach (var memberId in dto.TeamMemberIds)
+                {
+                    var user = await _userRepository.GetByIdAsync(memberId);
+                    if (user == null) continue; // skip invalid
+                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
+                }
+            }
+
+            await _projectRepository.UpdateAsync(project);
+        }
+
 
         public async Task DeleteProjectAsync(Guid id)
         {
@@ -104,5 +152,7 @@ namespace ProjectManagement.Application.Services
 
             await _projectRepository.DeleteAsync(existingProject);
         }
+
+
     }
 }
