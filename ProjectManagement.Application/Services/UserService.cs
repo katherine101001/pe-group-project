@@ -107,7 +107,21 @@ namespace ProjectManagement.Application.Services
             });
 
             await _userRepository.UpdateAsync(user);
-            }
+        }
+
+        public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
+        {
+           var users = await _userRepository.GetAllAsync();
+           return users.Select(u => new DispalyTeamMemberDto
+            {
+                 Name = u.Name ?? "Unknown",
+                 Email = u.Email,
+                 Role = u.UserRoles.FirstOrDefault()?.Role.Name ?? "Member"
+ 
+            }).ToList();
+        }
+
+
 
         }
 

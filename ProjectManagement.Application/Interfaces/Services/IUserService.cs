@@ -11,7 +11,7 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task UpdateUserAsync(Guid id, UserDto dto);
         Task DeleteUserAsync(Guid id);
         Task<UserDto?> AuthenticateAsync(string email, string password);
-
         Task InviteUserAsync(InviteTeamDto dto);
+        Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync();
     }
 }
