@@ -11,7 +11,7 @@ namespace ProjectManagement.Domain.Entities.Projects
         public Guid Id { get; set; } = Guid.NewGuid();
         public string Title { get; set; } = null!;
         public string? Type { get; set; }
-        public string? Status { get; set; }
+        public string Status { get; set; } = "PLANNING";
 
         public string? Priority { get; set; }
 

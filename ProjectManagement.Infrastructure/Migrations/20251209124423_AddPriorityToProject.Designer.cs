@@ -12,8 +12,8 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251207154902_Initial")]
-    partial class Initial
+    [Migration("20251209124423_AddPriorityToProject")]
+    partial class AddPriorityToProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -315,6 +315,9 @@ namespace ProjectManagement.Infrastructure.Migrations
 
                     b.Property<Guid?>("LeaderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Priority")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");

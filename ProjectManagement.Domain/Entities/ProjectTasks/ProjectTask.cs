@@ -23,6 +23,9 @@ namespace ProjectManagement.Domain.Entities.ProjectTasks
         public DateTime? DueDate { get; set; }        // Goal deadline
         public string? Status { get; set; }
         public string? Priority { get; set; }
+
+        public string? Type { get; set; }
+
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 

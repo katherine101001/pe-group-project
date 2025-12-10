@@ -41,5 +41,62 @@ namespace ProjectManagement.Infrastructure.Repositories
         {
             return await _context.ProjectTask.FindAsync(id);
         }
+
+        //******************************ABOVE ARE NORMAL CRUD********************************//
+
+        public async Task<int> CountTasksAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId)
+                .CountAsync();
+        }
+
+        public async Task<int> CountTasksByStatusAsync(Guid projectId, string status)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId && t.Status == status)
+                .CountAsync();
+        }
+
+        public async Task<int> CountTasksByStatusesAsync(Guid projectId, IEnumerable<string> statuses)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId && statuses.Contains(t.Status))
+                .CountAsync();
+        }
+
+        public async Task<int> CountOverdueTasksAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId && t.DueDate < DateTime.UtcNow && t.Status != "COMPLETED")
+                .CountAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetTaskCountsGroupedByStatusAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId)
+                .GroupBy(t => t.Status ?? "UNKNOWN")
+                .Select(g => new { Status = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Status, x => x.Count);
+        }
+
+        public async Task<Dictionary<string, int>> GetTaskCountsGroupedByTypeAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId)
+                .GroupBy(t => t.Type ?? "UNKNOWN")  // assuming you have a 'Type' property in ProjectTask
+                .Select(g => new { Type = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Type, x => x.Count);
+        }
+
+        public async Task<Dictionary<string, int>> GetTaskCountsGroupedByPriorityAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId)
+                .GroupBy(t => t.Priority ?? "UNKNOWN") // assuming you have a 'Priority' property
+                .Select(g => new { Priority = g.Key, Count = g.Count() })
+                .ToDictionaryAsync(x => x.Priority, x => x.Count);
+        }
     }
 }

@@ -28,6 +28,7 @@ builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IProjectTaskAnalyticsService, ProjectTaskAnalyticsService>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(
