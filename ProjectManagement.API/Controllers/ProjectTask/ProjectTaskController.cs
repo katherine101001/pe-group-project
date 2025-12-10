@@ -20,7 +20,7 @@ public class ProjectTaskController : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetProject(Guid id)
     {
         var project = await _projectTaskService.GetProjectTaskByIdAsync(id);
@@ -34,6 +34,7 @@ public class ProjectTaskController : ControllerBase
         var projects = await _projectTaskService.GetAllProjectTasksAsync();
         return Ok(projects);
     }
+
 
     // [HttpPut("{id}")]
     // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)

@@ -39,17 +39,28 @@ public class ProjectsController : ControllerBase
         return Ok(projects);
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)
-    {
-        await _projectService.UpdateProjectAsync(id, dto);
-        return NoContent();
-    }
-
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(Guid id)
     {
         await _projectService.DeleteProjectAsync(id);
         return NoContent();
     }
+
+
+    // Fill in the forms in Project Setting page first before updating
+    [HttpGet("{id:guid}/update/form")]
+    public async Task<IActionResult> GetUpdateDetailsProject(Guid id)
+    {
+        var project = await _projectService.GetUpdateProjectByIdAsync(id);
+        return Ok(project);
+    }
+
+    // Update the forms
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateProject(Guid id, [FromBody] UpdateProjectDto dto)
+    {
+        await _projectService.UpdateProjectAsync(id, dto);
+        return NoContent();
+    }
+
 }

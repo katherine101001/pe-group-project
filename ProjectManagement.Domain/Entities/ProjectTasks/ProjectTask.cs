@@ -15,8 +15,8 @@ namespace ProjectManagement.Domain.Entities.ProjectTasks
         public Project Project { get; set; } = null!; // Navigation to Project
 
 
-        public Guid? AssignTo { get; set; }
-        public User? User { get; set; }
+        public Guid AssignToUserId { get; set; }
+        public User AssignToUser { get; set; } = null!;
 
         public string? Title { get; set; }    // Goal title
         public string? Description { get; set; } = ""; // Optional description
@@ -25,7 +25,6 @@ namespace ProjectManagement.Domain.Entities.ProjectTasks
         public string? Priority { get; set; }
 
         public string? Type { get; set; }
-
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 

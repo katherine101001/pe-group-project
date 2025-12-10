@@ -21,22 +21,24 @@ namespace ProjectManagement.Application.Services
         }
 
         // Create Task for the Project
-        public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
+        public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dto)
         {
-            if (dto.AssignTo.HasValue)
+
+            var userExists = await _userRepository.GetByIdAsync(dto.AssignToUserId);
+            if (userExists == null)
             {
-                var userExists = await _userRepository.GetByIdAsync(dto.AssignTo.Value);
-                if (userExists == null)
-                {
-                    throw new NotFoundException("Assignee user not found.");
-                }
+                throw new NotFoundException("Assignee user not found.");
             }
+
 
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
+
+            var createdTask = await _projectTaskRepository.GetByIdAsync(task.Id);
+            return _mapper.Map<ProjectTaskDto>(createdTask!);
         }
 
         public async Task<ProjectTaskDto?> GetProjectTaskByIdAsync(Guid id)
@@ -76,6 +78,22 @@ namespace ProjectManagement.Application.Services
                 throw new NotFoundException("Task not found");
 
             await _projectTaskRepository.DeleteAsync(existingTask);
+        }
+
+        public async Task<ProjectTaskDetails?> GetProjectTaskBrieflyByIdAsync(Guid id)
+        {
+            var task = await _projectTaskRepository.GetByIdAsync(id);
+
+            if (task == null)
+                return null;
+
+            return _mapper.Map<ProjectTaskDetails>(task);
+        }
+
+        public async Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync()
+        {
+            var tasks = await _projectTaskRepository.GetAllAsync();
+            return _mapper.Map<List<ProjectTaskDetails>>(tasks);
         }
     }
 }

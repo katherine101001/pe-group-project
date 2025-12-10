@@ -10,6 +10,10 @@ namespace ProjectManagement.Application.Mapping
         {
             // Entity -> Output DTO
             CreateMap<ProjectTask, ProjectTaskDto>();
+               // .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+
+            CreateMap<ProjectTask, ProjectTaskDetails>();
+             //   .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
 
             // Input DTO -> Entity
             //CreateMap<CreateTaskDto, Task>();
