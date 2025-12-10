@@ -5,7 +5,7 @@ namespace ProjectManagement.Application.DTOs.Tasks
     public class CreateProjectTaskDto
     {
         public Guid ProjectId { get; set; }          // Which project this task belongs to
-        public Guid? AssignTo { get; set; }          // User assigned to task
+        public Guid AssignToUserId { get; set; }          // User assigned to task
 
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

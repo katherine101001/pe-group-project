@@ -9,7 +9,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
     {
         public Guid Id { get; set; } = Guid.NewGuid();              // Primary key
 
-        public Guid TaskId { get; set; }          // Foreign key
+        public Guid ProjectTaskId { get; set; }          // Foreign key
         public ProjectTask ProjectTask { get; set; } = null!; // Navigation to Task
 
         public Guid UserId { get; set; }          // Foreign key

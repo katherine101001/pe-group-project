@@ -104,7 +104,7 @@ namespace ProjectManagement.Application.Services
         // Update project with nullable DTO fields
         public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
         {
-            var project = await _projectRepository.GetByIdAsync(id);
+            var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true);
             if (project == null)
                 throw new NotFoundException("Project not found");
 
@@ -128,16 +128,28 @@ namespace ProjectManagement.Application.Services
             // Update team members if provided
             if (dto.TeamMemberIds != null)
             {
-                // Remove all previous members (optional: except lead)
-                //project.ProjectMembers.Clear();
+                // Get current member IDs
+                var currentMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
 
                 foreach (var memberId in dto.TeamMemberIds)
                 {
-                    var user = await _userRepository.GetByIdAsync(memberId);
-                    if (user == null) continue; // skip invalid
-                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
+                    // Only add if not already present
+                    if (!currentMemberIds.Contains(memberId))
+                    {
+                        var user = await _userRepository.GetByIdAsync(memberId);
+                        if (user != null)
+                        {
+                            // Attach the existing user entity instead of creating a new one
+                            project.ProjectMembers.Add(new ProjectMember
+                            {
+                                ProjectId = project.Id,
+                                UserId = user.Id
+                            });
+                        }
+                    }
                 }
             }
+
 
             await _projectRepository.UpdateAsync(project);
         }

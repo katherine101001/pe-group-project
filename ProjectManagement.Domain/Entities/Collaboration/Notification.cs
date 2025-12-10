@@ -18,7 +18,7 @@ namespace ProjectManagement.Domain.Entities.Collaborations
 
 
         // Nullable FKs for polymorphic references
-        public Guid? TaskId { get; set; }
+        public Guid? ProjectTaskId { get; set; }
         public ProjectTask? ProjectTask { get; set; }
 
         public Guid? CommentId { get; set; }

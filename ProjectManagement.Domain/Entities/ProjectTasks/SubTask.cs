@@ -10,12 +10,12 @@ namespace ProjectManagement.Domain.Entities.ProjectTasks
     {
         public Guid Id { get; set; } = Guid.NewGuid();             // Primary key
 
-        public Guid TaskId { get; set; }          // Foreign key
+        public Guid ProjectTaskId { get; set; }          // Foreign key
         public ProjectTask ProjectTask { get; set; } = null!; // Navigation to ProjectTask
 
 
-        public Guid? AssignTo { get; set; }
-        public User? User { get; set; }
+        public Guid? AssignToUserId { get; set; }
+        public User? AssignToUser { get; set; }
 
         public string? Title { get; set; }
         public DateTime? DueDate { get; set; }

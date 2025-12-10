@@ -23,14 +23,13 @@ namespace ProjectManagement.Application.Services
         // Create Task for the Project
         public async Task CreateProjectTaskAsync(CreateProjectTaskDto dto)
         {
-            if (dto.AssignTo.HasValue)
+
+            var userExists = await _userRepository.GetByIdAsync(dto.AssignToUserId);
+            if (userExists == null)
             {
-                var userExists = await _userRepository.GetByIdAsync(dto.AssignTo.Value);
-                if (userExists == null)
-                {
-                    throw new NotFoundException("Assignee user not found.");
-                }
+                throw new NotFoundException("Assignee user not found.");
             }
+
 
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
