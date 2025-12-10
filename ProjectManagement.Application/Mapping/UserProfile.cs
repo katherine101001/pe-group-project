@@ -10,10 +10,14 @@ namespace ProjectManagement.Application.Mapping
         {
             // Entity -> Output DTO
             CreateMap<User, UserDto>();
+            CreateMap<User,DispalyTeamMemberDto>();
+            CreateMap<User,InviteTeamDto>();
 
             // Input DTO -> Entity
             CreateMap<CreateUserDto, User>();
+            CreateMap<InviteTeamDto, User>();
             //CreateMap<UpdateUserDto, User>();
+
         }
     }
 }

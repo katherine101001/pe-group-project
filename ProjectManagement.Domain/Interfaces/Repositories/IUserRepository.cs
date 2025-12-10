@@ -10,5 +10,6 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
+        
     }
 }
