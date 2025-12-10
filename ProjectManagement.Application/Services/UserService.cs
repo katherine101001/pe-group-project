@@ -121,6 +121,28 @@ namespace ProjectManagement.Application.Services
             }).ToList();
         }
 
+        public async Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword)
+            {
+                if (string.IsNullOrEmpty(keyword))
+                return new List<DispalyTeamMemberDto>();  // 空列表返回，不抛异常也可以
+
+                var users = await _userRepository.GetAllAsync();
+
+                var filtered = users.Where(u =>
+                         (u.Name != null && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                         (u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+                         u.UserRoles.Any(ur => ur.Role.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                                         ).ToList();
+
+                 return filtered.Select(u => new DispalyTeamMemberDto
+                        {
+                            Name = u.Name ?? "Unknown",
+                            Email = u.Email,
+                            Role = u.UserRoles.FirstOrDefault()?.Role.Name
+                        }).ToList();
+}
+
+
 
 
         }

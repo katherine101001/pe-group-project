@@ -46,4 +46,14 @@ public class UserController : ControllerBase
         var users = await _userService.GetAllUsersSimpleAsync();
         return Ok(users);
     }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchUsers([FromQuery] string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+            return BadRequest("Keyword cannot be empty");
+
+        var users = await _userService.SearchUersAsync(keyword);
+        return Ok(users);
+    }
 }

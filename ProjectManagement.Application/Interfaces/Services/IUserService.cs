@@ -13,5 +13,7 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<UserDto?> AuthenticateAsync(string email, string password);
         Task InviteUserAsync(InviteTeamDto dto);
         Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync();
+
+        Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword);
     }
 }
