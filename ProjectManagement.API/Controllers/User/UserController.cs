@@ -32,17 +32,17 @@ namespace ProjectManagement.Api.Controllers
             }
         }
 
-        // POST: api/user/login
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto dto)
-        {
-            var userDto = await _userService.AuthenticateAsync(dto.Email, dto.Password);
+        // // POST: api/user/login
+        // [HttpPost("login")]
+        // public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        // {
+        //     var userDto = await _userService.AuthenticateAsync(dto.Email, dto.Password);
 
-            if (userDto == null)
-                return Unauthorized(new { message = "Invalid credentials" });
+        //     if (userDto == null)
+        //         return Unauthorized(new { message = "Invalid credentials" });
 
-            return Ok(userDto);
-        }
+        //     return Ok(userDto);
+        // }
 
         // GET: api/user
         [HttpGet]
