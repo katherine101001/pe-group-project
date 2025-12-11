@@ -89,9 +89,12 @@ namespace ProjectManagement.Infrastructure.Data
             // -------------------------------
             // modelBuilder.Entity<ProjectTask>()
             //     .HasKey(t => t.Id);
+
+            // modelBuilder.Entity<ProjectTask>()
+            //     .HasKey(t => t.Id);
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(t => t.AssignToUser)
-                .WithMany(u => u.ProjectTasks) // 如果 User 有对应集合
+                .WithMany(u => u.ProjectTasks) 
                 .HasForeignKey(t => t.AssignToUserId)
                 .OnDelete(DeleteBehavior.Restrict); // 改成 Restrict 或 NoAction
 

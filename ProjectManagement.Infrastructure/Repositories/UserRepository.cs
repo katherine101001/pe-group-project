@@ -45,7 +45,7 @@ namespace ProjectManagement.Infrastructure.Repositories
              .FirstOrDefaultAsync(u => u.Email == email);
             }
 
-
+//??
         public async Task<List<User>> GetUsersByRolesAsync(params string[] roleNames)
         {
          return await _context.User
@@ -55,12 +55,12 @@ namespace ProjectManagement.Infrastructure.Repositories
         }
 
 
-public async Task<List<User>> GetAllAsyncRole()
-        {
-        return await _context.User
-                         .Include(u => u.Role) // 确保 Role 被加载
-                         .ToListAsync();
-        }
+        public async Task<List<User>> GetAllAsyncRole()
+                {
+                return await _context.User
+                                .Include(u => u.Role) // 确保 Role 被加载
+                                .ToListAsync();
+                }
 
 
 

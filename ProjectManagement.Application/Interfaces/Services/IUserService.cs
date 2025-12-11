@@ -1,4 +1,5 @@
 using ProjectManagement.Application.DTOs.Users;
+using ProjectManagement.Domain.Entities.Users;
 
 namespace ProjectManagement.Application.Interfaces.Services
 {
@@ -12,9 +13,9 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task DeleteUserAsync(Guid id);
         //Task<UserDto?> AuthenticateAsync(string email, string password);
 
-        Task InviteUserAsync(InviteTeamDto dto);
+       Task<User> InviteUserAsync(InviteTeamDto dto);
         Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync();
 
-        //Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword);
+        Task<List<DisplayTeamMemberDto>> SearchUsersAsync(string keyword);
     }
 }

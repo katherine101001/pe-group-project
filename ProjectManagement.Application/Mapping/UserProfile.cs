@@ -19,9 +19,10 @@ namespace ProjectManagement.Application.Mapping
                 .ForMember(dest => dest.Role, opt => opt.Ignore());
             CreateMap<InviteTeamDto, User>();
             CreateMap<InviteTeamDto, User>()
-                .ForMember(dest => dest.RoleId, opt => opt.Ignore()) // RoleId 需要在 Service 中手动设置
-                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => "New User")) // 可以给默认名字
-                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => "12345")); // 默认密码
+            .ForMember(dest => dest.RoleId, opt => opt.Ignore()) // 由 Service 设置 RoleId
+            .ForMember(dest => dest.Role, opt => opt.Ignore())   // 忽略 Role 对象
+            .ForMember(dest => dest.Name, opt => opt.Ignore())   // 默认名字在 Service 设置
+            .ForMember(dest => dest.Password, opt => opt.Ignore()); // 默认密码在 Service 设置
 
             //CreateMap<UpdateUserDto, User>();
 
