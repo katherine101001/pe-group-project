@@ -18,11 +18,10 @@ namespace ProjectManagement.Domain.Entities.Users
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
+        public Guid RoleId { get; set; }
 
+        public Role Role { get; set; } = null!;
 
-        // Navigation property for roles
-        public ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
-        // Navigation property for projects if needed
         public ICollection<Project> LeadingProjects { get; set; } = new List<Project>();
 
         public ICollection<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();

@@ -10,10 +10,10 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<List<UserDto>> GetAllUsersAsync();
         Task UpdateUserAsync(Guid id, UserDto dto);
         Task DeleteUserAsync(Guid id);
-        Task<UserDto?> AuthenticateAsync(string email, string password);
-        Task InviteUserAsync(InviteTeamDto dto);
-        Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync();
+        //Task<UserDto?> AuthenticateAsync(string email, string password);
+        //Task InviteUserAsync(InviteTeamDto dto);
+        //Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync();
 
-        Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword);
+        //Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword);
     }
 }
