@@ -7,6 +7,8 @@
 *.sln.docstates
 
 ProjectManagement.API/appsettings.json
+ProjectManagement.API/appsettings.Development.json
+
 
 # VS Code / Visual Studio
 .vscode/
