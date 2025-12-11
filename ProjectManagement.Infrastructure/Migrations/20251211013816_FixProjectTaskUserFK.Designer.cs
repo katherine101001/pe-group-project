@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251211013816_FixProjectTaskUserFK")]
+    partial class FixProjectTaskUserFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -389,17 +392,27 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("ProjectManagement.Domain.Entities.Users.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("UserId", "RoleId");
+
                     b.HasIndex("RoleId");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("UserRole");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.Collaborations.Comment", b =>
@@ -578,15 +591,23 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ProjectManagement.Domain.Entities.Users.User", b =>
+            modelBuilder.Entity("ProjectManagement.Domain.Entities.Users.UserRole", b =>
                 {
                     b.HasOne("ProjectManagement.Domain.Entities.Users.Role", "Role")
-                        .WithMany()
+                        .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Role");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ProjectManagement.Domain.Entities.Collaborations.Comment", b =>
@@ -628,6 +649,11 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Navigation("ProjectTasks");
                 });
 
+            modelBuilder.Entity("ProjectManagement.Domain.Entities.Users.Role", b =>
+                {
+                    b.Navigation("UserRoles");
+                });
+
             modelBuilder.Entity("ProjectManagement.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("Attachments");
@@ -645,6 +671,8 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Navigation("ProjectTasks");
 
                     b.Navigation("SubTasks");
+
+                    b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
         }

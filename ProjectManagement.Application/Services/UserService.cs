@@ -18,16 +18,35 @@ namespace ProjectManagement.Application.Services
             _mapper = mapper;
         }
 
+        // public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
+        // {
+        //     // Map input DTO -> Entity
+        //     var user = _mapper.Map<User>(dto);
+
+        //     await _userRepository.AddAsync(user);
+
+        //     // Map Entity -> DTO to return
+        //     return _mapper.Map<UserDto>(user);
+        // }
+
         public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
-        {
-            // Map input DTO -> Entity
-            var user = _mapper.Map<User>(dto);
+{
+    var user = _mapper.Map<User>(dto);
 
-            await _userRepository.AddAsync(user);
+    // 自动设置 RoleId 为 Admin
+    var adminRole = await _userRepository.GetByNameAsync("Admin");
+    if (adminRole == null)
+        throw new Exception("Admin role not found in database");
 
-            // Map Entity -> DTO to return
-            return _mapper.Map<UserDto>(user);
-        }
+    user.RoleId = adminRole.Id;
+
+    await _userRepository.AddAsync(user);
+
+    return _mapper.Map<UserDto>(user);
+}
+
+
+
 
         public async Task<UserDto?> GetUserByIdAsync(Guid id)
         {
@@ -67,81 +86,81 @@ namespace ProjectManagement.Application.Services
             await _userRepository.DeleteAsync(existingUser);
         }
 
-        public async Task<UserDto?> AuthenticateAsync(string email, string password)
-        {
-            var user = await _userRepository.GetByEmailAsync(email);
+        // public async Task<UserDto?> AuthenticateAsync(string email, string password)
+        // {
+        //     var user = await _userRepository.GetByEmailAsync(email);
 
-            if (user == null)
-                return null;
+        //     if (user == null)
+        //         return null;
 
-            if (user.Password != password)
-                return null;
+        //     if (user.Password != password)
+        //         return null;
 
-            return _mapper.Map<UserDto>(user);
-        }
+        //     return _mapper.Map<UserDto>(user);
+        // }
 
-        public async Task InviteUserAsync(InviteTeamDto dto)
-        {
+        // public async Task InviteUserAsync(InviteTeamDto dto)
+        // {
 
-            var user = await _userRepository.GetByEmailAsync(dto.Email);
-            if (user == null)
-             {
-                 throw new Exception($"User with email '{dto.Email}' not found");
-             }
+        //     var user = await _userRepository.GetByEmailAsync(dto.Email);
+        //     if (user == null)
+        //      {
+        //          throw new Exception($"User with email '{dto.Email}' not found");
+        //      }
 
-            var roleName = string.IsNullOrEmpty(dto.Role) ? "Member" : dto.Role;
+        //     var roleName = string.IsNullOrEmpty(dto.Role) ? "Member" : dto.Role;
 
-            Guid roleId = dto.Role switch
-            {
-                 "Admin" => Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                 "Member" => Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                _ => throw new Exception($"Invalid role '{dto.Role}'")
-            };
+        //     Guid roleId = dto.Role switch
+        //     {
+        //          "Admin" => Guid.Parse("11111111-1111-1111-1111-111111111111"),
+        //          "Member" => Guid.Parse("22222222-2222-2222-2222-222222222222"),
+        //         _ => throw new Exception($"Invalid role '{dto.Role}'")
+        //     };
 
-            user.UserRoles.Clear();
+        //     user.UserRoles.Clear();
 
-             user.UserRoles.Add(new UserRole
-            {
-                UserId = user.Id,
-                RoleId = roleId
-            });
+        //      user.UserRoles.Add(new UserRole
+        //     {
+        //         UserId = user.Id,
+        //         RoleId = roleId
+        //     });
 
-            await _userRepository.UpdateAsync(user);
-        }
+        //     await _userRepository.UpdateAsync(user);
+        // }
 
-        public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
-        {
-           var users = await _userRepository.GetAllAsync();
+//         public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
+//         {
+//            var users = await _userRepository.GetAllAsync();
            
-           return users.Select(u => new DispalyTeamMemberDto
-            {
-                 Name = u.Name ?? "Unknown",
-                 Email = u.Email,
-                 Role = u.UserRoles.FirstOrDefault()?.Role.Name ?? "Member"
+//            return users.Select(u => new DispalyTeamMemberDto
+//             {
+//                  Name = u.Name ?? "Unknown",
+//                  Email = u.Email,
+//                  Role = u.UserRoles.FirstOrDefault()?.Role.Name ?? "Member"
  
-            }).ToList();
-        }
+//             }).ToList();
+//         }
 
-        public async Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword)
-            {
-                if (string.IsNullOrEmpty(keyword))
-                return new List<DispalyTeamMemberDto>();  // 空列表返回，不抛异常也可以
+//         public async Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword)
+//             {
+//                 if (string.IsNullOrEmpty(keyword))
+//                 return new List<DispalyTeamMemberDto>();  // 空列表返回，不抛异常也可以
 
-                var users = await _userRepository.GetAllAsync();
+//                 var users = await _userRepository.GetAllAsync();
 
-                var filtered = users.Where(u =>
-                         (u.Name != null && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
-                         (u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
-                         u.UserRoles.Any(ur => ur.Role.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                                         ).ToList();
+//                 var filtered = users.Where(u =>
+//                          (u.Name != null && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+//                          (u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
+//                          u.UserRoles.Any(ur => ur.Role.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+//                                          ).ToList();
 
-                 return filtered.Select(u => new DispalyTeamMemberDto
-                        {
-                            Name = u.Name ?? "Unknown",
-                            Email = u.Email,
-                            Role = u.UserRoles.FirstOrDefault()?.Role.Name
-                        }).ToList();
-}
+//                  return filtered.Select(u => new DispalyTeamMemberDto
+//                         {
+//                             Name = u.Name ?? "Unknown",
+//                             Email = u.Email,
+//                             Role = u.UserRoles.FirstOrDefault()?.Role.Name
+//                         }).ToList();
+// }
 
 
 
