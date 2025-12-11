@@ -16,7 +16,7 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync();
 
         Task<List<SearchTaskDto>> SearchTasksAsync(string keyword);
-
+    
    
     }
 }
