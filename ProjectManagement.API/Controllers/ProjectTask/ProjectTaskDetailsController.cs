@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 [ApiController]
-[Route("api/tasks/briefly")]
+[Route("api/tasks/details")]
 public class ProjectTaskDetailsController : ControllerBase
 {
     private readonly IProjectTaskService _service;
