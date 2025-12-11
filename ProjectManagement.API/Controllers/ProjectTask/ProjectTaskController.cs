@@ -36,6 +36,17 @@ public class ProjectTaskController : ControllerBase
     }
 
 
+    [HttpGet("calendar")]
+    public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
+    {
+        if (year <= 0 || month < 1 || month > 12)
+            return BadRequest("Invalid year or month.");
+
+        var result = await _projectTaskService.GetTaskCalendarAsync(year, month);
+
+        return Ok(result);
+    }
+
     // [HttpPut("{id}")]
     // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)
     // {
@@ -49,4 +60,5 @@ public class ProjectTaskController : ControllerBase
         await _projectTaskService.DeleteProjectTaskAsync(id);
         return NoContent();
     }
+
 }
