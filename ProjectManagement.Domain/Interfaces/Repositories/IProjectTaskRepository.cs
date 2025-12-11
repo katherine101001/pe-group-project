@@ -26,5 +26,8 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task DeleteAsync(ProjectTask projectTask);
 
         Task<int> GetTotalTasksAsync();
+
+         Task<List<ProjectTask>> SearchAsync(string keyword);
+
     }
 }

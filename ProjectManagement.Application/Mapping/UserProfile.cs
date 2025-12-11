@@ -2,6 +2,8 @@ using AutoMapper;
 using ProjectManagement.Domain.Entities.Users;
 using ProjectManagement.Application.DTOs.Users;
 
+
+
 namespace ProjectManagement.Application.Mapping
 {
     public class UserProfile : Profile
@@ -13,6 +15,7 @@ namespace ProjectManagement.Application.Mapping
             CreateMap<User,DisplayTeamMemberDto>()
                       .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : "Member"));
             // CreateMap<User,InviteTeamDto>();
+            
 
             // Input DTO -> Entity
             CreateMap<CreateUserDto, User>()

@@ -107,5 +107,21 @@ namespace ProjectManagement.Infrastructure.Repositories
         {
             return await _context.ProjectTask.CountAsync();
         }
+
+         public async Task<List<ProjectTask>> SearchAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return new List<ProjectTask>();
+            }
+
+            return await _context.ProjectTask
+                .Where(t =>
+                    (t.Title != null && t.Title.Contains(keyword)) ||
+                    (t.Description != null && t.Description.Contains(keyword))
+                )
+                .ToListAsync();
+        }
+
     }
 }
