@@ -99,47 +99,47 @@ namespace ProjectManagement.Application.Services
         //     return _mapper.Map<UserDto>(user);
         // }
 
-        // public async Task InviteUserAsync(InviteTeamDto dto)
-        // {
 
-        //     var user = await _userRepository.GetByEmailAsync(dto.Email);
-        //     if (user == null)
-        //      {
-        //          throw new Exception($"User with email '{dto.Email}' not found");
-        //      }
+//未完成
+        public async Task InviteUserAsync(InviteTeamDto dto)
+{
+    var user = await _userRepository.GetByEmailAsync(dto.Email);
+    if (user == null)
+    {
+        throw new Exception($"User with email '{dto.Email}' not found");
+    }
 
-        //     var roleName = string.IsNullOrEmpty(dto.Role) ? "Member" : dto.Role;
+    // 默认角色为 Member
+    string roleName = string.IsNullOrEmpty(dto.Role) ? "Member" : dto.Role;
 
-        //     Guid roleId = dto.Role switch
-        //     {
-        //          "Admin" => Guid.Parse("11111111-1111-1111-1111-111111111111"),
-        //          "Member" => Guid.Parse("22222222-2222-2222-2222-222222222222"),
-        //         _ => throw new Exception($"Invalid role '{dto.Role}'")
-        //     };
+    // 直接对应数据库中已有的 RoleId
+    Guid roleId = roleName switch
+    {
+        "Leader" => Guid.Parse("19C40377-92B4-4E7E-B51B-33BC73994834"),
+        "Member" => Guid.Parse("CCCD3629-1AD8-43B8-9CE7-B8268F7722A6"),
+        _ => throw new Exception($"Invalid role '{roleName}'")
+    };
 
-        //     user.UserRoles.Clear();
+    // 直接更新 User 的 RoleId
+    user.RoleId = roleId;
 
-        //      user.UserRoles.Add(new UserRole
-        //     {
-        //         UserId = user.Id,
-        //         RoleId = roleId
-        //     });
+    await _userRepository.UpdateAsync(user);
+}
 
-        //     await _userRepository.UpdateAsync(user);
-        // }
 
-//         public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
-//         {
-//            var users = await _userRepository.GetAllAsync();
-           
-//            return users.Select(u => new DispalyTeamMemberDto
-//             {
-//                  Name = u.Name ?? "Unknown",
-//                  Email = u.Email,
-//                  Role = u.UserRoles.FirstOrDefault()?.Role.Name ?? "Member"
- 
-//             }).ToList();
-//         }
+public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
+{
+    var users = await _userRepository.GetAllAsyncRole(); // 从数据库拿所有用户
+    return users.Select(u => new DisplayTeamMemberDto
+    {
+        Name = u.Name ?? "Unknown",
+        Email = u.Email,
+        Role = u.Role != null ? u.Role.Name : "Unknown" // 防止 Role 为 null
+    }).ToList();
+}
+
+
+
 
 //         public async Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword)
 //             {

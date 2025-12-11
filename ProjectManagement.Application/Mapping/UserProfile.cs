@@ -10,13 +10,14 @@ namespace ProjectManagement.Application.Mapping
         {
             // Entity -> Output DTO
             CreateMap<User, UserDto>();
-            // CreateMap<User,DispalyTeamMemberDto>();
+            CreateMap<User,DisplayTeamMemberDto>()
+                      .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role != null ? src.Role.Name : "Member"));
             // CreateMap<User,InviteTeamDto>();
 
             // Input DTO -> Entity
             CreateMap<CreateUserDto, User>();
             //    .ForMember(dest => dest.Role, opt => opt.Ignore());
-            // CreateMap<InviteTeamDto, User>();
+            CreateMap<InviteTeamDto, User>();
             //CreateMap<UpdateUserDto, User>();
 
         }
