@@ -46,4 +46,11 @@ public class UserController : ControllerBase
         var userDto = await _userService.CreateUserAsync(dto);
         return Ok(userDto);
     }
+
+    [HttpGet("teamstats")]
+        public async Task<ActionResult<DashboardTeam>> GetTeamStats()
+        {
+            var stats = await _userService.GetDashboardTeamStatsAsync();
+            return Ok(stats);
+        }
 }
