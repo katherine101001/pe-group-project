@@ -96,11 +96,6 @@ namespace ProjectManagement.Infrastructure.Data
                 .HasOne(t => t.AssignToUser)
                 .WithMany(u => u.ProjectTasks) 
                 .HasForeignKey(t => t.AssignToUserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-                .HasOne(t => t.AssignToUser)
-                .WithMany(u => u.ProjectTasks) // 如果 User 有对应集合
-                .HasForeignKey(t => t.AssignToUserId)
                 .OnDelete(DeleteBehavior.Restrict); // 改成 Restrict 或 NoAction
 
             // -------------------------------
