@@ -27,9 +27,16 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IProjectTaskService, ProjectTaskService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IProjectTaskAnalyticsService, ProjectTaskAnalyticsService>();
+
+
+
+builder.Services.Configure<MailjetOptions>(
+    builder.Configuration.GetSection("Mailjet")
+);
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(

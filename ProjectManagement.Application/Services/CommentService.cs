@@ -83,36 +83,69 @@ namespace ProjectManagement.Application.Services
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public CommentService(ICommentRepository commentRepository, IMapper mapper)
+        public CommentService(
+            ICommentRepository commentRepository,
+            IUserRepository userRepository,
+            IEmailService emailService,
+            IMapper mapper)
         {
             _commentRepository = commentRepository;
+            _userRepository = userRepository;
+            _emailService = emailService;
             _mapper = mapper;
         }
 
-        public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
+       public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
         {
+            // 创建 Comment
             var comment = _mapper.Map<Comment>(dto);
 
-            // 添加 Mention
+            // 先添加 Mention
             if (dto.MentionedUserIds != null)
             {
                 foreach (var userId in dto.MentionedUserIds)
                 {
-                    comment.Mentions.Add(new Mention
+                    var user = await _userRepository.GetByIdAsync(userId);
+                    if (user != null)
                     {
-                        CommentId = comment.Id,
-                        MentionedUserId = userId
-                    });
+                        comment.Mentions.Add(new Mention
+                        {
+                            CommentId = comment.Id,
+                            MentionedUserId = userId
+                        });
+                    }
                 }
             }
 
+            // 保存 Comment（包含 Mentions）
             await _commentRepository.AddAsync(comment);
 
-            // 查询完整对象以 Include User 和 MentionedUser
+            // 查询完整 Comment
             var fullComment = await _commentRepository.GetByIdWithIncludesAsync(comment.Id);
-            return _mapper.Map<CommentDto>(fullComment);
+            var commentDto = _mapper.Map<CommentDto>(fullComment);
+
+            // 发送邮件（异步，不影响保存）
+            if (dto.MentionedUserIds != null)
+            {
+                foreach (var userId in dto.MentionedUserIds)
+                {
+                    var user = await _userRepository.GetByIdAsync(userId);
+                    if (user != null)
+                    {
+                        await _emailService.SendMentionEmailAsync(
+                            user.Email,
+                            comment.Content ?? "",
+                            user.Name ?? "User"
+                        );
+                    }
+                }
+            }
+
+            return commentDto;
         }
 
         public async Task<CommentDto?> GetCommentByIdAsync(Guid id)
