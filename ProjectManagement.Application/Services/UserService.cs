@@ -10,12 +10,18 @@ namespace ProjectManagement.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IProjectTaskRepository _projectTaskRepository;
+    
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper,IProjectRepository projectRepository,
+            IProjectTaskRepository projecttaskRepository)   
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _projectRepository = projectRepository;
+            _projectTaskRepository = projecttaskRepository;
         }
 
         // public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
@@ -99,68 +105,76 @@ namespace ProjectManagement.Application.Services
         //     return _mapper.Map<UserDto>(user);
         // }
 
-        // public async Task InviteUserAsync(InviteTeamDto dto)
-        // {
 
-        //     var user = await _userRepository.GetByEmailAsync(dto.Email);
-        //     if (user == null)
-        //      {
-        //          throw new Exception($"User with email '{dto.Email}' not found");
-        //      }
 
-        //     var roleName = string.IsNullOrEmpty(dto.Role) ? "Member" : dto.Role;
 
-        //     Guid roleId = dto.Role switch
-        //     {
-        //          "Admin" => Guid.Parse("11111111-1111-1111-1111-111111111111"),
-        //          "Member" => Guid.Parse("22222222-2222-2222-2222-222222222222"),
-        //         _ => throw new Exception($"Invalid role '{dto.Role}'")
-        //     };
+public async Task<User> InviteUserAsync(InviteTeamDto dto)
+        {
+            // 1. 检查邮箱是否已存在
+            var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
+            if (existingUser != null)
+                throw new Exception($"User with email '{dto.Email}' already exists.");
 
-        //     user.UserRoles.Clear();
+            // 2. 根据角色名称查找角色
+            var role = await _userRepository.GetByNameAsync(dto.Role);
+            if (role == null)
+                throw new Exception($"Role '{dto.Role}' not found.");
 
-        //      user.UserRoles.Add(new UserRole
-        //     {
-        //         UserId = user.Id,
-        //         RoleId = roleId
-        //     });
+            // 3. 创建 User 实体并赋值
+            var user = _mapper.Map<User>(dto);
+            user.RoleId = role.Id;           // 给用户赋角色
+            user.Name = "New User";          // 默认名字
+            user.Password = "12345";         // 默认密码
 
-        //     await _userRepository.UpdateAsync(user);
-        // }
+            // 4. 保存用户
+            await _userRepository.AddAsync(user);
 
-//         public async Task<List<DispalyTeamMemberDto>> GetAllUsersSimpleAsync()
-//         {
-//            var users = await _userRepository.GetAllAsync();
-           
-//            return users.Select(u => new DispalyTeamMemberDto
-//             {
-//                  Name = u.Name ?? "Unknown",
-//                  Email = u.Email,
-//                  Role = u.UserRoles.FirstOrDefault()?.Role.Name ?? "Member"
- 
-//             }).ToList();
-//         }
+            return user;
+        }
 
-//         public async Task<List<DispalyTeamMemberDto>>SearchUersAsync(string keyword)
-//             {
-//                 if (string.IsNullOrEmpty(keyword))
-//                 return new List<DispalyTeamMemberDto>();  // 空列表返回，不抛异常也可以
+public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
+{
+    var users = await _userRepository.GetAllAsyncRole(); // 从数据库拿所有用户
+    return users.Select(u => new DisplayTeamMemberDto
+    {
+        Name = u.Name ?? "Unknown",
+        Email = u.Email,
+        Role = u.Role != null ? u.Role.Name : "Unknown" // 防止 Role 为 null
+    }).ToList();
+}
 
-//                 var users = await _userRepository.GetAllAsync();
 
-//                 var filtered = users.Where(u =>
-//                          (u.Name != null && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
-//                          (u.Email.Contains(keyword, StringComparison.OrdinalIgnoreCase)) ||
-//                          u.UserRoles.Any(ur => ur.Role.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-//                                          ).ToList();
+        public async Task<List<DisplayTeamMemberDto>> SearchUsersAsync(string keyword)
+{
+    if (string.IsNullOrEmpty(keyword))
+        return new List<DisplayTeamMemberDto>();
 
-//                  return filtered.Select(u => new DispalyTeamMemberDto
-//                         {
-//                             Name = u.Name ?? "Unknown",
-//                             Email = u.Email,
-//                             Role = u.UserRoles.FirstOrDefault()?.Role.Name
-//                         }).ToList();
-// }
+    var users = await _userRepository.GetAllAsyncRole();
+
+    var filtered = users.Where(u =>
+        (!string.IsNullOrEmpty(u.Name) && u.Name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0) ||
+        (!string.IsNullOrEmpty(u.Email) && u.Email.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0) ||
+        (u.Role != null && u.Role.Name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+    ).ToList();
+
+    return filtered.Select(u => new DisplayTeamMemberDto
+    {
+        Name = u.Name ?? "Unknown",
+        Email = u.Email,
+        Role = u.Role != null ? u.Role.Name : "Unknown"
+    }).ToList();
+}
+        public async Task<DashboardTeam> GetDashboardTeamStatsAsync()
+        {
+            return new DashboardTeam
+            {
+                TotalUsers = await _userRepository.GetTotalUsersAsync(),
+                TotalProjects = await _projectRepository.GetTotalProjectsAsync(),
+                TotalTasks = await _projectTaskRepository.GetTotalTasksAsync()
+            };
+        }
+        
+
 
 
 

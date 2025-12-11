@@ -24,5 +24,10 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task AddAsync(ProjectTask projectTask);
         Task UpdateAsync(ProjectTask projectTask);
         Task DeleteAsync(ProjectTask projectTask);
+
+        Task<int> GetTotalTasksAsync();
+
+         Task<List<ProjectTask>> SearchAsync(string keyword);
+
     }
 }

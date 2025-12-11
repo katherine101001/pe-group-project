@@ -1,4 +1,5 @@
 using ProjectManagement.Application.DTOs.Tasks;
+using ProjectManagement.Application.DTOs.Projects;
 
 namespace ProjectManagement.Application.Interfaces.Services
 {
@@ -11,9 +12,11 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task DeleteProjectTaskAsync(Guid id);
 
 
-        Task<ProjectTaskDto> GetUpdateProjectTaskByIdAsync(Guid id);
         Task<ProjectTaskDetailsDto?> GetProjectTaskBrieflyByIdAsync(Guid id);
         Task<List<ProjectTaskDetailsDto>> GetAllProjectTasksBrieflyAsync();
+
+        Task<List<SearchTaskDto>> SearchTasksAsync(string keyword);
+    
    
     }
 }

@@ -16,5 +16,9 @@ namespace ProjectManagement.Application.Interfaces.Services
 
         Task DeleteProjectAsync(Guid id);
 
+        Task<List<SearchProjectDto>> SearchProjectsAsync(string keyword);
+
+
+
     }
 }

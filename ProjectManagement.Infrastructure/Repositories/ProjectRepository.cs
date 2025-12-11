@@ -67,5 +67,18 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<int> GetTotalProjectsAsync()
+        {
+            return await _context.Project.CountAsync(p => p.Status == "Active"); // 只统计 Active 项目
+        }
+
+        public async Task<List<Project>> SearchAsync(string keyword)
+        {
+            return await _context.Project
+                 .Where(p => p.Title.Contains(keyword) || (p.Description != null && p.Description.Contains(keyword)))
+                 .ToListAsync();
+
+        }
+
     }
 }
