@@ -1,9 +1,9 @@
 using System;
-using ProjectManagement.Application.DTOs.Users;
+using ProjectManagement.Domain.Entities.Users;
 
 namespace ProjectManagement.Application.DTOs.Tasks
 {
-    public class ProjectTaskDetails
+    public class ProjectTaskDetailsDto
     {
         public string Title { get; set; } = null!;
         public string? Type { get; set; }
@@ -12,8 +12,9 @@ namespace ProjectManagement.Application.DTOs.Tasks
         public string Description { get; set; } = string.Empty;
         public Guid ProjectId { get; set; }
 
-        public Guid? AssignTo { get; set; }
-        public UserDto? User { get; set; }
+        public Guid AssignToUserId { get; set; }
+        //        public User AssignToUser { get; set; } = null!; 
+        public string? AssigneeName { get; set; }
 
         public DateTime? DueDate { get; set; }
 

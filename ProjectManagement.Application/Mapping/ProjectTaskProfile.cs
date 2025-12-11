@@ -9,11 +9,12 @@ namespace ProjectManagement.Application.Mapping
         public ProjectTaskProfile()
         {
             // Entity -> Output DTO
-            CreateMap<ProjectTask, ProjectTaskDto>();
-               // .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+             CreateMap<ProjectTask, ProjectTaskDto>()
+                .ForMember(dest => dest.AssigneeName, opt => opt.MapFrom(src => src.AssignToUser.Name));
+    
 
-            CreateMap<ProjectTask, ProjectTaskDetails>();
-             //   .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User));
+            CreateMap<ProjectTask, ProjectTaskDetailsDto>()
+                .ForMember(dest => dest.AssigneeName, opt => opt.MapFrom(src => src.AssignToUser.Name));
 
             // Input DTO -> Entity
             //CreateMap<CreateTaskDto, Task>();

@@ -33,6 +33,7 @@ namespace ProjectManagement.Application.Services
 
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
+            Console.WriteLine(task.AssignToUserId);
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
@@ -49,6 +50,26 @@ namespace ProjectManagement.Application.Services
                 return null;
 
             return _mapper.Map<ProjectTaskDto>(task);
+        }
+
+        public async Task<ProjectTaskDto> GetUpdateProjectTaskByIdAsync(Guid id)
+        {
+            var task = await _projectTaskRepository.GetByIdAsync(id);
+
+            if (task == null)
+                throw new NotFoundException("Task not found");
+
+            // Map entity to DTO for update
+            var dto = _mapper.Map<ProjectTaskDto>(task);
+
+            // Optionally include assignee info
+            if (task.AssignToUser != null)
+            {
+                dto.AssignToUserId = task.AssignToUserId;
+                dto.AssigneeName = task.AssignToUser.Name; // or map only needed fields
+            }
+
+            return dto;
         }
 
         public async Task<List<ProjectTaskDto>> GetAllProjectTasksAsync()
@@ -80,20 +101,20 @@ namespace ProjectManagement.Application.Services
             await _projectTaskRepository.DeleteAsync(existingTask);
         }
 
-        public async Task<ProjectTaskDetails?> GetProjectTaskBrieflyByIdAsync(Guid id)
+        public async Task<ProjectTaskDetailsDto?> GetProjectTaskBrieflyByIdAsync(Guid id)
         {
             var task = await _projectTaskRepository.GetByIdAsync(id);
 
             if (task == null)
                 return null;
 
-            return _mapper.Map<ProjectTaskDetails>(task);
+            return _mapper.Map<ProjectTaskDetailsDto>(task);
         }
 
-        public async Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync()
+        public async Task<List<ProjectTaskDetailsDto>> GetAllProjectTasksBrieflyAsync()
         {
             var tasks = await _projectTaskRepository.GetAllAsync();
-            return _mapper.Map<List<ProjectTaskDetails>>(tasks);
+            return _mapper.Map<List<ProjectTaskDetailsDto>>(tasks);
         }
     }
 }

@@ -87,8 +87,15 @@ namespace ProjectManagement.Infrastructure.Data
             // -------------------------------
             // ProjectTask key
             // -------------------------------
+            // modelBuilder.Entity<ProjectTask>()
+            //     .HasKey(t => t.Id);
+
             modelBuilder.Entity<ProjectTask>()
-                .HasKey(t => t.Id);
+                .HasOne(t => t.AssignToUser)
+                .WithMany(u => u.ProjectTasks) 
+                .HasForeignKey(t => t.AssignToUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
 
             // -------------------------------
             // Mentions

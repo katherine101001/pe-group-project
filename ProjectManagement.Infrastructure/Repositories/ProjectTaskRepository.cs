@@ -35,14 +35,14 @@ namespace ProjectManagement.Infrastructure.Repositories
         public async Task<List<ProjectTask>> GetAllAsync()
         {
             return await _context.ProjectTask
-                                 .Include(t => t.User)   // <-- 关键
+                                 .Include(t => t.AssignToUser)   // <-- 关键
                                  .ToListAsync();
         }
 
         public async Task<ProjectTask?> GetByIdAsync(Guid id)
         {
             return await _context.ProjectTask
-                                 .Include(t => t.User)   // <-- 关键
+                                 .Include(t => t.AssignToUser)   // <-- 关键
                                  .FirstOrDefaultAsync(t => t.Id == id);
         }
 
