@@ -10,12 +10,18 @@ namespace ProjectManagement.Application.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IProjectTaskRepository _projectTaskRepository;
+    
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IMapper mapper,IProjectRepository projectRepository,
+            IProjectTaskRepository projecttaskRepository)   
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _projectRepository = projectRepository;
+            _projectTaskRepository = projecttaskRepository;
         }
 
         // public async Task<UserDto> CreateUserAsync(CreateUserDto dto)
@@ -158,6 +164,16 @@ public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
         Role = u.Role != null ? u.Role.Name : "Unknown"
     }).ToList();
 }
+        public async Task<DashboardTeam> GetDashboardTeamStatsAsync()
+        {
+            return new DashboardTeam
+            {
+                TotalUsers = await _userRepository.GetTotalUsersAsync(),
+                TotalProjects = await _projectRepository.GetTotalProjectsAsync(),
+                TotalTasks = await _projectTaskRepository.GetTotalTasksAsync()
+            };
+        }
+        
 
 
 

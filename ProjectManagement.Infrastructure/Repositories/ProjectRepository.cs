@@ -67,5 +67,10 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<int> GetTotalProjectsAsync()
+        {
+            return await _context.Project.CountAsync(p => p.Status == "Active"); // 只统计 Active 项目
+        }
+
     }
 }

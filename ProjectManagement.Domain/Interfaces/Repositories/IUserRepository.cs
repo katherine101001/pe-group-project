@@ -20,7 +20,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<List<User>> GetAllAsyncRole();
 
-
+        Task<int> GetTotalUsersAsync();
 
     }
 }

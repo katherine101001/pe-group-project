@@ -17,5 +17,7 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync();
 
         Task<List<DisplayTeamMemberDto>> SearchUsersAsync(string keyword);
+
+        Task<DashboardTeam> GetDashboardTeamStatsAsync();
     }
 }

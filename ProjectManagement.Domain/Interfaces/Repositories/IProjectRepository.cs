@@ -13,5 +13,6 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task AddAsync(Project project);
         Task UpdateAsync(Project project);
         Task DeleteAsync(Project project);
+        Task<int> GetTotalProjectsAsync();
     }
 }

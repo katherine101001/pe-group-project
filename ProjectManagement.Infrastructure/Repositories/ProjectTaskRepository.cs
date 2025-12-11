@@ -102,5 +102,10 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Select(g => new { Priority = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.Priority, x => x.Count);
         }
+
+        public async Task<int> GetTotalTasksAsync()
+        {
+            return await _context.ProjectTask.CountAsync();
+        }
     }
 }

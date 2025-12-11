@@ -62,7 +62,10 @@ namespace ProjectManagement.Infrastructure.Repositories
                                 .ToListAsync();
                 }
 
-
+        public async Task<int> GetTotalUsersAsync()
+        {
+            return await _context.User.CountAsync();
+        }
 
     }
 }
