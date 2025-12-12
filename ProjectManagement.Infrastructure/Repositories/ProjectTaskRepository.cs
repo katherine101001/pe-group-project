@@ -165,5 +165,15 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<ProjectTask>> GetRecentTasksAsync(int limit)
+        {
+            return await _context.ProjectTask
+                .Include(t => t.AssignToUser)
+                .OrderByDescending(t => t.UpdatedAt)
+                .Take(limit)
+                .ToListAsync();
+        }
+
+
     }
 }

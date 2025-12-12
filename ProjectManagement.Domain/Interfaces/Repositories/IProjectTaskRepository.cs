@@ -33,5 +33,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<List<ProjectTask>> GetAllOverdueTasksAsync();
         Task<List<ProjectTask>> GetOverdueTasksByProjectIdAsync(Guid projectId);
+
+        Task<List<ProjectTask>> GetRecentTasksAsync(int limit);
     }
 }

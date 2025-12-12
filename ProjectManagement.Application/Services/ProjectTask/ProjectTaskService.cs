@@ -158,6 +158,12 @@ namespace ProjectManagement.Application.Services
         }
 
 
+        public async Task<List<RecentActivityDto>> GetRecentTasksAsync(int limit)
+        {
+            var tasks = await _projectTaskRepository.GetRecentTasksAsync(limit);
+
+            return _mapper.Map<List<RecentActivityDto>>(tasks);
+        }
 
     }
 

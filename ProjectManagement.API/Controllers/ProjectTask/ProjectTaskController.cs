@@ -62,6 +62,13 @@ public class ProjectTaskController : ControllerBase
         return Ok(overdueTasks);
     }
 
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecentTasks([FromQuery] int limit = 5)
+    {
+        var result = await _projectTaskService.GetRecentTasksAsync(limit);
+        return Ok(result);
+    }
+
 
 
     // [HttpPut("{id}")]

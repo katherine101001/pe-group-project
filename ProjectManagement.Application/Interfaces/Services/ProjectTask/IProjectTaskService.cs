@@ -20,7 +20,8 @@ namespace ProjectManagement.Application.Interfaces.Services
                 Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month);
                 Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync();
 
-                Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId); 
+                Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId);
+                Task<List<RecentActivityDto>> GetRecentTasksAsync(int limit);
                 
         }
 }

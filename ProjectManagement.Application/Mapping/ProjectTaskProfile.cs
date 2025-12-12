@@ -29,6 +29,9 @@ namespace ProjectManagement.Application.Mapping
                 .ForMember(dest => dest.TaskCount, opt => opt.Ignore());
 
             CreateMap<ProjectTask, OverdueTaskDto>();
+
+            CreateMap<ProjectTask, RecentActivityDto>()
+                .ForMember(dest => dest.AssigneeName, opt => opt.MapFrom(src => src.AssignToUser.Name));
         }
     }
 }
