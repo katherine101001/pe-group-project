@@ -55,6 +55,15 @@ public class ProjectTaskController : ControllerBase
     }
 
 
+    [HttpGet("overdue/{projectId}")]
+    public async Task<IActionResult> GetOverdueTasksByProject(Guid projectId)
+    {
+        var overdueTasks = await _projectTaskService.GetOverdueTasksByProjectIdAsync(projectId);
+        return Ok(overdueTasks);
+    }
+
+
+
     // [HttpPut("{id}")]
     // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)
     // {

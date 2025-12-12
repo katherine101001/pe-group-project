@@ -108,7 +108,7 @@ namespace ProjectManagement.Infrastructure.Repositories
             return await _context.ProjectTask.CountAsync();
         }
 
-         public async Task<List<ProjectTask>> SearchAsync(string keyword)
+        public async Task<List<ProjectTask>> SearchAsync(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
             {
@@ -120,6 +120,48 @@ namespace ProjectManagement.Infrastructure.Repositories
                     (t.Title != null && t.Title.Contains(keyword)) ||
                     (t.Description != null && t.Description.Contains(keyword))
                 )
+                .ToListAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.DueDate != null &&
+                            t.DueDate.Value.Date >= startDate.Date &&
+                            t.DueDate.Value.Date <= endDate.Date)
+                .GroupBy(t => t.DueDate!.Value.Date)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionaryAsync(
+                    x => x.Date.ToString("yyyy-MM-dd"),
+                    x => x.Count
+                );
+        }
+
+        public async Task<List<ProjectTask>> GetAllOverdueTasksAsync()
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return await _context.ProjectTask
+                .Where(t => t.DueDate != null 
+                            && t.DueDate < today 
+                            && t.Status != "COMPLETED")
+                .ToListAsync();
+        }
+
+
+        public async Task<List<ProjectTask>> GetOverdueTasksByProjectIdAsync(Guid projectId)
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId
+                            && t.DueDate != null
+                            && t.DueDate < today
+                            && t.Status != "COMPLETED")
                 .ToListAsync();
         }
 

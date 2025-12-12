@@ -1,6 +1,7 @@
 using AutoMapper;
 using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Application.DTOs.Tasks;
+using ProjectManagement.Application.DTOs;
 
 namespace ProjectManagement.Application.Mapping
 {
@@ -21,6 +22,13 @@ namespace ProjectManagement.Application.Mapping
             CreateMap<CreateProjectTaskDto, ProjectTask>();
 
             CreateMap<ProjectTask, SearchTaskDto>();
+
+            CreateMap<ProjectTask, ProjectTaskCalendarDto>()
+                .ForMember(dest => dest.Date,
+                        opt => opt.MapFrom(src => src.DueDate.HasValue ? src.DueDate.Value.ToString("yyyy-MM-dd") : ""))
+                .ForMember(dest => dest.TaskCount, opt => opt.Ignore());
+
+            CreateMap<ProjectTask, OverdueTaskDto>();
         }
     }
 }

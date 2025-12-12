@@ -4,6 +4,7 @@ using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
 using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Shared.Exceptions;
+using ProjectManagement.Application.DTOs;
 
 namespace ProjectManagement.Application.Services
 {
@@ -117,12 +118,47 @@ namespace ProjectManagement.Application.Services
             return _mapper.Map<List<ProjectTaskDetailsDto>>(tasks);
         }
 
-         public async Task<List<SearchTaskDto>> SearchTasksAsync(string keyword)
+        public async Task<List<SearchTaskDto>> SearchTasksAsync(string keyword)
         {
             var tasks = await _projectTaskRepository.SearchAsync(keyword);
             return _mapper.Map<List<SearchTaskDto>>(tasks);
-        
-    }
+
+        }
+
+
+        public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month)
+        {
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            var taskCounts = await _projectTaskRepository
+                .GetTaskCountsByDateRangeAsync(startDate, endDate);
+
+            var calendarDtos = taskCounts
+                .Select(tc => new ProjectTaskCalendarDto
+                {
+                    Date = tc.Key,     // "yyyy-MM-dd"
+                    TaskCount = tc.Value
+                })
+                .ToList();
+
+            return calendarDtos;
+        }
+
+        public async Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync()
+        {
+            var tasks = await _projectTaskRepository.GetAllOverdueTasksAsync();
+            return _mapper.Map<List<OverdueTaskDto>>(tasks);
+        }
+
+        public async Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId)
+        {
+            var tasks = await _projectTaskRepository.GetOverdueTasksByProjectIdAsync(projectId);
+            return _mapper.Map<List<OverdueTaskDto>>(tasks);
+        }
+
+
+
     }
 
 }
