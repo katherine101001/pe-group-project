@@ -157,6 +157,13 @@ namespace ProjectManagement.Application.Services
             return _mapper.Map<List<OverdueTaskDto>>(tasks);
         }
 
+        public async Task<int> GetSoonToOverdueTaskCountAsync()
+        {
+            return await _projectTaskRepository.CountSoonToOverdueTasksAsync();
+        }
+
+
+
 
         public async Task<List<RecentActivityDto>> GetRecentTasksAsync(int limit)
         {
@@ -164,6 +171,7 @@ namespace ProjectManagement.Application.Services
 
             return _mapper.Map<List<RecentActivityDto>>(tasks);
         }
+
 
     }
 

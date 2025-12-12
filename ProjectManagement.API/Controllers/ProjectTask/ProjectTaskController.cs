@@ -62,6 +62,13 @@ public class ProjectTaskController : ControllerBase
         return Ok(overdueTasks);
     }
 
+    [HttpGet("overdue/count")]
+    public async Task<IActionResult> GetSoonOverdueTaskCount()
+    {
+        var count = await _projectTaskService.GetSoonToOverdueTaskCountAsync();
+        return Ok(new { count });
+    }
+
     [HttpGet("recent")]
     public async Task<IActionResult> GetRecentTasks([FromQuery] int limit = 5)
     {
