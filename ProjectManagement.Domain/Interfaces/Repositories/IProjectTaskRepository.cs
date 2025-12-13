@@ -29,5 +29,8 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
          Task<List<ProjectTask>> SearchAsync(string keyword);
 
+         Task<int> GetMyTasksCountAsync(Guid userId);
+         Task<int> GetOverdueTasksCountAsync(Guid userId);
+
     }
 }

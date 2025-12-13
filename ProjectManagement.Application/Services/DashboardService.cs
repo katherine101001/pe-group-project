@@ -46,5 +46,17 @@ namespace ProjectManagement.Application.Services
 
             return dashboardStats;
         }
+
+        public async Task<DashboardProjectStatsNumDto> GetDashboardProjectStatsAsync(Guid userId)
+            {
+                return new DashboardProjectStatsNumDto
+                {
+                    TotalProjects = await _projectRepository.GetTotalProjectsAsync(),
+                    CompletedProjects = await _projectRepository.GetCompletedProjectsAsync(),
+                    MyTasks = await _projectTaskRepository.GetMyTasksCountAsync(userId),
+                    OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync(userId)
+                };
+            }
+
     }
 }

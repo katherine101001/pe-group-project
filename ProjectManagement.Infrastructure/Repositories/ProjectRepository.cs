@@ -80,5 +80,12 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         }
 
+        public async Task<int> GetCompletedProjectsAsync()
+            {
+                return await _context.Project
+                    .Where(p => p.Status == "COMPLETED")
+                    .CountAsync();
+            }
+
     }
 }

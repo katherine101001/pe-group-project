@@ -123,5 +123,23 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> GetMyTasksCountAsync(Guid userId)
+            {
+                return await _context.ProjectTask
+                    .Where(t => t.AssignToUserId == userId)
+                    .CountAsync();
+            }
+
+            public async Task<int> GetOverdueTasksCountAsync(Guid userId)
+            {
+                return await _context.ProjectTask
+                    .Where(t =>
+                        t.AssignToUserId == userId &&
+                        t.DueDate < DateTime.UtcNow &&
+                        t.Status != "COMPLETED")
+                    .CountAsync();
+            }
+
+
     }
 }
