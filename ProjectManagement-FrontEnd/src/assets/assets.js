@@ -12,28 +12,28 @@ export const assets = {
 
 export const dummyUsers = [
     {
-        "id": "user_1",
-        "name": "Alex Smith",
-        "email": "alexsmith@example.com",
+        "id": "32ce7db8-731e-43ad-aabe-6012043f92e6",
+        "name": "Apple",
+        "email": "apple@example.com",
         "image": profile_img_a,
-        "createdAt": "2025-10-06T11:04:03.485Z",
-        "updatedAt": "2025-10-06T11:04:03.485Z"
+        "createdAt": "2025-12-11 06:00:06.9920890",
+        "updatedAt": "2025-12-11 06:00:06.9920940"
     },
     {
-        "id": "user_2",
-        "name": "John Warrel",
-        "email": "johnwarrel@example.com",
+        "id": "74c1be87-1868-414d-a052-6ea24fb29800",
+        "name": "John Doe",
+        "email": "john.doe@example.com",
         "image": profile_img_j,
-        "createdAt": "2025-10-09T13:20:24.360Z",
-        "updatedAt": "2025-10-09T13:20:24.360Z"
+        "createdAt": "2025-12-11 08:12:18.3391510",
+        "updatedAt": "2025-12-11 08:12:18.3391520"
     },
     {
-        "id": "user_3",
-        "name": "Oliver Watts",
-        "email": "oliverwatts@example.com",
+        "id": "72da7c5e-a07c-4e30-b59c-a6a4fc164f58",
+        "name": "Orange",
+        "email": "orange@example.com",
         "image": profile_img_o,
-        "createdAt": "2025-09-01T04:31:22.043Z",
-        "updatedAt": "2025-09-26T09:03:37.866Z"
+        "createdAt": "2025-12-11 06:02:05.2354620",
+        "updatedAt": "2025-12-11 06:02:05.2355010"
     }
 ]
 
@@ -76,28 +76,28 @@ export const dummyWorkspaces = [
         ],
         "projects": [
             {
-                "id": "4d0f6ef3-e798-4d65-a864-00d9f8085c51",
-                "name": "LaunchPad CRM",
+                "id": "d1c12b82-1628-4c4c-a163-95e3a9593106",
+                "name": "New Website Redesign",
                 "description": "A next-gen CRM for startups to manage customer pipelines, analytics, and automation.",
                 "priority": "HIGH",
                 "status": "ACTIVE",
                 "start_date": "2025-10-10T00:00:00.000Z",
                 "end_date": "2026-02-28T00:00:00.000Z",
-                "team_lead": "user_3",
+                "team_lead": "72da7c5e-a07c-4e30-b59c-a6a4fc164f58",
                 "workspaceId": "org_1",
                 "progress": 65,
                 "createdAt": "2025-10-13T08:01:35.491Z",
                 "updatedAt": "2025-10-13T08:01:45.620Z",
                 "tasks": [
                     {
-                        "id": "24ca6d74-7d32-41db-a257-906a90bca8f4",
-                        "projectId": "4d0f6ef3-e798-4d65-a864-00d9f8085c51",
+                        "id": "737230df-2b8c-4e1f-a358-33920b1b2c4a",
+                        "projectId": "714c4b5e-948e-4cfa-be36-1af4b187f821",
                         "title": "Design Dashboard UI",
                         "description": "Create a modern, responsive CRM dashboard layout.",
                         "status": "IN_PROGRESS",
                         "type": "FEATURE",
                         "priority": "HIGH",
-                        "assigneeId": "user_1",
+                        "assigneeId": "32ce7db8-731e-43ad-aabe-6012043f92e6",
                         "due_date": "2025-10-31T00:00:00.000Z",
                         "createdAt": "2025-10-13T08:04:04.084Z",
                         "updatedAt": "2025-10-13T08:04:04.084Z",
@@ -105,14 +105,14 @@ export const dummyWorkspaces = [
                         "comments": []
                     },
                     {
-                        "id": "9dbd5f04-5a29-4232-9e8c-a1d8e4c566df",
-                        "projectId": "4d0f6ef3-e798-4d65-a864-00d9f8085c51",
+                        "id": "21652122-3924-4f6b-ba79-4bac98b9a712",
+                        "projectId": "714c4b5e-948e-4cfa-be36-1af4b187f821",
                         "title": "Integrate Email API",
                         "description": "Set up SendGrid integration for email campaigns.",
                         "status": "TODO",
                         "type": "TASK",
                         "priority": "MEDIUM",
-                        "assigneeId": "user_2",
+                        "assigneeId": "74c1be87-1868-414d-a052-6ea24fb29800",
                         "due_date": "2025-11-30T00:00:00.000Z",
                         "createdAt": "2025-10-13T08:10:31.922Z",
                         "updatedAt": "2025-10-13T08:10:31.922Z",
@@ -120,8 +120,8 @@ export const dummyWorkspaces = [
                         "comments": []
                     },
                     {
-                        "id": "0e6798ad-8a1d-4bca-b0cd-8199491dbf03",
-                        "projectId": "4d0f6ef3-e798-4d65-a864-00d9f8085c51",
+                        "id": "b6e23b71-61b1-4649-b963-a7390ae9fa71",
+                        "projectId": "714c4b5e-948e-4cfa-be36-1af4b187f821",
                         "title": "Fix Duplicate Contact Bug",
                         "description": "Duplicate records appear when importing CSV files.",
                         "status": "TODO",
@@ -135,7 +135,7 @@ export const dummyWorkspaces = [
                         "comments": []
                     },
                     {
-                        "id": "7989b4cc-1234-4816-a1d9-cc86cd09596a",
+                        "id": "718111de-3fbb-433a-814f-a83211441382",
                         "projectId": "4d0f6ef3-e798-4d65-a864-00d9f8085c51",
                         "title": "Add Role-Based Access Control (RBAC)",
                         "description": "Define user roles and permissions for the dashboard.",

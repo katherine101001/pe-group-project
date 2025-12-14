@@ -207,5 +207,18 @@ namespace ProjectManagement.Infrastructure.Repositories
         }
 
 
+        public async Task<List<ProjectTask>> GetTasksByUserAsync(Guid userId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.AssignToUserId == userId)
+                .Select(t => new ProjectTask
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Status = t.Status
+                })
+                .ToListAsync();
+        }
+
     }
 }

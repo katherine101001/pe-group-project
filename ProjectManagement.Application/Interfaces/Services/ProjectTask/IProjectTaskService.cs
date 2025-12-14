@@ -23,6 +23,7 @@ namespace ProjectManagement.Application.Interfaces.Services
                 Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId);
                 Task<List<RecentActivityDto>> GetRecentTasksAsync(int limit);
                 Task<int> GetSoonToOverdueTaskCountAsync();
+                Task<List<MyTaskSidebarDto>> GetTasksByUserAsync(Guid userId);
                 
         }
 }

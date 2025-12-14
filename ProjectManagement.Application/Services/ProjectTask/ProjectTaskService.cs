@@ -172,6 +172,12 @@ namespace ProjectManagement.Application.Services
             return _mapper.Map<List<RecentActivityDto>>(tasks);
         }
 
+        public async Task<List<MyTaskSidebarDto>> GetTasksByUserAsync(Guid userId)
+        {
+            var tasks = await _projectTaskRepository.GetTasksByUserAsync(userId);
+            return _mapper.Map<List<MyTaskSidebarDto>>(tasks);
+        }
+
 
     }
 

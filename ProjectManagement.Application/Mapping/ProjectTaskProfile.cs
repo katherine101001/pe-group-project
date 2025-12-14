@@ -32,6 +32,11 @@ namespace ProjectManagement.Application.Mapping
 
             CreateMap<ProjectTask, RecentActivityDto>()
                 .ForMember(dest => dest.AssigneeName, opt => opt.MapFrom(src => src.AssignToUser.Name));
+
+            CreateMap<ProjectTask, MyTaskSidebarDto>()
+                .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status));
+
         }
     }
 }

@@ -76,6 +76,30 @@ public class ProjectTaskController : ControllerBase
         return Ok(result);
     }
 
+    // [HttpGet("my-tasks")]
+    // public async Task<IActionResult> GetMyTasks()
+    // {
+    //     // 假设你已经有用户 Id，从 token 或 session 获取
+    //     var userIdClaim = User.FindFirst("72da7c5e-a07c-4e30-b59c-a6a4fc164f58");
+    //     if (userIdClaim == null)
+    //         return Unauthorized("User not found.");
+
+    //     if (!Guid.TryParse(userIdClaim.Value, out var userId))
+    //         return Unauthorized("Invalid user ID.");
+
+    //     var tasks = await _projectTaskService.GetTasksByUserAsync(userId);
+
+    //     return Ok(tasks);
+    // }
+
+
+
+    [HttpGet("my-tasks/{userId:guid}")]
+    public async Task<IActionResult> GetMyTasks(Guid userId)
+    {
+        var tasks = await _projectTaskService.GetTasksByUserAsync(userId);
+        return Ok(tasks);
+    }
 
 
     // [HttpPut("{id}")]
