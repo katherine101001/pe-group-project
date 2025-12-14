@@ -53,4 +53,24 @@ public class UserController : ControllerBase
             var stats = await _userService.GetDashboardTeamStatsAsync();
             return Ok(stats);
         }
+
+
+        [HttpPost("invite")]
+    public async Task<IActionResult> InviteUser([FromBody] InviteTeamDto dto)
+    {
+        if (dto == null || string.IsNullOrEmpty(dto.Email) || string.IsNullOrEmpty(dto.Role))
+            return BadRequest("Email and Role are required.");
+
+        try
+        {
+            var user = await _userService.InviteUserAsync(dto);
+            return Ok(user); // 返回用户信息
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+    }
+
+    
 }
