@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Domain.Entities.Collaborations;
+using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Infrastructure.Data;
 
 namespace ProjectManagement.Infrastructure.Repositories
@@ -40,6 +40,25 @@ namespace ProjectManagement.Infrastructure.Repositories
         public async Task<Comment?> GetByIdAsync(Guid id)
         {
             return await _context.Comment.FindAsync(id);
+        }
+
+        // 包含 User 和 MentionedUser 导航属性
+        public async Task<Comment?> GetByIdWithIncludesAsync(Guid id)
+        {
+            return await _context.Comment
+                .Include(c => c.User)
+                .Include(c => c.Mentions)
+                    .ThenInclude(m => m.MentionedUser)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        public async Task<List<Comment>> GetAllWithIncludesAsync()
+        {
+            return await _context.Comment
+                .Include(c => c.User)
+                .Include(c => c.Mentions)
+                    .ThenInclude(m => m.MentionedUser)
+                .ToListAsync();
         }
     }
 }

@@ -21,16 +21,23 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
 
 
+
         Task AddAsync(ProjectTask projectTask);
         Task UpdateAsync(ProjectTask projectTask);
         Task DeleteAsync(ProjectTask projectTask);
 
         Task<int> GetTotalTasksAsync();
 
-         Task<List<ProjectTask>> SearchAsync(string keyword);
+        Task<List<ProjectTask>> SearchAsync(string keyword);
 
-         Task<int> GetMyTasksCountAsync(Guid userId);
-         Task<int> GetOverdueTasksCountAsync(Guid userId);
+        Task<int> GetMyTasksCountAsync(Guid userId);
+        Task<int> GetOverdueTasksCountAsync(Guid userId);
 
+        Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<List<ProjectTask>> GetAllOverdueTasksAsync();
+        Task<List<ProjectTask>> GetOverdueTasksByProjectIdAsync(Guid projectId);
+
+        Task<List<ProjectTask>> GetRecentTasksAsync(int limit);
+        Task<int> CountSoonToOverdueTasksAsync();
     }
 }

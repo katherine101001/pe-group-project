@@ -108,7 +108,7 @@ namespace ProjectManagement.Infrastructure.Repositories
             return await _context.ProjectTask.CountAsync();
         }
 
-         public async Task<List<ProjectTask>> SearchAsync(string keyword)
+        public async Task<List<ProjectTask>> SearchAsync(string keyword)
         {
             if (string.IsNullOrWhiteSpace(keyword))
             {
@@ -124,21 +124,87 @@ namespace ProjectManagement.Infrastructure.Repositories
         }
 
         public async Task<int> GetMyTasksCountAsync(Guid userId)
-            {
-                return await _context.ProjectTask
-                    .Where(t => t.AssignToUserId == userId)
-                    .CountAsync();
-            }
+        {
+            return await _context.ProjectTask
+                .Where(t => t.AssignToUserId == userId)
+                .CountAsync();
+        }
 
-            public async Task<int> GetOverdueTasksCountAsync(Guid userId)
-            {
-                return await _context.ProjectTask
-                    .Where(t =>
-                        t.AssignToUserId == userId &&
-                        t.DueDate < DateTime.UtcNow &&
-                        t.Status != "COMPLETED")
-                    .CountAsync();
-            }
+        public async Task<int> GetOverdueTasksCountAsync(Guid userId)
+        {
+            return await _context.ProjectTask
+                .Where(t =>
+                    t.AssignToUserId == userId &&
+                    t.DueDate < DateTime.UtcNow &&
+                    t.Status != "COMPLETED")
+                .CountAsync();
+        }
+
+        public async Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.DueDate != null &&
+                            t.DueDate.Value.Date >= startDate.Date &&
+                            t.DueDate.Value.Date <= endDate.Date)
+                .GroupBy(t => t.DueDate!.Value.Date)
+                .Select(g => new
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .ToDictionaryAsync(
+                    x => x.Date.ToString("yyyy-MM-dd"),
+                    x => x.Count
+                );
+        }
+
+        public async Task<List<ProjectTask>> GetAllOverdueTasksAsync()
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return await _context.ProjectTask
+                .Where(t => t.DueDate != null
+                            && t.DueDate < today
+                            && t.Status != "COMPLETED")
+                .ToListAsync();
+        }
+
+
+        public async Task<List<ProjectTask>> GetOverdueTasksByProjectIdAsync(Guid projectId)
+        {
+            var today = DateTime.UtcNow.Date;
+
+            return await _context.ProjectTask
+                .Where(t => t.ProjectId == projectId
+                            && t.DueDate != null
+                            && t.DueDate < today
+                            && t.Status != "COMPLETED")
+                .ToListAsync();
+        }
+
+        public async Task<int> CountSoonToOverdueTasksAsync()
+        {
+            var today = DateTime.Now.Date;
+            var next7Days = today.AddDays(7);
+
+            return await _context.ProjectTask
+                .Where(t => t.DueDate.HasValue
+                            && t.Status != "COMPLETED"
+                            && t.DueDate.Value.Date >= today
+                            && t.DueDate.Value.Date <= next7Days)
+                .CountAsync();
+        }
+
+
+
+        public async Task<List<ProjectTask>> GetRecentTasksAsync(int limit)
+        {
+            return await _context.ProjectTask
+                .Include(t => t.AssignToUser)
+                .OrderByDescending(t => t.UpdatedAt)
+                .Take(limit)
+                .ToListAsync();
+        }
 
 
     }

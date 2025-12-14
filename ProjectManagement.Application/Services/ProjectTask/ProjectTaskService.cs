@@ -4,6 +4,7 @@ using ProjectManagement.Domain.Interfaces.Repositories;
 using ProjectManagement.Application.Interfaces.Services;
 using ProjectManagement.Domain.Entities.ProjectTasks;
 using ProjectManagement.Shared.Exceptions;
+using ProjectManagement.Application.DTOs;
 
 namespace ProjectManagement.Application.Services
 {
@@ -33,6 +34,7 @@ namespace ProjectManagement.Application.Services
 
             // Map DTO -> Entity
             var task = _mapper.Map<ProjectTask>(dto);
+            Console.WriteLine(task.AssignToUserId);
 
             // Save entity
             await _projectTaskRepository.AddAsync(task);
@@ -49,6 +51,26 @@ namespace ProjectManagement.Application.Services
                 return null;
 
             return _mapper.Map<ProjectTaskDto>(task);
+        }
+
+        public async Task<ProjectTaskDto> GetUpdateProjectTaskByIdAsync(Guid id)
+        {
+            var task = await _projectTaskRepository.GetByIdAsync(id);
+
+            if (task == null)
+                throw new NotFoundException("Task not found");
+
+            // Map entity to DTO for update
+            var dto = _mapper.Map<ProjectTaskDto>(task);
+
+            // Optionally include assignee info
+            if (task.AssignToUser != null)
+            {
+                dto.AssignToUserId = task.AssignToUserId;
+                dto.AssigneeName = task.AssignToUser.Name; // or map only needed fields
+            }
+
+            return dto;
         }
 
         public async Task<List<ProjectTaskDto>> GetAllProjectTasksAsync()
@@ -80,28 +102,77 @@ namespace ProjectManagement.Application.Services
             await _projectTaskRepository.DeleteAsync(existingTask);
         }
 
-        public async Task<ProjectTaskDetails?> GetProjectTaskBrieflyByIdAsync(Guid id)
+        public async Task<ProjectTaskDetailsDto?> GetProjectTaskBrieflyByIdAsync(Guid id)
         {
             var task = await _projectTaskRepository.GetByIdAsync(id);
 
             if (task == null)
                 return null;
 
-            return _mapper.Map<ProjectTaskDetails>(task);
+            return _mapper.Map<ProjectTaskDetailsDto>(task);
         }
 
-        public async Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync()
+        public async Task<List<ProjectTaskDetailsDto>> GetAllProjectTasksBrieflyAsync()
         {
             var tasks = await _projectTaskRepository.GetAllAsync();
-            return _mapper.Map<List<ProjectTaskDetails>>(tasks);
+            return _mapper.Map<List<ProjectTaskDetailsDto>>(tasks);
         }
 
-         public async Task<List<SearchTaskDto>> SearchTasksAsync(string keyword)
+        public async Task<List<SearchTaskDto>> SearchTasksAsync(string keyword)
         {
             var tasks = await _projectTaskRepository.SearchAsync(keyword);
             return _mapper.Map<List<SearchTaskDto>>(tasks);
-        
-    }
+
+        }
+
+
+        public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month)
+        {
+            var startDate = new DateTime(year, month, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+
+            var taskCounts = await _projectTaskRepository
+                .GetTaskCountsByDateRangeAsync(startDate, endDate);
+
+            var calendarDtos = taskCounts
+                .Select(tc => new ProjectTaskCalendarDto
+                {
+                    Date = tc.Key,     // "yyyy-MM-dd"
+                    TaskCount = tc.Value
+                })
+                .ToList();
+
+            return calendarDtos;
+        }
+
+        public async Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync()
+        {
+            var tasks = await _projectTaskRepository.GetAllOverdueTasksAsync();
+            return _mapper.Map<List<OverdueTaskDto>>(tasks);
+        }
+
+        public async Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId)
+        {
+            var tasks = await _projectTaskRepository.GetOverdueTasksByProjectIdAsync(projectId);
+            return _mapper.Map<List<OverdueTaskDto>>(tasks);
+        }
+
+        public async Task<int> GetSoonToOverdueTaskCountAsync()
+        {
+            return await _projectTaskRepository.CountSoonToOverdueTasksAsync();
+        }
+
+
+
+
+        public async Task<List<RecentActivityDto>> GetRecentTasksAsync(int limit)
+        {
+            var tasks = await _projectTaskRepository.GetRecentTasksAsync(limit);
+
+            return _mapper.Map<List<RecentActivityDto>>(tasks);
+        }
+
+
     }
 
 }

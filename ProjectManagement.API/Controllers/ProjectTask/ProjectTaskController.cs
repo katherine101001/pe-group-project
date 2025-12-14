@@ -36,6 +36,48 @@ public class ProjectTaskController : ControllerBase
     }
 
 
+    [HttpGet("calendar")]
+    public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
+    {
+        if (year <= 0 || month < 1 || month > 12)
+            return BadRequest("Invalid year or month.");
+
+        var result = await _projectTaskService.GetTaskCalendarAsync(year, month);
+
+        return Ok(result);
+    }
+
+    [HttpGet("overdue")]
+    public async Task<IActionResult> GetAllOverdueTasks()
+    {
+        var overdueTasks = await _projectTaskService.GetAllOverdueTasksAsync();
+        return Ok(overdueTasks);
+    }
+
+
+    [HttpGet("overdue/{projectId}")]
+    public async Task<IActionResult> GetOverdueTasksByProject(Guid projectId)
+    {
+        var overdueTasks = await _projectTaskService.GetOverdueTasksByProjectIdAsync(projectId);
+        return Ok(overdueTasks);
+    }
+
+    [HttpGet("overdue/count")]
+    public async Task<IActionResult> GetSoonOverdueTaskCount()
+    {
+        var count = await _projectTaskService.GetSoonToOverdueTaskCountAsync();
+        return Ok(new { count });
+    }
+
+    [HttpGet("recent")]
+    public async Task<IActionResult> GetRecentTasks([FromQuery] int limit = 5)
+    {
+        var result = await _projectTaskService.GetRecentTasksAsync(limit);
+        return Ok(result);
+    }
+
+
+
     // [HttpPut("{id}")]
     // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)
     // {
@@ -49,4 +91,5 @@ public class ProjectTaskController : ControllerBase
         await _projectTaskService.DeleteProjectTaskAsync(id);
         return NoContent();
     }
+
 }
