@@ -16,6 +16,8 @@ namespace ProjectManagement.Application.Mapping
             // Input DTO -> Entity
             CreateMap<CreateProjectDto, Project>();
             CreateMap<UpdateProjectDto, Project>();
+
+            CreateMap<Project, SearchProjectDto>();
         }
     }
 }

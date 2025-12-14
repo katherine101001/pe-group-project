@@ -95,5 +95,14 @@ namespace ProjectManagement.Application.Services
             var tasks = await _projectTaskRepository.GetAllAsync();
             return _mapper.Map<List<ProjectTaskDetails>>(tasks);
         }
+
+         public async Task<List<SearchTaskDto>> SearchTasksAsync(string keyword)
+        {
+            var tasks = await _projectTaskRepository.SearchAsync(keyword);
+            return _mapper.Map<List<SearchTaskDto>>(tasks);
+        
     }
+    }
+
 }
+    

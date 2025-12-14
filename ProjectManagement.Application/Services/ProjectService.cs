@@ -165,6 +165,13 @@ namespace ProjectManagement.Application.Services
             await _projectRepository.DeleteAsync(existingProject);
         }
 
+        public async Task<List<SearchProjectDto>> SearchProjectsAsync(string keyword)
+        {
+            var projects = await _projectRepository.SearchAsync(keyword);
+            return _mapper.Map<List<SearchProjectDto>>(projects);
+        }
+        
+
 
     }
 }

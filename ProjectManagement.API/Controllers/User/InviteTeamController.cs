@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Application.DTOs.Users;
 using ProjectManagement.Application.Interfaces.Services;
@@ -15,45 +13,44 @@ public class UserController : ControllerBase
         _userService = userService;
     }
 
-    //api/user/update-role
-    [HttpPost("update-role")]
-    public async Task<IActionResult> UpdateUserRole([FromBody] InviteTeamDto dto)
-    {
-        // 验证请求体是否为空或邮箱为空
-        if (dto == null || string.IsNullOrEmpty(dto.Email))
-            return BadRequest("Email is required");
-
-        // 如果前端没传 Role，则默认设置为 "Member"
-        if (string.IsNullOrEmpty(dto.Role))
-            dto.Role = "Member";
-
-        try
-        {
-            // 调用业务逻辑服务，处理邀请或更新角色
-            await _userService.InviteUserAsync(dto);
-            return Ok(new { Message = "User role updated successfully" });
-        }
-        catch (Exception ex)
-        {
-            return BadRequest(new { Message = ex.Message });
-        }
-    }
-
-    //api/user/Team-Memberlist
-    [HttpGet("Team-Memberlist")]
+    // GET: api/user/simple
+    // 必须放在 id:guid 前面
+    [HttpGet("Team")]
     public async Task<IActionResult> GetAllUsersSimple()
     {
         var users = await _userService.GetAllUsersSimpleAsync();
         return Ok(users);
     }
-    //api/user/search?keyword=Alex(sample)
-    [HttpGet("search")]
-    public async Task<IActionResult> SearchUsers([FromQuery] string keyword)
-    {
-        if (string.IsNullOrWhiteSpace(keyword))
-            return BadRequest("Keyword cannot be empty");
 
-        var users = await _userService.SearchUersAsync(keyword);
+    // GET: api/user
+    [HttpGet]
+    public async Task<IActionResult> GetAllUsers()
+    {
+        var users = await _userService.GetAllUsersAsync();
         return Ok(users);
     }
+
+    // GET: api/user/{id}
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetUserById(Guid id)
+    {
+        var user = await _userService.GetUserByIdAsync(id);
+        if (user == null) return NotFound();
+        return Ok(user);
+    }
+
+    // POST: api/user/register
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] CreateUserDto dto)
+    {
+        var userDto = await _userService.CreateUserAsync(dto);
+        return Ok(userDto);
+    }
+
+    [HttpGet("teamstats")]
+        public async Task<ActionResult<DashboardTeam>> GetTeamStats()
+        {
+            var stats = await _userService.GetDashboardTeamStatsAsync();
+            return Ok(stats);
+        }
 }

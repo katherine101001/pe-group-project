@@ -35,14 +35,14 @@ namespace ProjectManagement.Infrastructure.Repositories
         public async Task<List<ProjectTask>> GetAllAsync()
         {
             return await _context.ProjectTask
-                                 .Include(t => t.User)   // <-- 关键
+                                 .Include(t => t.AssignToUser)   // <-- 关键
                                  .ToListAsync();
         }
 
         public async Task<ProjectTask?> GetByIdAsync(Guid id)
         {
             return await _context.ProjectTask
-                                 .Include(t => t.User)   // <-- 关键
+                                 .Include(t => t.AssignToUser)   // <-- 关键
                                  .FirstOrDefaultAsync(t => t.Id == id);
         }
 
@@ -102,5 +102,44 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Select(g => new { Priority = g.Key, Count = g.Count() })
                 .ToDictionaryAsync(x => x.Priority, x => x.Count);
         }
+
+        public async Task<int> GetTotalTasksAsync()
+        {
+            return await _context.ProjectTask.CountAsync();
+        }
+
+         public async Task<List<ProjectTask>> SearchAsync(string keyword)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return new List<ProjectTask>();
+            }
+
+            return await _context.ProjectTask
+                .Where(t =>
+                    (t.Title != null && t.Title.Contains(keyword)) ||
+                    (t.Description != null && t.Description.Contains(keyword))
+                )
+                .ToListAsync();
+        }
+
+        public async Task<int> GetMyTasksCountAsync(Guid userId)
+            {
+                return await _context.ProjectTask
+                    .Where(t => t.AssignToUserId == userId)
+                    .CountAsync();
+            }
+
+            public async Task<int> GetOverdueTasksCountAsync(Guid userId)
+            {
+                return await _context.ProjectTask
+                    .Where(t =>
+                        t.AssignToUserId == userId &&
+                        t.DueDate < DateTime.UtcNow &&
+                        t.Status != "COMPLETED")
+                    .CountAsync();
+            }
+
+
     }
 }

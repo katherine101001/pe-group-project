@@ -1,4 +1,5 @@
 using ProjectManagement.Application.DTOs.Tasks;
+using ProjectManagement.Application.DTOs.Projects;
 
 namespace ProjectManagement.Application.Interfaces.Services
 {
@@ -13,6 +14,9 @@ namespace ProjectManagement.Application.Interfaces.Services
 
         Task<ProjectTaskDetails?> GetProjectTaskBrieflyByIdAsync(Guid id);
         Task<List<ProjectTaskDetails>> GetAllProjectTasksBrieflyAsync();
+
+        Task<List<SearchTaskDto>> SearchTasksAsync(string keyword);
+    
    
     }
 }

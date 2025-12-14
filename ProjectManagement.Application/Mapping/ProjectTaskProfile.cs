@@ -18,6 +18,8 @@ namespace ProjectManagement.Application.Mapping
             // Input DTO -> Entity
             //CreateMap<CreateTaskDto, Task>();
             CreateMap<CreateProjectTaskDto, ProjectTask>();
+
+            CreateMap<ProjectTask, SearchTaskDto>();
         }
     }
 }

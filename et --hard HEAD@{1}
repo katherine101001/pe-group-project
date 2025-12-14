@@ -1,0 +1,122 @@
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{0}: checkout: moving from alexversion4 to version5
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{1}: reset: moving to HEAD
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{2}: checkout: moving from alexversion4 to alexversion4
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{3}: checkout: moving from alexversion4 to alexversion4
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{4}: checkout: moving from test to alexversion4
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{5}: checkout: moving from alexversion4 to test
+[33mcfe6a769[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mversion5[m[33m, [m[1;31morigin/alexversion4[m[33m, [m[1;32mtest[m[33m, [m[1;32malexversion4[m[33m)[m HEAD@{6}: commit: Update Latest Version with Database Upate, User Roles Updated, Register Controller
+[33m7f78f5ae[m HEAD@{7}: commit: Update Latest Version with Database Upate, User Roles Updated, Register Controller
+[33m733ab443[m HEAD@{8}: commit: Update Latest Version with Database Upate, User Roles Updated, Register Controller
+[33m8366a30e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{9}: checkout: moving from develop to alexversion4
+[33m8366a30e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{10}: merge alexversion4: Fast-forward
+[33meabb8d63[m HEAD@{11}: reset: moving to origin/develop
+[33meabb8d63[m HEAD@{12}: checkout: moving from develop to develop
+[33meabb8d63[m HEAD@{13}: reset: moving to origin/develop
+[33m8366a30e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{14}: checkout: moving from develop to develop
+[33m8366a30e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{15}: merge alexversion4: Fast-forward
+[33m2376b3c5[m HEAD@{16}: checkout: moving from alexversion4 to develop
+[33m8366a30e[m[33m ([m[1;31morigin/develop[m[33m, [m[1;32mdevelop[m[33m)[m HEAD@{17}: commit (merge): UserRollSuccessful
+[33m92638546[m HEAD@{18}: commit: Updatebefore insert develop
+[33m0d13b428[m HEAD@{19}: commit: Updatebefore insert develop
+[33ma02b4da6[m HEAD@{20}: commit: Updatebefore insert develop
+[33m4f5f9e06[m HEAD@{21}: commit (merge): Updatebefore insert develop
+[33m4cb0a3fc[m HEAD@{22}: commit: Updatebefore insert develop
+[33mfb44396c[m HEAD@{23}: commit: SearchMember
+[33m96aa903a[m HEAD@{24}: commit: DisplayMember
+[33ma9d5d835[m HEAD@{25}: commit: DisplayMember
+[33md1eacc0a[m HEAD@{26}: commit: DisplayMember
+[33mc020b09f[m HEAD@{27}: commit: UpdateRole
+[33m025dfec4[m HEAD@{28}: commit (merge): Resolve conflict: keep remote delete of appsettings.json
+[33m6dd7b886[m[33m ([m[1;31morigin/alexversion3[m[33m, [m[1;32malexversion3[m[33m)[m HEAD@{29}: checkout: moving from alexversion3 to alexversion4
+[33m6dd7b886[m[33m ([m[1;31morigin/alexversion3[m[33m, [m[1;32malexversion3[m[33m)[m HEAD@{30}: commit: UpdateRole
+[33m8d7a694f[m HEAD@{31}: commit: UpdateRole
+[33m6cd5f8a5[m HEAD@{32}: commit: UpdateRole
+[33m32f24a81[m HEAD@{33}: commit (merge): Save my work before pushing to GitHub
+[33m2376b3c5[m HEAD@{34}: checkout: moving from alexversion3 to alexversion3
+[33m2376b3c5[m HEAD@{35}: checkout: moving from develop to alexversion3
+[33m2376b3c5[m HEAD@{36}: checkout: moving from alexversion2 to develop
+[33m00a0767e[m[33m ([m[1;31morigin/alexversion2[m[33m, [m[1;32malexversion2[m[33m)[m HEAD@{37}: checkout: moving from develop to alexversion2
+[33m2376b3c5[m HEAD@{38}: commit (merge): save my work before pulling develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{39}: checkout: moving from alexversion2 to develop
+[33m00a0767e[m[33m ([m[1;31morigin/alexversion2[m[33m, [m[1;32malexversion2[m[33m)[m HEAD@{40}: commit: Add Invitation and TeamMember backend modules
+[33mc27beff1[m HEAD@{41}: commit: Add Invitation and TeamMember backend modules
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{42}: checkout: moving from frontend-login-register to alexversion2
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{43}: checkout: moving from main to frontend-login-register
+[33m180f3876[m[33m ([m[1;32mmain[m[33m)[m HEAD@{44}: checkout: moving from alexversion2 to main
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{45}: reset: moving to HEAD
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{46}: checkout: moving from new_branch_name to alexversion2
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{47}: reset: moving to origin/frontend/login-register
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{48}: reset: moving to HEAD
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{49}: reset: moving to HEAD
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{50}: reset: moving to HEAD
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{51}: checkout: moving from main to new_branch_name
+[33m180f3876[m[33m ([m[1;32mmain[m[33m)[m HEAD@{52}: reset: moving to HEAD
+[33m180f3876[m[33m ([m[1;32mmain[m[33m)[m HEAD@{53}: checkout: moving from alexversion2 to main
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{54}: reset: moving to origin/alexversion2
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{55}: checkout: moving from new-invite-feature to alexversion2
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{56}: reset: moving to HEAD
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{57}: checkout: moving from alexversion1 to new-invite-feature
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{58}: checkout: moving from alexversion1 to alexversion1
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{59}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{60}: checkout: moving from alexversion1 to alexversion2
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{61}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{62}: checkout: moving from alexversion1 to alexversion2
+[33mf16cfc78[m[33m ([m[1;32mnew-invite-feature[m[33m, [m[1;32malexversion1[m[33m)[m HEAD@{63}: commit: Save current changes before switching to alexversion2
+[33mc62f9f3b[m HEAD@{64}: checkout: moving from alexversion1 to alexversion1
+[33mc62f9f3b[m HEAD@{65}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{66}: checkout: moving from alexversion1 to alexversion2
+[33mc62f9f3b[m HEAD@{67}: checkout: moving from alexversion1 to alexversion1
+[33mc62f9f3b[m HEAD@{68}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{69}: checkout: moving from alexversion1 to alexversion2
+[33mc62f9f3b[m HEAD@{70}: checkout: moving from alexversion1 to alexversion1
+[33mc62f9f3b[m HEAD@{71}: commit: broken
+[33mdaba984e[m HEAD@{72}: checkout: moving from alexversion1 to alexversion1
+[33mdaba984e[m HEAD@{73}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{74}: checkout: moving from alexversion1 to alexversion2
+[33mdaba984e[m HEAD@{75}: commit: broken
+[33m7433a424[m HEAD@{76}: checkout: moving from alexversion1 to alexversion1
+[33m7433a424[m HEAD@{77}: commit: broken
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{78}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{79}: checkout: moving from alexversion1 to alexversion2
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{80}: checkout: moving from alexversion2 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{81}: checkout: moving from alexversion1 to alexversion2
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{82}: checkout: moving from alexversion1 to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{83}: branch: Reset to origin/frontend/login-register
+[33mfed29056[m HEAD@{84}: reset: moving to HEAD
+[33mfed29056[m HEAD@{85}: reset: moving to HEAD
+[33mfed29056[m HEAD@{86}: checkout: moving from frontend-login-register to alexversion1
+[33mcd9d40eb[m[33m ([m[1;31morigin/frontend/login-register[m[33m, [m[1;31morigin/alexversion1[m[33m, [m[1;32mnew_branch_name[m[33m, [m[1;32mfrontend-login-register[m[33m)[m HEAD@{87}: checkout: moving from alexversion1 to frontend-login-register
+[33mfed29056[m HEAD@{88}: commit: Save current progress
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{89}: checkout: moving from develop to alexversion1
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{90}: checkout: moving from feature/new-api to develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{91}: reset: moving to develop
+[33m283614db[m[33m ([m[1;31morigin/feature/new-api[m[33m)[m HEAD@{92}: commit: Testing
+[33m207627a9[m HEAD@{93}: commit (merge): Testing
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{94}: reset: moving to develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{95}: reset: moving to develop
+[33m03839b57[m[33m ([m[1;31morigin/feature/backendversion1[m[33m, [m[1;32mfeature/backendversion1[m[33m)[m HEAD@{96}: checkout: moving from develop to feature/new-api
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{97}: reset: moving to HEAD
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{98}: checkout: moving from develop to develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{99}: checkout: moving from feature/new-api to develop
+[33m03839b57[m[33m ([m[1;31morigin/feature/backendversion1[m[33m, [m[1;32mfeature/backendversion1[m[33m)[m HEAD@{100}: reset: moving to HEAD
+[33m03839b57[m[33m ([m[1;31morigin/feature/backendversion1[m[33m, [m[1;32mfeature/backendversion1[m[33m)[m HEAD@{101}: checkout: moving from feature/backendversion1 to feature/new-api
+[33m03839b57[m[33m ([m[1;31morigin/feature/backendversion1[m[33m, [m[1;32mfeature/backendversion1[m[33m)[m HEAD@{102}: commit: Add CreateTaskDto and UpdateTaskDto
+[33m8fc2806f[m HEAD@{103}: commit: Add CreateTaskDto and UpdateTaskDto
+[33mdedefa71[m HEAD@{104}: commit: Add CreateTaskDto and UpdateTaskDto
+[33m9b35da39[m HEAD@{105}: commit: Add CreateTaskDto and UpdateTaskDto
+[33m79412475[m HEAD@{106}: commit (merge): Save progress before merge
+[33me1677905[m HEAD@{107}: commit (merge): version1alex
+[33m9524868c[m HEAD@{108}: commit (merge): alex-version1
+[33me9dbca06[m HEAD@{109}: commit: WIP: temporary save before switching branch
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{110}: checkout: moving from develop to feature/backendversion1
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{111}: checkout: moving from develop to develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{112}: checkout: moving from feature/backend-login to develop
+[33m5ca2f799[m[33m ([m[1;32mfeature/backend-login[m[33m)[m HEAD@{113}: commit: WIP: temporary save before switching branch
+[33m4019a4ec[m[33m ([m[1;31morigin/feature/backend-login[m[33m)[m HEAD@{114}: reset: moving to origin/feature/backend-login
+[33m4019a4ec[m[33m ([m[1;31morigin/feature/backend-login[m[33m)[m HEAD@{115}: reset: moving to HEAD
+[33m4019a4ec[m[33m ([m[1;31morigin/feature/backend-login[m[33m)[m HEAD@{116}: reset: moving to HEAD
+[33m4019a4ec[m[33m ([m[1;31morigin/feature/backend-login[m[33m)[m HEAD@{117}: checkout: moving from develop to feature/backend-login
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{118}: reset: moving to HEAD
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{119}: checkout: moving from develop to develop
+[33mf6342080[m[33m ([m[1;32mfeature/new-api[m[33m)[m HEAD@{120}: checkout: moving from feature/backend-login to develop
+[33m4019a4ec[m[33m ([m[1;31morigin/feature/backend-login[m[33m)[m HEAD@{121}: commit: testing

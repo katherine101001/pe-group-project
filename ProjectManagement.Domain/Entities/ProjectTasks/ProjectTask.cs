@@ -18,7 +18,7 @@ namespace ProjectManagement.Domain.Entities.ProjectTasks
         public Guid AssignToUserId { get; set; }
         public User AssignToUser { get; set; } = null!;
 
-        public string? Title { get; set; }    // Goal title
+        public string? Title { get; set; } = null!;  // Goal title
         public string? Description { get; set; } = ""; // Optional description
         public DateTime? DueDate { get; set; }        // Goal deadline
         public string? Status { get; set; }

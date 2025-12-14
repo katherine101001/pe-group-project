@@ -15,7 +15,7 @@ namespace ProjectManagement.Infrastructure.Data
         // 1️⃣ Add DbSets for your entities
         public DbSet<User> User { get; set; } = null!;
         public DbSet<Role> Role { get; set; } = null!;
-        public DbSet<UserRole> UserRole { get; set; } = null!;
+        //public DbSet<UserRole> UserRole { get; set; } = null!;
 
 
         public DbSet<Project> Project { get; set; } = null!;
@@ -68,27 +68,35 @@ namespace ProjectManagement.Infrastructure.Data
             // -------------------------------
             // UserRole composite key
             // -------------------------------
-            modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
+            ///modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
 
             // UserRole → User
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.Entity<UserRole>()
+            //     .HasOne(ur => ur.User)
+            //     .WithMany(u => u.UserRoles)
+            //     .HasForeignKey(ur => ur.UserId)
+            //     .OnDelete(DeleteBehavior.Restrict);
 
-            // UserRole → Role
-            modelBuilder.Entity<UserRole>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // // UserRole → Role
+            // modelBuilder.Entity<UserRole>()
+            //     .HasOne(ur => ur.Role)
+            //     .WithMany(r => r.UserRoles)
+            //     .HasForeignKey(ur => ur.RoleId)
+            //     .OnDelete(DeleteBehavior.Restrict);
 
             // -------------------------------
             // ProjectTask key
             // -------------------------------
+            // modelBuilder.Entity<ProjectTask>()
+            //     .HasKey(t => t.Id);
+
+            // modelBuilder.Entity<ProjectTask>()
+            //     .HasKey(t => t.Id);
             modelBuilder.Entity<ProjectTask>()
-                .HasKey(t => t.Id);
+                .HasOne(t => t.AssignToUser)
+                .WithMany(u => u.ProjectTasks) 
+                .HasForeignKey(t => t.AssignToUserId)
+                .OnDelete(DeleteBehavior.Restrict); // 改成 Restrict 或 NoAction
 
             // -------------------------------
             // Mentions
