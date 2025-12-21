@@ -22,26 +22,30 @@ namespace ProjectManagement.Application.Services
         }
 
         // Create Task for the Project
-        public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dto)
+public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dto)
+    {
+        // 允许可空 AssignToUserId
+        if (dto.AssignToUserId != Guid.Empty)
         {
-
             var userExists = await _userRepository.GetByIdAsync(dto.AssignToUserId);
             if (userExists == null)
             {
                 throw new NotFoundException("Assignee user not found.");
             }
-
-
-            // Map DTO -> Entity
-            var task = _mapper.Map<ProjectTask>(dto);
-            Console.WriteLine(task.AssignToUserId);
-
-            // Save entity
-            await _projectTaskRepository.AddAsync(task);
-
-            var createdTask = await _projectTaskRepository.GetByIdAsync(task.Id);
-            return _mapper.Map<ProjectTaskDto>(createdTask!);
         }
+
+        // Map DTO -> Entity
+        var task = _mapper.Map<ProjectTask>(dto);
+
+        // 保存任务
+        await _projectTaskRepository.AddAsync(task);
+
+        // 取出任务，并 Include AssignToUser
+        var createdTask = await _projectTaskRepository.GetByIdWithAssigneeAsync(task.Id);
+
+        // 映射 DTO 返回前端
+        return _mapper.Map<ProjectTaskDto>(createdTask!);
+    }
 
         public async Task<ProjectTaskDto?> GetProjectTaskByIdAsync(Guid id)
         {
@@ -72,6 +76,13 @@ namespace ProjectManagement.Application.Services
 
             return dto;
         }
+
+        public async Task<List<ProjectTaskDto>> GetTasksByProjectIdAsync(Guid projectId)
+        {
+            var tasks = await _projectTaskRepository.GetByProjectIdAsync(projectId);
+            return _mapper.Map<List<ProjectTaskDto>>(tasks);
+        }
+
 
         public async Task<List<ProjectTaskDto>> GetAllProjectTasksAsync()
         {

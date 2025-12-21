@@ -1,6 +1,14 @@
-import { API } from '../api'; 
+import { API } from '../api';
 
-
+export const createTask = async (task) => {
+    try {
+        const res = await API.post("/tasks", task);
+        return res.data;
+    } catch (error) {
+        console.error("Failed to create task", error);
+        throw error;
+    }
+};
 
 
 export const getAllTasks = async () => {
@@ -63,3 +71,27 @@ export const getTaskById = async (taskId) => {
       return [];
     }
   };
+
+  export const getTasksByProjectId = async (projectId) => {
+    try {
+        const res = await API.get(`/tasks/project/${projectId}`); // 注意后端路由要匹配
+        return res.data.map(task => ({
+            ...task,
+            due_date: new Date(task.dueDate || task.due_date),
+            assignee: { name: task.assigneeName || "Unassigned" },
+        }));
+    } catch (error) {
+        console.error("Failed to fetch tasks by project", error);
+        return [];
+    }
+};
+
+export const updateTaskStatus = async (taskId, status) => {
+    const response = await axios.put(`/api/tasks/${taskId}`, { status });
+    return response.data;
+};
+
+export const deleteTasks = async (taskIds) => {
+    const promises = taskIds.map(id => axios.delete(`/api/tasks/${id}`));
+    await Promise.all(promises);
+};

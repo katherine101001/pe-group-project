@@ -35,6 +35,13 @@ public class ProjectTaskController : ControllerBase
         return Ok(projects);
     }
 
+    [HttpGet("project/{projectId:guid}")]
+    public async Task<IActionResult> GetTasksByProjectId(Guid projectId)
+    {
+        var tasks = await _projectTaskService.GetTasksByProjectIdAsync(projectId);
+        return Ok(tasks);
+    }
+
 
     [HttpGet("calendar")]
     public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
