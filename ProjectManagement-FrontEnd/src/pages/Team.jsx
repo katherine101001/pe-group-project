@@ -19,7 +19,7 @@ const Team = () => {
   const filterRoles = (list) =>
     list.filter(u => {
       const role = u.role?.toUpperCase();
-      return role === "MEMBER" || role === "MANAGER";
+      return role === "MEMBER" || role === "LEADER";
     });
 
   const fetchUsers = async () => {
@@ -88,7 +88,7 @@ const Team = () => {
     try {
       const newUser = await registerUser(dto);
       const role = dto.role.toUpperCase();
-      if (role !== "MEMBER" && role !== "MANAGER") return;
+      if (role !== "MEMBER" && role !== "LEADER") return;
 
       setUsers(prev => {
         const index = prev.findIndex(u => u.user.email.toLowerCase() === dto.email.toLowerCase());
@@ -244,7 +244,7 @@ const Team = () => {
                       </td>
                       <td className="px-6 py-2.5 whitespace-nowrap text-sm text-gray-500 dark:text-zinc-400">{user.user.email}</td>
                       <td className="px-6 py-2.5 whitespace-nowrap">
-                        <span className={`px-2 py-1 text-xs rounded-md ${user.role === "MANAGER"
+                        <span className={`px-2 py-1 text-xs rounded-md ${user.role === "LEADER"
                           ? "bg-blue-100 dark:bg-blue-500/20 text-blue-500 dark:text-blue-400"
                           : "bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300"}`}>
                           {user.role}
@@ -268,7 +268,7 @@ const Team = () => {
                     </div>
                   </div>
                   <div>
-                    <span className={`px-2 py-1 text-xs rounded-md ${user.role === "MANAGER"
+                    <span className={`px-2 py-1 text-xs rounded-md ${user.role === "LEADER"
                       ? "bg-blue-100 dark:bg-blue-500/20 text-blue-500 dark:text-blue-400"
                       : "bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300"}`}>
                       {user.role}
