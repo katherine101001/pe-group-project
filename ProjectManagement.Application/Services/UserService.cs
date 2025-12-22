@@ -9,11 +9,15 @@ namespace ProjectManagement.Application.Services
 {
     public class UserService : IUserService
     {
+
+        
         private readonly IUserRepository _userRepository;
         private readonly IProjectRepository _projectRepository;
         private readonly IProjectTaskRepository _projectTaskRepository;
     
         private readonly IMapper _mapper;
+
+        
 
         public UserService(IUserRepository userRepository, IMapper mapper,IProjectRepository projectRepository,
             IProjectTaskRepository projecttaskRepository)   
@@ -109,28 +113,36 @@ namespace ProjectManagement.Application.Services
 
 
 public async Task<User> InviteUserAsync(InviteTeamDto dto)
-        {
-            // 1. 检查邮箱是否已存在
-            var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
-            if (existingUser != null)
-                throw new Exception($"User with email '{dto.Email}' already exists.");
+{
+    // 1. 根据邮箱查找用户
+    var existingUser = await _userRepository.GetByEmailAsync(dto.Email);
 
-            // 2. 根据角色名称查找角色
-            var role = await _userRepository.GetByNameAsync(dto.Role);
-            if (role == null)
-                throw new Exception($"Role '{dto.Role}' not found.");
+    // 2. 根据角色名称查找角色
+    var role = await _userRepository.GetByNameAsync(dto.Role);
+    if (role == null)
+        throw new Exception($"Role '{dto.Role}' not found.");
 
-            // 3. 创建 User 实体并赋值
-            var user = _mapper.Map<User>(dto);
-            user.RoleId = role.Id;           // 给用户赋角色
-            user.Name = "New User";          // 默认名字
-            user.Password = "12345";         // 默认密码
+    if (existingUser != null)
+    {
+        // 用户已存在，更新角色
+        existingUser.RoleId = role.Id;
+        await _userRepository.UpdateAsync(existingUser); // 假设 Add/Update 内部已经保存
+        return existingUser;
+    }
 
-            // 4. 保存用户
-            await _userRepository.AddAsync(user);
+    // 3. 用户不存在，创建新用户
+    var user = _mapper.Map<User>(dto);
+    user.RoleId = role.Id;           // 给用户赋角色
+    user.Name = "New User";          // 默认名字
+    user.Password = "12345";         // 默认密码
 
-            return user;
-        }
+    // 4. 保存新用户
+    await _userRepository.AddAsync(user);  // 内部保存到数据库
+
+    return user;
+}
+
+
 
 public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
 {
@@ -174,6 +186,23 @@ public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
             };
         }
         
+
+public async Task<User?> LoginAsync(LoginDto dto)
+{
+    if (dto == null) return null;
+
+    var user = await _userRepository.GetByEmailAsyncLogin(dto.Email);
+    if (user == null) return null;
+
+    if (user.Password != dto.Password) return null;
+
+    if (user.Role == null) return null;
+    if (!string.Equals(user.Role.Name, dto.Role, StringComparison.OrdinalIgnoreCase))
+        return null;
+
+    return user;
+}
+
 
 
 

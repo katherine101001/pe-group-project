@@ -151,7 +151,6 @@
 //     </form>
 //   );
 // }
-
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { API } from "../services/api";
@@ -160,6 +159,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("MEMBER"); // 默认 MEMBER
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -169,21 +169,25 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 发送请求到后端 LoginDto
-      const res = await API.post("/user/login", { email, password });
+      // 🔹 传 email, password, role 给后端
+      const res = await API.post("/user/login", { email, password, role });
 
-      console.log("Login response:", res.data); // 🔹 调试用
+      console.log("Login response:", res.data); // 调试用
 
-      // 保存用户信息
-      localStorage.setItem("userName", res.data.userName);
-      localStorage.setItem("role", res.data.role);
+      // 保存登录信息到本地
+      localStorage.setItem("userName", res.data.userName || "");
+      localStorage.setItem("role", res.data.role || role);
 
-      // 登录成功跳转 Dashboard
-      navigate("/app");
+      // 根据 role 跳转页面
+      if (res.data.role === "ADMIN") {
+        navigate("/admin-dashboard");
+      } else if (res.data.role === "MANAGER") {
+        navigate("/manager-dashboard");
+      } else {
+        navigate("/app"); // 默认普通用户
+      }
     } catch (err) {
-      console.error("Login error:", err); // 🔹 调试用
-
-      // 显示后端返回错误消息
+      console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed");
     } finally {
       setLoading(false);
@@ -203,6 +207,7 @@ export default function Login() {
         {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
 
         <div className="space-y-5">
+          {/* Email */}
           <div>
             <input
               type="email"
@@ -214,6 +219,7 @@ export default function Login() {
             />
           </div>
 
+          {/* Password */}
           <div>
             <input
               type="password"
@@ -225,14 +231,27 @@ export default function Login() {
             />
           </div>
 
-            <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#2373ff] hover:bg-blue-600 text-white py-3 rounded font-medium mt-6 transition-colors"
-                >
-                {loading ? "Signing in..." : "Login"}
-            </button>
+          {/* Role 下拉 */}
+          <div>
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-3 py-2.5 border-b border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent placeholder-gray-400 transition-colors"
+            >
+              <option value="MEMBER">Member</option>
+              <option value="MANAGER">Manager</option>
+              <option value="ADMIN">Admin</option>
+            </select>
+          </div>
 
+          {/* 登录按钮 */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#2373ff] hover:bg-blue-600 text-white py-3 rounded font-medium mt-6 transition-colors"
+          >
+            {loading ? "Signing in..." : "Login"}
+          </button>
         </div>
 
         <div className="mt-8 text-center">
