@@ -1,8 +1,9 @@
 import { API } from '../api';
+import { updateProject } from "../services/projectAPI";
 
-export const createProject = async (data) => {
+export const createProject = async (payload) => {
   try {
-    const res = await API.post("/projects", data);
+    const res = await API.post("/projects", payload);
     return res.data;
   } catch (error) {
     console.error("Failed to create project", error);
@@ -29,3 +30,16 @@ export const getProjectById = async (id) => {
     return null;
   }
 };
+
+import { API } from "../api";
+
+export const updateProject = async (projectId, payload) => {
+  try {
+    const res = await API.put(`/projects/${projectId}`, payload);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to update project", error);
+    throw error;
+  }
+};
+

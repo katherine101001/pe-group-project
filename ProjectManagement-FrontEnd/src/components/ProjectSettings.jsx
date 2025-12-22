@@ -20,8 +20,35 @@ export default function ProjectSettings({ project }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!project) return;
 
+        setIsSubmitting(true);
+
+        try {
+            // Build payload. Keep null for empty optional fields
+            const payload = {
+                title: formData.name || null,
+                description: formData.description || null,
+                status: formData.status,
+                priority: formData.priority,
+                startDate: formData.start_date ? new Date(formData.start_date).toISOString() : null,
+                endDate: formData.end_date ? new Date(formData.end_date).toISOString() : null,
+                progress: formData.progress,
+            };
+
+            console.log("PUT payload:", payload);
+
+            await updateProject(project.id, payload);
+
+            alert("Project updated successfully!");
+        } catch (error) {
+            console.error("Failed to update project:", error);
+            alert("Failed to update project.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
+
 
     useEffect(() => {
         if (project) setFormData(project);
