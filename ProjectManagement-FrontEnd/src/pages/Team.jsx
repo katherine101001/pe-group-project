@@ -25,7 +25,6 @@ const Team = () => {
   const filterRoles = (list) =>
     list.filter(u => ["MEMBER", "LEADER"].includes(u.role?.toUpperCase()));
 
-
   const fetchUsers = async () => {
     try {
       setLoading(true);

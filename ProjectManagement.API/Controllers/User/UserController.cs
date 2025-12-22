@@ -54,7 +54,6 @@ public class UserController : ControllerBase
         return Ok(stats);
     }
 
-
     [HttpPost("invite")]
     public async Task<IActionResult> InviteUser([FromBody] InviteTeamDto dto)
     {
@@ -71,6 +70,4 @@ public class UserController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
-
-
 }
