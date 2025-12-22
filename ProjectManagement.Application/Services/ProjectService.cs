@@ -26,24 +26,25 @@ namespace ProjectManagement.Application.Services
             var project = _mapper.Map<Project>(dto);
 
             // Assign team lead
-            if (dto.TeamLeadId.HasValue)
+            if (!string.IsNullOrEmpty(dto.TeamLeadEmail))
             {
-                var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
+                var lead = await _userRepository.GetByEmailAsync(dto.TeamLeadEmail);
                 if (lead == null)
                     throw new NotFoundException("Team lead not found");
                 project.Leader = lead;
             }
 
-            foreach (var memberId in dto.TeamMemberIds) // Guid list from dropdown
+            // Assign team members
+            foreach (var email in dto.TeamMemberEmails)
             {
-                var user = await _userRepository.GetByIdAsync(memberId);
+                var user = await _userRepository.GetByEmailAsync(email);
                 if (user != null)
                 {
                     project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
                 }
                 else
                 {
-                    throw new NotFoundException($"User with ID {memberId} not found");
+                    throw new NotFoundException($"User with email {email} not found");
                 }
             }
 
@@ -170,8 +171,8 @@ namespace ProjectManagement.Application.Services
             var projects = await _projectRepository.SearchAsync(keyword);
             return _mapper.Map<List<SearchProjectDto>>(projects);
         }
-        
-        
+
+
 
     }
 }
