@@ -287,7 +287,7 @@ import { useState, useEffect, useMemo } from "react";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getTasksByProjectId } from "../services/ProjectTask/ProjectTask";
+import { getTasksByProjectId } from "../services/ProjectTask/ProjectTaskAPI";
 import { Bug, Zap, Square, GitCommit, MessageSquare, CalendarIcon, XIcon } from "lucide-react";
 
 const typeIcons = {

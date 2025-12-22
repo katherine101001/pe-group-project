@@ -407,9 +407,9 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CalendarIcon, MessageCircle, PenIcon } from "lucide-react";
 import { assets } from "../assets/assets";
-import { getTaskDetailsById } from "../services/ProjectTask/ProjectTask";
-import { getProjectById } from "../services/Project/Project";
-import { getCommentsByTaskId, addCommentToTask } from "../services/Comment/Comment";
+import { getTaskDetailsById } from "../services/ProjectTask/ProjectTaskAPI";
+import { getProjectById } from "../services/Project/ProjectAPI";
+import { getCommentsByTaskId, addCommentToTask } from "../services/Comment/CommentAPI";
 
 const TaskDetails = () => {
     const [searchParams] = useSearchParams();

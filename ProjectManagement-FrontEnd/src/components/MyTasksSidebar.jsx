@@ -95,7 +95,7 @@ import { useEffect, useState } from 'react';
 import { CheckSquareIcon, ChevronDownIcon, ChevronRightIcon } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getAllTasks } from '../services/ProjectTask/ProjectTask'; 
+import { getAllTasks } from '../services/ProjectTask/ProjectTaskAPI'; 
 
 function MyTasksSidebar() {
     const [showMyTasks, setShowMyTasks] = useState(false);

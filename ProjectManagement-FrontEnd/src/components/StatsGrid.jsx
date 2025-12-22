@@ -113,7 +113,7 @@
 import { FolderOpen, CheckCircle, Users, AlertTriangle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getOverdueCount } from "../services/Dashboard/dashboard";
+import { getOverdueCount } from "../services/Dashboard/DashboardAPI";
 
 export default function StatsGrid() {
   const currentWorkspace = useSelector(

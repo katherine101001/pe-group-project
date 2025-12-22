@@ -115,7 +115,7 @@ import { useState, useEffect } from "react";
 import { Plus, Search, FolderOpen } from "lucide-react";
 import ProjectCard from "../components/ProjectCard";
 import CreateProjectDialog from "../components/CreateProjectDialog";
-import { getAllProjects } from "../services/Project/Project";
+import { getAllProjects } from "../services/Project/ProjectAPI";
 
 export default function Projects() {
     const [projects, setProjects] = useState([]);

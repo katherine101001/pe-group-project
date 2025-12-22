@@ -1,5 +1,5 @@
 import { API } from '../api';
-import { updateProject } from "../services/projectAPI";
+//import { updateProject } from "../services/projectAPI";
 
 export const createProject = async (payload) => {
   try {
@@ -31,7 +31,7 @@ export const getProjectById = async (id) => {
   }
 };
 
-import { API } from "../api";
+//import { API } from "../api";
 
 export const updateProject = async (projectId, payload) => {
   try {
