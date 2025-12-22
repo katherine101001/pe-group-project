@@ -3,7 +3,9 @@ import { UsersIcon, Search, UserPlus, Shield, Activity } from "lucide-react";
 import InviteMemberDialog from "../components/InviteMemberDialog";
 import { getAllUsersSimple, getTeamStats, searchUsers, registerUser } from "../services/Team/team.api";
 
+
 const Team = () => {
+  const currentRole = localStorage.getItem("role");
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -133,12 +135,15 @@ const Team = () => {
             Manage team members and their contributions
           </p>
         </div>
-        <button
-          onClick={() => setIsDialogOpen(true)}
-          className="flex items-center px-5 py-2 rounded text-sm bg-gradient-to-br from-blue-500 to-blue-600 hover:opacity-90 text-white transition"
-        >
-          <UserPlus className="w-4 h-4 mr-2" /> Invite Member
-        </button>
+        {currentRole === "ADMIN" && (
+  <button
+    onClick={() => setIsDialogOpen(true)}
+    className="flex items-center px-5 py-2 rounded text-sm bg-gradient-to-br from-blue-500 to-blue-600 hover:opacity-90 text-white transition"
+  >
+    <UserPlus className="w-4 h-4 mr-2" /> Invite Member
+  </button>
+)}
+
 
         {/* ✅ 关键修改：传入 users 和 setUsers */}
         <InviteMemberDialog

@@ -67,11 +67,13 @@ namespace ProjectManagement.Infrastructure.Repositories
         // ✅ 修复这里
        
 
-       public async Task<User?> GetByEmailAsyncLogin(string email)
-        {
-            // 查询用户
-            return await _context.User.FirstOrDefaultAsync(u => u.Email == email);
-        }
+public async Task<User?> GetByEmailAsyncLogin(string email)
+{
+    return await _context.User
+                         .Include(u => u.Role)  // 加上这一行
+                         .FirstOrDefaultAsync(u => u.Email == email);
+}
+
 
     }
 }

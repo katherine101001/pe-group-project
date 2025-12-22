@@ -15,30 +15,44 @@ namespace ProjectManagement.API.Controllers.User
             _userService = userService;
         }
 
-        /// <summary>
-        /// User Login
-        /// </summary>
         [HttpPost("login")]
-public async Task<IActionResult> Login([FromBody] LoginDto dto)
-{
-    if (dto == null)
-        return BadRequest("Request body is null");
-
-    var user = await _userService.LoginAsync(dto);
-
-    if (user == null)
-        return Unauthorized(new
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            message = "Invalid email, password or role"
-        });
+            if (dto == null)
+                return BadRequest(new { message = "Request body is null" });
 
-    return Ok(new
-    {
-        message = "Login successful",
-        userId = user.Id,
-        role = user.Role.ToString()
-    });
-}
+            if (string.IsNullOrWhiteSpace(dto.Role))
+                return BadRequest(new { message = "Role is required" });
 
+            // ✅ 统一 role 格式
+            dto.Role = dto.Role.Trim().ToUpper();
+
+            var allowedRoles = new[] { "ADMIN", "MANAGER", "MEMBER" };
+            if (!allowedRoles.Contains(dto.Role))
+            {
+                return BadRequest(new
+                {
+                    message = "Invalid role. Allowed roles: ADMIN, MANAGER, MEMBER"
+                });
+            }
+
+            var user = await _userService.LoginAsync(dto);
+
+            if (user == null)
+            {
+                return Unauthorized(new
+                {
+                    message = "Invalid email, password, or role"
+                });
+            }
+
+            return Ok(new
+            {
+                message = "Login successful",
+                userId = user.Id,
+                userName = user.Name ?? "User",
+                role = user.Role?.Name?.ToUpper() ?? "MEMBER"
+            });
+        }
     }
 }

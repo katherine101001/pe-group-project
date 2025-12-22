@@ -159,7 +159,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("MEMBER"); // 默认选 MEMBER
+  const [role, setRole] = useState("MEMBER"); // 默认 MEMBER
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -169,16 +169,23 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // 调用后端登录接口
+      // 🔹 传 email, password, role 给后端
       const res = await API.post("/user/login", { email, password, role });
 
-      console.log("Login response:", res.data); // 🔹 调试用
+      console.log("Login response:", res.data); // 调试用
 
       // 保存登录信息到本地
-      localStorage.setItem("userName", res.data.userName);
-      localStorage.setItem("role", res.data.role);
+      localStorage.setItem("userName", res.data.userName || "");
+      localStorage.setItem("role", res.data.role || role);
 
-      navigate("/app"); // 登录成功跳转
+      // 根据 role 跳转页面
+      if (res.data.role === "ADMIN") {
+        navigate("/admin-dashboard");
+      } else if (res.data.role === "MANAGER") {
+        navigate("/manager-dashboard");
+      } else {
+        navigate("/app"); // 默认普通用户
+      }
     } catch (err) {
       console.error("Login error:", err);
       setError(err.response?.data?.message || "Login failed");

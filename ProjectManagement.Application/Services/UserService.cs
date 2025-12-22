@@ -187,24 +187,24 @@ public async Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync()
         }
         
 
-  public async Task<User?> LoginAsync(LoginDto dto)
-    {
-        if (dto == null)
-            return null;
+public async Task<User?> LoginAsync(LoginDto dto)
+{
+    if (dto == null) return null;
 
-        var user = await _userRepository.GetByEmailAsyncLogin(dto.Email);
-        if (user == null)
-            return null;
+    var user = await _userRepository.GetByEmailAsyncLogin(dto.Email);
+    if (user == null) return null;
 
-        if (user.Password != dto.Password)
-            return null;
+    if (user.Password != dto.Password) return null;
 
-        if (!string.Equals(user.Role.ToString(), dto.Role,
-            StringComparison.OrdinalIgnoreCase))
-            return null;
+    if (user.Role == null) return null;
+    if (!string.Equals(user.Role.Name, dto.Role, StringComparison.OrdinalIgnoreCase))
+        return null;
 
-        return user;
-    }
+    return user;
+}
+
+
+
 
 
 
