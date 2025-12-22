@@ -46,6 +46,14 @@ namespace ProjectManagement.Infrastructure.Repositories
                                  .FirstOrDefaultAsync(t => t.Id == id);
         }
 
+
+        public async Task<ProjectTask?> GetByIdWithAssigneeAsync(Guid taskId)
+    {
+        // Include 导航属性
+        return await _context.ProjectTask
+                             .Include(t => t.AssignToUser)
+                             .FirstOrDefaultAsync(t => t.Id == taskId);
+    }
         //******************************ABOVE ARE NORMAL CRUD********************************//
 
         public async Task<int> CountTasksAsync(Guid projectId)
@@ -203,6 +211,28 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Include(t => t.AssignToUser)
                 .OrderByDescending(t => t.UpdatedAt)
                 .Take(limit)
+                .ToListAsync();
+        }
+
+
+        public async Task<List<ProjectTask>> GetTasksByUserAsync(Guid userId)
+        {
+            return await _context.ProjectTask
+                .Where(t => t.AssignToUserId == userId)
+                .Select(t => new ProjectTask
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    Status = t.Status
+                })
+                .ToListAsync();
+        }
+
+        public async Task<List<ProjectTask>> GetByProjectIdAsync(Guid projectId)
+        {
+            return await _context.ProjectTask
+                .Include(t => t.AssignToUser)
+                .Where(t => t.ProjectId == projectId)
                 .ToListAsync();
         }
 

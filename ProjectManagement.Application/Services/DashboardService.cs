@@ -54,7 +54,7 @@ namespace ProjectManagement.Application.Services
                     TotalProjects = await _projectRepository.GetTotalProjectsAsync(),
                     CompletedProjects = await _projectRepository.GetCompletedProjectsAsync(),
                     MyTasks = await _projectTaskRepository.GetMyTasksCountAsync(userId),
-                    OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync(userId)
+                    //OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync(userId)
                 };
             }
 

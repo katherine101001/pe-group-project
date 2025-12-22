@@ -15,7 +15,7 @@ const ProjectCard = ({ project }) => {
             <div className="flex items-start justify-between mb-3">
                 <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-gray-900 dark:text-zinc-200 mb-1 truncate group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
-                        {project.name}
+                        {project.title}
                     </h3>
                     <p className="text-gray-500 dark:text-zinc-400 text-sm line-clamp-2 mb-3">
                         {project.description || "No description"}
