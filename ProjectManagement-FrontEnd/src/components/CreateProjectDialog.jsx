@@ -155,7 +155,7 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
   );
 };
 
-// export default CreateProjectDialog;
+export default CreateProjectDialog;
 
 
 // import { useState } from "react";
