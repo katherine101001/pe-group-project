@@ -180,9 +180,9 @@ export default function Login() {
 
       // 根据 role 跳转页面
       if (res.data.role === "ADMIN") {
-        navigate("/admin-dashboard");
+        navigate("/app");
       } else if (res.data.role === "MANAGER") {
-        navigate("/manager-dashboard");
+        navigate("/app");
       } else {
         navigate("/app"); // 默认普通用户
       }
