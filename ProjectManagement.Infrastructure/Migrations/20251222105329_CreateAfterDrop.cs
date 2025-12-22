@@ -5,7 +5,7 @@
 namespace ProjectManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRoleId : Migration
+    public partial class CreateAfterDrop : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

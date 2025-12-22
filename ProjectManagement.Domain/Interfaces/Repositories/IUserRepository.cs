@@ -22,5 +22,10 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<int> GetTotalUsersAsync();
 
+        
+
+         Task<User?> GetByEmailAsyncLogin(string email);
+        
+
     }
 }

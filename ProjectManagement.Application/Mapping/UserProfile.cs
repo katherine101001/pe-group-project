@@ -27,6 +27,10 @@ namespace ProjectManagement.Application.Mapping
             .ForMember(dest => dest.Name, opt => opt.Ignore())   // 默认名字在 Service 设置
             .ForMember(dest => dest.Password, opt => opt.Ignore()); // 默认密码在 Service 设置
 
+            CreateMap<LoginDto, User>()
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.Password, opt => opt.Ignore());
+
             //CreateMap<UpdateUserDto, User>();
 
         }

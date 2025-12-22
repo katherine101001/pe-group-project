@@ -20,6 +20,8 @@ namespace ProjectManagement.Application.Interfaces.Services
 
         Task<DashboardTeam> GetDashboardTeamStatsAsync();
 
+        Task<User?> LoginAsync(LoginDto loginDto);
+
         
     }
 }

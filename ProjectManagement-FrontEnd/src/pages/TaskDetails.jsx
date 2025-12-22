@@ -406,7 +406,7 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CalendarIcon, MessageCircle, PenIcon } from "lucide-react";
-import { assets } from "../assets/assets";
+// import { assets } from "../assets/assets";
 import { getTaskDetailsById } from "../services/ProjectTask/ProjectTaskAPI";
 import { getProjectById } from "../services/Project/ProjectAPI";
 import { getCommentsByTaskId, addCommentToTask } from "../services/Comment/CommentAPI";
