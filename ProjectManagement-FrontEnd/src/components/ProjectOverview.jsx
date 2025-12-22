@@ -112,7 +112,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, Calendar, UsersIcon, FolderOpen } from "lucide-react";
 import { format } from "date-fns";
 import CreateProjectDialog from "./CreateProjectDialog";
-import { getAllProjects } from "../services/Project/Project";
+import { getAllProjects } from "../services/Project/ProjectAPI";
 
 const ProjectOverview = () => {
   const statusColors = {
@@ -208,9 +208,8 @@ const ProjectOverview = () => {
                         {project.status.replace("_", " ").replaceAll(/\b\w/g, (c) => c.toUpperCase())}
                       </span>
                       <div
-                        className={`w-2 h-2 rounded-full border-2 ${
-                          priorityColors[project.priority] || priorityColors.MEDIUM
-                        }`}
+                        className={`w-2 h-2 rounded-full border-2 ${priorityColors[project.priority] || priorityColors.MEDIUM
+                          }`}
                       />
                     </div>
                   </div>

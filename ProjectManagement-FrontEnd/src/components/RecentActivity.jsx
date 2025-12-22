@@ -100,7 +100,7 @@
 import { useEffect, useState } from "react";
 import { GitCommit, MessageSquare, Clock, Bug, Zap, Square } from "lucide-react";
 import { format } from "date-fns";
-import { getRecentTasks } from '../services/Dashboard/dashboard';
+import { getRecentTasks } from '../services/Dashboard/DashboardAPI';
 
 
 const typeIcons = {

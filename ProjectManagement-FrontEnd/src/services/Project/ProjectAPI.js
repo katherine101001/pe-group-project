@@ -1,5 +1,4 @@
 import { API } from '../api';
-import { updateProject } from "../services/projectAPI";
 
 export const createProject = async (payload) => {
   try {
@@ -31,8 +30,6 @@ export const getProjectById = async (id) => {
   }
 };
 
-import { API } from "../api";
-
 export const updateProject = async (projectId, payload) => {
   try {
     const res = await API.put(`/projects/${projectId}`, payload);
@@ -43,3 +40,12 @@ export const updateProject = async (projectId, payload) => {
   }
 };
 
+export const getProjectAnalytics = async (projectId) => {
+  try {
+    const res = await API.get(`/projects/${projectId}/analytics/overview`);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch project analytics", error);
+    return null;
+  }
+};

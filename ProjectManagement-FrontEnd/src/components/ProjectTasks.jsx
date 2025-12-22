@@ -287,7 +287,7 @@ import { useState, useEffect, useMemo } from "react";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { getTasksByProjectId } from "../services/ProjectTask/ProjectTask";
+import { getTasksByProjectId } from "../services/ProjectTask/ProjectTaskAPI";
 import { Bug, Zap, Square, GitCommit, MessageSquare, CalendarIcon, XIcon } from "lucide-react";
 
 const typeIcons = {
@@ -325,19 +325,19 @@ const ProjectTasks = ({ projectId }) => {
   }, [projectId]);
 
   // assignee 列表
-  const assigneeList = useMemo(() => 
-    Array.from(new Set(tasks.map(t => t.assignee?.name).filter(Boolean))), 
+  const assigneeList = useMemo(() =>
+    Array.from(new Set(tasks.map(t => t.assignee?.name).filter(Boolean))),
     [tasks]
   );
 
   // 过滤任务
-  const filteredTasks = useMemo(() => 
+  const filteredTasks = useMemo(() =>
     tasks.filter(task => {
       const { status, type, priority, assignee } = filters;
       return (!status || task.status === status) &&
-             (!type || task.type === type) &&
-             (!priority || task.priority === priority) &&
-             (!assignee || task.assignee?.name === assignee);
+        (!type || task.type === type) &&
+        (!priority || task.priority === priority) &&
+        (!assignee || task.assignee?.name === assignee);
     }),
     [tasks, filters]
   );

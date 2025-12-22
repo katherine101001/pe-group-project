@@ -147,8 +147,8 @@ import ProjectSettings from "../components/ProjectSettings";
 import CreateTaskDialog from "../components/CreateTaskDialog";
 import ProjectCalendar from "../components/ProjectCalendar";
 import ProjectTasks from "../components/ProjectTasks";
-import { getProjectById } from "../services/Project/Project"; // 后端 API
-import { getTasksByProjectId } from "../services/ProjectTask/ProjectTask";   // 后端 API
+import { getProjectById } from "../services/Project/ProjectAPI"; // 后端 API
+import { getTasksByProjectId } from "../services/ProjectTask/ProjectTaskAPI";   // 后端 API
 
 export default function ProjectDetail() {
     const [searchParams, setSearchParams] = useSearchParams();
