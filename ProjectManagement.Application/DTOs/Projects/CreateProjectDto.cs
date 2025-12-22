@@ -8,7 +8,9 @@ namespace ProjectManagement.Application.DTOs.Projects
         public string Priority { get; set; } = "MEDIUM";  // default
         public DateTime? StartDate { get; set; }           // optional
         public DateTime? EndDate { get; set; }             // optional
-        public List<Guid> TeamMemberIds { get; set; } = new(); // user emails
-        public Guid? TeamLeadId { get; set; }               // user ID
+        // public List<Guid> TeamMemberIds { get; set; } = new(); // user emails
+        // public Guid? TeamLeadId { get; set; }               // user ID
+        public List<string> TeamMemberEmails { get; set; } = new();
+        public string? TeamLeadEmail { get; set; }
     }
 }

@@ -1,14 +1,14 @@
 import { API } from '../api';
 
-export const createProject = async (payload) => {
-    try {
-      const res = await API.post("/projects", payload);
-      return res.data; 
-    } catch (error) {
-      console.error("Failed to create project", error);
-      throw error;
-    }
-  };
+export const createProject = async (data) => {
+  try {
+    const res = await API.post("/projects", data);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to create project", error);
+    throw error;
+  }
+};
 
 export const getAllProjects = async () => {
   try {
@@ -20,9 +20,9 @@ export const getAllProjects = async () => {
   }
 };
 
-export const getProjectById = async (projectId) => {
+export const getProjectById = async (id) => {
   try {
-    const res = await API.get(`/projects/${projectId}`);
+    const res = await API.get(`/projects/${id}`);
     return res.data;
   } catch (error) {
     console.error("Failed to fetch project", error);
