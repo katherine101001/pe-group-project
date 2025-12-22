@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { Mail, UserPlus } from "lucide-react";
-import { useSelector } from "react-redux";
 
 const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen, onInvite, users, setUsers }) => {
-  const currentWorkspace = useSelector((state) => state.workspace?.currentWorkspace || null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
@@ -17,7 +15,7 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen, onInvite, users, se
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.email || !formData.role || !currentWorkspace) return;
+    if (!formData.email || !formData.role) return;
     if (!isValidEmail(formData.email)) {
       alert("Please enter a valid email address");
       return;
@@ -28,10 +26,9 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen, onInvite, users, se
       const newUser = await onInvite({
         email: formData.email,
         role: formData.role,
-        workspaceId: currentWorkspace.id,
       });
 
-      // ✅ 前端更新 users 列表（可选，如果 onInvite 已更新）
+      // Update users list on frontend
       setUsers(prev => {
         const existingIndex = prev.findIndex(u => u.user.email.toLowerCase() === formData.email.toLowerCase());
         if (existingIndex >= 0) {
@@ -74,11 +71,6 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen, onInvite, users, se
           <h2 className="text-xl font-bold flex items-center gap-2">
             <UserPlus className="size-5 text-zinc-900 dark:text-zinc-200" /> Invite Team Member
           </h2>
-          {currentWorkspace && (
-            <p className="text-sm text-zinc-700 dark:text-zinc-400">
-              Inviting to workspace: <span className="text-blue-600 dark:text-blue-400">{currentWorkspace.name}</span>
-            </p>
-          )}
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -123,7 +115,7 @@ const InviteMemberDialog = ({ isDialogOpen, setIsDialogOpen, onInvite, users, se
             </button>
             <button
               type="submit"
-              disabled={isSubmitting || !currentWorkspace}
+              disabled={isSubmitting}
               className="px-5 py-2 rounded text-sm bg-gradient-to-br from-blue-500 to-blue-600 text-white disabled:opacity-50 hover:opacity-90 transition"
             >
               {isSubmitting ? "Sending..." : "Send Invitation"}
