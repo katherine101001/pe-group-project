@@ -25,5 +25,6 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<int> GetTotalProjectsByUserAsync(Guid userId);
         Task<int> GetCompletedProjectsByUserAsync(Guid userId);
         Task<int> GetActiveProjectsByUserAsync(Guid userId);
+        Task<Project?> GetByIdWithRelationsAsync(Guid id);
     }
 }

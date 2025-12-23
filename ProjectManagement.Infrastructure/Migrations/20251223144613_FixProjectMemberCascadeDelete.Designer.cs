@@ -12,8 +12,8 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251222105329_CreateAfterDrop")]
-    partial class CreateAfterDrop
+    [Migration("20251223144613_FixProjectMemberCascadeDelete")]
+    partial class FixProjectMemberCascadeDelete
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -567,7 +567,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.HasOne("ProjectManagement.Domain.Entities.Projects.Project", "Project")
                         .WithMany("ProjectMembers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")

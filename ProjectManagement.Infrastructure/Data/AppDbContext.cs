@@ -56,7 +56,7 @@ namespace ProjectManagement.Infrastructure.Data
                 .HasOne(pm => pm.Project)
                 .WithMany(p => p.ProjectMembers)
                 .HasForeignKey(pm => pm.ProjectId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             // ProjectMember → User
             modelBuilder.Entity<ProjectMember>()
@@ -94,7 +94,7 @@ namespace ProjectManagement.Infrastructure.Data
             //     .HasKey(t => t.Id);
             modelBuilder.Entity<ProjectTask>()
                 .HasOne(t => t.AssignToUser)
-                .WithMany(u => u.ProjectTasks) 
+                .WithMany(u => u.ProjectTasks)
                 .HasForeignKey(t => t.AssignToUserId)
                 .OnDelete(DeleteBehavior.Restrict); // 改成 Restrict 或 NoAction
 

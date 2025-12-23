@@ -564,7 +564,7 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.HasOne("ProjectManagement.Domain.Entities.Projects.Project", "Project")
                         .WithMany("ProjectMembers")
                         .HasForeignKey("ProjectId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ProjectManagement.Domain.Entities.Users.User", "User")

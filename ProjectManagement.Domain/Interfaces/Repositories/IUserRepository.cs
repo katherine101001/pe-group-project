@@ -11,6 +11,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<User?> GetByIdAsync(Guid id);
         Task<Role?> GetByNameAsync(string name);
         Task<User?> GetByEmailAsync(string email);
+        Task<List<User>> GetByEmailsAsync(IEnumerable<string> emails);
         Task<List<User>> GetAllAsync();
         Task AddAsync(User user);
         Task UpdateAsync(User user);

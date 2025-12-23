@@ -4,13 +4,12 @@ namespace ProjectManagement.Application.DTOs.Projects
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string Status { get; set; } = "PLANNING"; // default
-        public string Priority { get; set; } = "MEDIUM";  // default
-        public DateTime? StartDate { get; set; }           // optional
-        public DateTime? EndDate { get; set; }             // optional
-        // public List<Guid> TeamMemberIds { get; set; } = new(); // user emails
-        // public Guid? TeamLeadId { get; set; }               // user ID
+        public string Status { get; set; } = "PLANNING";
+        public string Priority { get; set; } = "MEDIUM";
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public List<string> TeamMemberEmails { get; set; } = new();
         public string? TeamLeadEmail { get; set; }
     }
+
 }

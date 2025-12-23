@@ -21,36 +21,67 @@ namespace ProjectManagement.Application.Services
         }
 
         // Create Project (Add New project)
-        public async Task CreateProjectAsync(CreateProjectDto dto)
-        {
-            var project = _mapper.Map<Project>(dto);
+        // In ProjectManagement.Application/Services/ProjectService.cs
 
-            // Assign team lead
+        public async Task<ProjectDto> CreateProjectAsync(CreateProjectDto dto)
+        {
+            // 1. Map basic properties
+            var project = _mapper.Map<Project>(dto);
+            project.Id = Guid.NewGuid();
+
+            // 2. Assign team lead
             if (!string.IsNullOrEmpty(dto.TeamLeadEmail))
             {
-                var lead = await _userRepository.GetByEmailAsync(dto.TeamLeadEmail);
-                if (lead == null)
-                    throw new NotFoundException("Team lead not found");
+                var lead = await _userRepository.GetByEmailAsync(dto.TeamLeadEmail)
+                           ?? throw new NotFoundException("Team lead not found");
+
+                project.LeaderId = lead.Id;
                 project.Leader = lead;
             }
-
-            // Assign team members
-            foreach (var email in dto.TeamMemberEmails)
+            else
             {
-                var user = await _userRepository.GetByEmailAsync(email);
-                if (user != null)
+                // PROPOSED FIX: Ensure Leader is required
+                throw new ValidationException("Project Leader is required.");
+            }
+
+            // 3. Assign team members (avoid duplicates)
+            if (dto.TeamMemberEmails != null)
+            {
+                foreach (var email in dto.TeamMemberEmails.Distinct())
                 {
-                    project.ProjectMembers.Add(new ProjectMember { Project = project, User = user });
-                }
-                else
-                {
-                    throw new NotFoundException($"User with email {email} not found");
+                    var user = await _userRepository.GetByEmailAsync(email)
+                               ?? throw new NotFoundException($"User {email} not found");
+
+                    project.ProjectMembers.Add(new ProjectMember
+                    {
+                        ProjectId = project.Id, // PROPOSED FIX: Explicitly set ProjectId
+                        UserId = user.Id
+                    });
                 }
             }
 
-            // Save project
+            // 4. Save to DB
             await _projectRepository.AddAsync(project);
+
+            // 5. Reload project including relations for accurate DTO
+            var fullProject = await _projectRepository.GetByIdWithRelationsAsync(project.Id)
+                              ?? throw new Exception("Failed to retrieve project after creation");
+
+            // 6. Map to DTO
+            return new ProjectDto
+            {
+                Id = fullProject.Id,
+                Title = fullProject.Title,
+                Description = fullProject.Description,
+                Status = fullProject.Status,
+                Priority = fullProject.Priority,
+                StartDate = fullProject.StartDate,
+                EndDate = fullProject.EndDate,
+                LeaderId = fullProject.LeaderId,
+                MemberIds = fullProject.ProjectMembers.Select(pm => pm.UserId).ToList()
+            };
         }
+
 
         // When clicking into the project overview
         public async Task<ProjectOverviewDto?> GetProjectByIdAsync(Guid id)

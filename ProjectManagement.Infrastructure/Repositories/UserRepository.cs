@@ -52,6 +52,15 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<User>> GetByEmailsAsync(IEnumerable<string> emails)
+        {
+            return await _context.User
+                .Include(u => u.Role)
+                .Where(u => emails.Contains(u.Email))
+                .ToListAsync();
+        }
+
+
         public async Task<List<User>> GetAllAsyncRole()
         {
             return await _context.User

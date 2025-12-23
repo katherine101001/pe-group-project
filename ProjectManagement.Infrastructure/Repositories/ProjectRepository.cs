@@ -35,7 +35,10 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task<List<Project>> GetAllAsync()
         {
-            return await _context.Project.ToListAsync();
+            return await _context.Project
+                .Include(p => p.ProjectMembers)
+                .ThenInclude(pm => pm.User) // include the join table
+                .ToListAsync();
         }
 
         public async Task<Project?> GetByIdAsync(Guid id, bool includeTasks = false, bool includeProjectMembers = false, bool includeLeader = false)
@@ -125,6 +128,14 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
                             && p.Status != "COMPLETED")
                 .CountAsync();
+        }
+
+        public async Task<Project?> GetByIdWithRelationsAsync(Guid id)
+        {
+            return await _context.Project
+                .Include(p => p.Leader)
+                .Include(p => p.ProjectMembers)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
 

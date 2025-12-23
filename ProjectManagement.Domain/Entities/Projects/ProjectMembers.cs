@@ -15,7 +15,7 @@ namespace ProjectManagement.Domain.Entities.Projects
         public User? User { get; set; }        // Navigation property
 
         // Optional: additional info for membership
-        public string? RoleInProject { get; set; } = "Contributor";
+        public string? RoleInProject { get; set; } = "Member";
         public DateTime? JoinedAt { get; set; } = DateTime.UtcNow;
     }
 }

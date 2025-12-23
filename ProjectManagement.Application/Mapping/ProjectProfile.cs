@@ -9,7 +9,11 @@ namespace ProjectManagement.Application.Mapping
         public ProjectProfile()
         {
             // Entity -> Output DTO
-            CreateMap<Project, ProjectDto>();
+            CreateMap<Project, ProjectDto>()
+                .ForMember(dest => dest.MemberIds,
+                     opt => opt.MapFrom(src => src.ProjectMembers.Select(pm => pm.UserId)));
+
+
             CreateMap<Project, ProjectOverviewDto>();
             CreateMap<Project, GetUpdateProjectDto>();
 
