@@ -18,12 +18,6 @@ const Team = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  // const filterRoles = (list) =>
-  //   list.filter(u => {
-  //     const role = u.role?.toUpperCase();
-  //     return role === "MEMBER" || role === "MANAGER";
-  //   });
-
   const filterRoles = (list) =>
     list.filter(u => ["MEMBER", "LEADER"].includes(u.role?.toUpperCase()));
 

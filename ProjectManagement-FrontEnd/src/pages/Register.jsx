@@ -27,9 +27,9 @@ export default function Register() {
     } catch (err) {
       setError(err.response?.data?.message || "Registration failed");
     }
-  };  
+  };
 
-    return (
+  return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
       <form
         className="border border-gray-200 p-8 rounded-lg w-full max-w-sm shadow-sm"
@@ -85,18 +85,18 @@ export default function Register() {
               onChange={handleChange}
               className="w-full px-3 py-2.5 border-b border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent text-gray-700 appearance-none cursor-pointer transition-colors"
             >
-              <option value="Admin">Admin</option>
-              <option value="ProjectManager">Project Manager</option>
-              <option value="Contributor">Contributor</option>
+              <option value="ADMIN">Admin</option>
+              <option value="LEADER">Leader</option>
+              <option value="MEMBER">Member</option>
             </select>
           </div>
 
-        <button
+          <button
             type="submit"
             className="w-full bg-[#2373ff] hover:bg-blue-600 text-white py-3 rounded font-medium mt-6 transition-colors"
-            >
+          >
             Register
-        </button>
+          </button>
 
         </div>
 

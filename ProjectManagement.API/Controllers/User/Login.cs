@@ -27,12 +27,12 @@ namespace ProjectManagement.API.Controllers.User
             // ✅ 统一 role 格式
             dto.Role = dto.Role.Trim().ToUpper();
 
-            var allowedRoles = new[] { "ADMIN", "MANAGER", "MEMBER" };
+            var allowedRoles = new[] { "ADMIN", "LEADER", "MEMBER" };
             if (!allowedRoles.Contains(dto.Role))
             {
                 return BadRequest(new
                 {
-                    message = "Invalid role. Allowed roles: ADMIN, MANAGER, MEMBER"
+                    message = "Invalid role. Allowed roles: ADMIN, LEADER, MEMBER"
                 });
             }
 

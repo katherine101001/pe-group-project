@@ -94,7 +94,7 @@ export default function Login() {
               className="w-full px-3 py-2.5 border-b border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent placeholder-gray-400 transition-colors"
             >
               <option value="MEMBER">Member</option>
-              <option value="MANAGER">Manager</option>
+              <option value="LEADER">Leader</option>
               <option value="ADMIN">Admin</option>
             </select>
           </div>
