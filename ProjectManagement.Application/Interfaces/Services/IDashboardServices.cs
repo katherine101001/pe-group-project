@@ -4,9 +4,7 @@ namespace ProjectManagement.Application.Interfaces.Services
 {
     public interface IDashboardService
     {
-        Task<DashboardStatsDto> GetDashboardStatsAsync();
-
-        Task<DashboardProjectStatsNumDto> GetDashboardProjectStatsAsync(Guid userId);
-
+        Task<DashboardStatsDto> GetUserDashboardStatsAsync(Guid userId);
+        Task<DashboardStatsDto> GetAdminDashboardStatsAsync();
     }
 }

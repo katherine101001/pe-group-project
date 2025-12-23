@@ -9,11 +9,11 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<List<ProjectTask>> GetAllAsync();
 
 
-
         Task<int> CountTasksAsync(Guid projectId);
         Task<int> CountTasksByStatusAsync(Guid projectId, string status);
         Task<int> CountTasksByStatusesAsync(Guid projectId, IEnumerable<string> statuses);
         Task<int> CountOverdueTasksAsync(Guid projectId);
+
 
         Task<Dictionary<string, int>> GetTaskCountsGroupedByStatusAsync(Guid projectId);
         Task<Dictionary<string, int>> GetTaskCountsGroupedByTypeAsync(Guid projectId);
@@ -21,17 +21,19 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
 
 
-
         Task AddAsync(ProjectTask projectTask);
         Task UpdateAsync(ProjectTask projectTask);
         Task DeleteAsync(ProjectTask projectTask);
+
 
         Task<int> GetTotalTasksAsync();
 
         Task<List<ProjectTask>> SearchAsync(string keyword);
 
+
         Task<int> GetMyTasksCountAsync(Guid userId);
         Task<int> GetOverdueTasksCountAsync(Guid userId);
+        Task<int> GetOverdueTasksCountAsync();
 
         Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<List<ProjectTask>> GetAllOverdueTasksAsync();
@@ -44,7 +46,10 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<ProjectTask?> GetByIdWithAssigneeAsync(Guid taskId);
 
-         Task<List<ProjectTask>> GetByProjectIdAsync(Guid projectId);
+        Task<List<ProjectTask>> GetByProjectIdAsync(Guid projectId);
+
+        Task<List<ProjectTask>> GetTasksByUserIdAsync(Guid userId);
+
 
     }
 }

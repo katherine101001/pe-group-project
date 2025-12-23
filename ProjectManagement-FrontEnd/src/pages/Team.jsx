@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { UsersIcon, Search, UserPlus, Shield, Activity } from "lucide-react";
+import { useSelector } from "react-redux";
 import InviteMemberDialog from "../components/InviteMemberDialog";
 import { getAllUsersSimple, getTeamStats, searchUsers, registerUser } from "../services/Team/team.api";
 
 
 const Team = () => {
-  const currentRole = localStorage.getItem("role");
+  // const currentRole = localStorage.getItem("role");
+  const currentRole = useSelector((state) => state.user.role);
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);

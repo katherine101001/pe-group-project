@@ -19,6 +19,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<int> GetTotalProjectsAsync();
 
         Task<List<Project>> SearchAsync(string keyword);
+        Task<int> GetActiveProjectsAsync();
 
         Task<int> GetCompletedProjectsAsync();
     }

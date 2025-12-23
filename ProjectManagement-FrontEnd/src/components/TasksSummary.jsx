@@ -8,25 +8,27 @@ export default function TasksSummary() {
   const [myTasks, setMyTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const [overdueData, myTasksData] = await Promise.all([
-          getOverdueTasks(),
-          getMyTasks(user.id)
-        ]);
 
-        setOverdueTasks(overdueData);
-        setMyTasks(myTasksData);
-      } catch (error) {
-        console.error(error);
+  useEffect(() => {
+    const fetchSummary = async () => {
+      try {
+        const data = await getTasksSummary();
+        setMyTasks(data.myTasks);
+        setOverdueTasks(data.overdueTasks);
+        setCounts({
+          myTasksCount: data.myTasksCount,
+          overdueTasksCount: data.overdueTasksCount,
+          inProgressCount: data.inProgressTasksCount
+        });
+      } catch (err) {
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
-
-    fetchTasks();
+    fetchSummary();
   }, []);
+
 
   if (loading) return <p className="p-6 text-center">Loading tasks summary...</p>;
 

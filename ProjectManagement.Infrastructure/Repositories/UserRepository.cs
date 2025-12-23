@@ -65,15 +65,36 @@ namespace ProjectManagement.Infrastructure.Repositories
         }
 
         // ✅ 修复这里
-       
 
-public async Task<User?> GetByEmailAsyncLogin(string email)
-{
-    return await _context.User
-                         .Include(u => u.Role)  // 加上这一行
-                         .FirstOrDefaultAsync(u => u.Email == email);
-}
 
+        public async Task<User?> GetByEmailAsyncLogin(string email)
+        {
+            return await _context.User
+                                 .Include(u => u.Role)  // 加上这一行
+                                 .FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        // public async Task<int> GetUserTaskCountAsync(Guid userId)
+        // {
+        //     return await _context.ProjectTask
+        //         .Where(t => t.AssignToUserId == userId)
+        //         .CountAsync();
+        // }
+        // public async Task<int> GetUserOverdueTaskCountAsync(Guid userId)
+        // {
+        //     var today = DateTime.UtcNow;
+        //     return await _context.ProjectTask
+        //         .Where(t => t.AssignToUserId == userId && t.DueDate < today && t.Status != "COMPLETED")
+        //         .CountAsync();
+        // }
+
+        // public async Task<List<User>> GetUsersWithTasksAsync()
+        // {
+        //     return await _context.User
+        //         .Include(u => u.AssignedTasks)
+        //         .Where(u => u.AssignedTasks.Any())
+        //         .ToListAsync();
+        // }
 
     }
 }

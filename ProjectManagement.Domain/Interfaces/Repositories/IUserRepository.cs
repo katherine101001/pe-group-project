@@ -15,17 +15,15 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task AddAsync(User user);
         Task UpdateAsync(User user);
         Task DeleteAsync(User user);
-       
+
         Task<List<User>> GetUsersByRolesAsync(params string[] roleNames);
 
         Task<List<User>> GetAllAsyncRole();
 
         Task<int> GetTotalUsersAsync();
 
-        
+        Task<User?> GetByEmailAsyncLogin(string email);
 
-         Task<User?> GetByEmailAsyncLogin(string email);
-        
 
     }
 }
