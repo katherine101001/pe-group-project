@@ -130,19 +130,22 @@ namespace ProjectManagement.Application.Services
             };
         }
 
-        // USER dashboard (personalized)
+        // USER dashboard (personalized: leader or member)
         public async Task<DashboardStatsDto> GetUserDashboardStatsAsync(Guid userId)
         {
             return new DashboardStatsDto
             {
-                TotalProjects = 0, // user does not see system totals
-                CompletedProjects = 0,
-                ActiveProjects = 0,
+                // Get only projects the user is part of
+                TotalProjects = await _projectRepository.GetTotalProjectsByUserAsync(userId),
+                CompletedProjects = await _projectRepository.GetCompletedProjectsByUserAsync(userId),
+                ActiveProjects = await _projectRepository.GetActiveProjectsByUserAsync(userId),
+
+                // Get only tasks assigned to the user
                 MyTasks = await _projectTaskRepository.GetMyTasksCountAsync(userId),
                 OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync(userId)
             };
         }
-    }
 
+    }
 }
 

@@ -20,7 +20,10 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<List<Project>> SearchAsync(string keyword);
         Task<int> GetActiveProjectsAsync();
-
         Task<int> GetCompletedProjectsAsync();
+
+        Task<int> GetTotalProjectsByUserAsync(Guid userId);
+        Task<int> GetCompletedProjectsByUserAsync(Guid userId);
+        Task<int> GetActiveProjectsByUserAsync(Guid userId);
     }
 }

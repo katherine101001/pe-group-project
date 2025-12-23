@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { getDashboardStats } from "../services/Dashboard/DashboardAPI";
 
 export default function StatsGrid() {
-  const { role, userId } = useSelector((state) => state.user);
+  const { role, userId } = useSelector((state) => state.user ?? {});
   const [stats, setStats] = useState({
     totalProjects: 0,
     activeProjects: 0,
@@ -14,44 +14,45 @@ export default function StatsGrid() {
   });
 
   useEffect(() => {
-    if (!userId || !role) return;
+    if (!role) return;
 
     const fetchStats = async () => {
-      const data = await getDashboardStats.getStats(userId, role);
-      setStats(data);
+      try {
+        const data = await getDashboardStats.getStats(userId, role);
+        setStats(data);
+      } catch (err) {
+        console.error("Failed to fetch stats:", err);
+      }
     };
 
     fetchStats();
-  }, [userId, role]);
+  }, [role, userId]);
 
-
-
+  // Build stat cards
   const statCards = [
-    ...(role === "ADMIN"
-      ? [
-        {
-          icon: FolderOpen,
-          title: "Total Projects",
-          value: stats.totalProjects,
-          subtitle: "projects in portfolio",
-          bgColor: "bg-blue-500/10",
-          textColor: "text-blue-500",
-        },
-        {
-          icon: CheckCircle,
-          title: "Completed Projects",
-          value: stats.completedProjects,
-          subtitle: `of ${stats.totalProjects} total`,
-          bgColor: "bg-emerald-500/10",
-          textColor: "text-emerald-500",
-        },
-      ]
-      : []),
+    // Projects stats always shown
+    {
+      icon: FolderOpen,
+      title: "Total Projects",
+      value: stats.totalProjects,
+      subtitle: role === "ADMIN" ? "projects in portfolio" : "projects you are part of",
+      bgColor: "bg-blue-500/10",
+      textColor: "text-blue-500",
+    },
+    {
+      icon: CheckCircle,
+      title: "Completed Projects",
+      value: stats.completedProjects,
+      subtitle: role === "ADMIN" ? `of ${stats.totalProjects} total` : `of your ${stats.totalProjects} projects`,
+      bgColor: "bg-emerald-500/10",
+      textColor: "text-emerald-500",
+    },
+    // Task stats
     {
       icon: Users,
-      title: "My Tasks",
+      title: role === "ADMIN" ? "Total Tasks" : "My Tasks",
       value: stats.myTasks,
-      subtitle: "assigned to me",
+      subtitle: role === "ADMIN" ? "all tasks" : "assigned to you",
       bgColor: "bg-purple-500/10",
       textColor: "text-purple-500",
     },
@@ -59,7 +60,7 @@ export default function StatsGrid() {
       icon: AlertTriangle,
       title: "Overdue",
       value: stats.overdueIssues,
-      subtitle: "need attention",
+      subtitle: role === "ADMIN" ? "all overdue tasks" : "need attention",
       bgColor: "bg-amber-500/10",
       textColor: "text-amber-500",
     },

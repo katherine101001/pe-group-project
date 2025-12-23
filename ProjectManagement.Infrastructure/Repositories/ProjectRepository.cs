@@ -217,6 +217,28 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<int> GetTotalProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+                .CountAsync();
+        }
+
+        public async Task<int> GetCompletedProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+                            && p.Status == "COMPLETED")
+                .CountAsync();
+        }
+
+        public async Task<int> GetActiveProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+                            && p.Status != "COMPLETED")
+                .CountAsync();
+        }
 
 
     }
