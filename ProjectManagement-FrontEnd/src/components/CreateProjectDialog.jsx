@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { XIcon } from "lucide-react";
 import { createProject } from "../services/Project/ProjectAPI";
-import { getAllUsers } from "../services/Team/team.api"; // your API call
+import { getAllUsersSimple } from "../services/Team/team.api"; // your API call
 
 const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
   const [allUsers, setAllUsers] = useState([]);
@@ -25,8 +25,12 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
 
     const fetchUsers = async () => {
       try {
-        const response = await getAllUsers();
-        setAllUsers(response.data); // assuming response.data is an array of users with {email, name, id...}
+        const response = await getAllUsersSimples();
+        // Only include users with role "LEADER" or "MEMBER"
+        const filteredUsers = response.data.filter(
+          (user) => user.role === "LEADER" || user.role === "MEMBER"
+        );
+        setAllUsers(filteredUsers);
       } catch (err) {
         console.error("Failed to fetch users:", err);
       }
