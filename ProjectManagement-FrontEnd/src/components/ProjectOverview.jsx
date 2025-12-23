@@ -28,19 +28,13 @@ const ProjectOverview = () => {
 
   const fetchProjects = async () => {
     const data = await getAllProjects();
-    console.log("Raw API projects:", data);
-    console.log("Redux userId:", userId, "role:", role);
-
-    // Optional test filter to check leader only
-    const test = data.filter(project => project.LeaderId === userId);
-    console.log("Test filter result:", test);
 
     let visibleProjects = data;
 
     if (role !== "ADMIN") {
       visibleProjects = data.filter(project => {
-        const memberIds = project.MemberIds || []; // ensure array exists
-        return String(project.LeaderId) === String(userId) ||
+        const memberIds = project.memberIds || []; // ensure array exists
+        return String(project.leaderId) === String(userId) ||
           memberIds.some(id => String(id) === String(userId));
       });
     }
