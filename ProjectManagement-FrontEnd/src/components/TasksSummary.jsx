@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Clock, AlertTriangle, User } from "lucide-react";
-import { getOverdueTasks, getMyTasks } from "../services/Dashboard/DashboardAPI";
+//import { getOverdueTasks, getMyTasks } from "../services/Dashboard/DashboardAPI";
 
 export default function TasksSummary() {
   const user = { id: 'user_1' };
