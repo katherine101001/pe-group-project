@@ -12,8 +12,8 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251223144613_FixProjectMemberCascadeDelete")]
-    partial class FixProjectMemberCascadeDelete
+    [Migration("20251223154427_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
