@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { XIcon } from "lucide-react";
 import { useSelector } from "react-redux";
 import { createProject } from "../services/Project/ProjectAPI";
-import { getAllUsersSimple } from "../services/Team/team.api"; // your API call
-
+import { getAllUsersSimple } from "../services/Team/team.api";
 
 const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
   const { role, email } = useSelector((state) => state.user ?? {});
@@ -30,9 +29,7 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
 
     const fetchUsers = async () => {
       try {
-
         const res = await getAllUsersSimple();
-        // 🔑 Normalize role to uppercase
         const normalizedUsers = (res.data || []).map((u) => ({
           ...u,
           role: u.role.toUpperCase(),
@@ -154,6 +151,32 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
             />
           </div>
 
+          {/* Start & End Date */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm">Start Date</label>
+              <input
+                type="date"
+                value={formData.start_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, start_date: e.target.value })
+                }
+                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+              />
+            </div>
+            <div>
+              <label className="text-sm">End Date</label>
+              <input
+                type="date"
+                value={formData.end_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, end_date: e.target.value })
+                }
+                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+              />
+            </div>
+          </div>
+
           {/* Status & Priority */}
           <div className="grid grid-cols-2 gap-4">
             <select
@@ -199,7 +222,6 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
               className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900 disabled:opacity-60"
             >
               {role === "ADMIN" && <option value="">Select Leader</option>}
-
               {role === "ADMIN" &&
                 allUsers
                   .filter((u) => u.role === "LEADER")
@@ -208,7 +230,6 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
                       {u.email}
                     </option>
                   ))}
-
               {role === "LEADER" && email && (
                 <option value={email}>{email} (You)</option>
               )}
@@ -233,12 +254,9 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
               }}
             >
               <option value="">Add member</option>
-
               {allUsers
                 .filter((u) => u.role === "MEMBER")
-                .filter(
-                  (u) => !formData.team_members.includes(u.email)
-                )
+                .filter((u) => !formData.team_members.includes(u.email))
                 .map((u) => (
                   <option key={u.email} value={u.email}>
                     {u.email}
