@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowLeftIcon, PlusIcon, SettingsIcon, BarChart3Icon, CalendarIcon, FileStackIcon, ZapIcon } from "lucide-react";
-import ProjectAnalytics from "../components/ProjectAnalytics";
+// import ProjectAnalytics from "../components/ProjectAnalytics";
+import ProjectAnalyticsWrapper from "../components/ProjectAnalyticsWrapper";
 import ProjectSettings from "../components/ProjectSettings";
 import CreateTaskDialog from "../components/CreateTaskDialog";
 import ProjectCalendar from "../components/ProjectCalendar";
 import ProjectTasks from "../components/ProjectTasks";
 import { getProjectById } from "../services/Project/ProjectAPI";
+import { useSelector } from "react-redux";
 
 export default function ProjectDetail() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab");
   const id = searchParams.get("id");
+
+  const { role } = useSelector(state => state.user);
 
   const navigate = useNavigate();
   const [project, setProject] = useState(null);
@@ -109,8 +113,10 @@ export default function ProjectDetail() {
           {[
             { key: "tasks", label: "Tasks", icon: FileStackIcon },
             { key: "calendar", label: "Calendar", icon: CalendarIcon },
-            { key: "analytics", label: "Analytics", icon: BarChart3Icon },
-            { key: "settings", label: "Settings", icon: SettingsIcon },
+            // { key: "analytics", label: "Analytics", icon: BarChart3Icon },
+            ...(role === "ADMIN" || role === "LEADER" ? [{ key: "analytics", label: "Analytics", icon: BarChart3Icon }] : []),
+            ...(role === "ADMIN" || role === "LEADER" ? [{ key: "settings", label: "Settings", icon: SettingsIcon }] : []),
+            // { key: "settings", label: "Settings", icon: SettingsIcon },
           ].map((tabItem) => (
             <button
               key={tabItem.key}
@@ -118,9 +124,8 @@ export default function ProjectDetail() {
                 setActiveTab(tabItem.key);
                 setSearchParams({ id, tab: tabItem.key });
               }}
-              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${
-                activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                }`}
             >
               <tabItem.icon className="size-3.5" />
               {tabItem.label}
@@ -134,9 +139,9 @@ export default function ProjectDetail() {
               <ProjectTasks projectId={id} />
             </div>
           )}
-          {activeTab === "analytics" && (
+          {activeTab === "analytics" && (role === "ADMIN" || role === "LEADER") && (
             <div className="dark:bg-zinc-900/40 rounded max-w-6xl">
-              <ProjectAnalytics project={project} />
+              <ProjectAnalyticsWrapper project={project} />
             </div>
           )}
           {activeTab === "calendar" && (
@@ -144,7 +149,7 @@ export default function ProjectDetail() {
               <ProjectCalendar project={project} />
             </div>
           )}
-          {activeTab === "settings" && (
+          {activeTab === "settings" && (role === "ADMIN" || role === "LEADER") && (
             <div className="dark:bg-zinc-900/40 rounded max-w-6xl">
               <ProjectSettings project={project} />
             </div>

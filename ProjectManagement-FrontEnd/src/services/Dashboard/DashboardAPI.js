@@ -11,36 +11,6 @@ export const getRecentTasks = async (limit = 5) => {
   }
 };
 
-export const getOverdueTasks = async () => {
-  try {
-    const response = await API.get('/tasks/overdue');
-    return response.data; // 返回所有超期任务数组
-  } catch (error) {
-    console.error("Failed to fetch overdue tasks", error);
-    throw error;
-  }
-};
-
-export const getMyTasks = async (userId) => {
-  try {
-    const response = await API.get(`/tasks?assigneeId=${userId}`);
-    return response.data;
-  } catch (error) {
-    console.error("Failed to fetch my tasks", error);
-    throw error;
-  }
-};
-
-export const getOverdueCount = async () => {
-  try {
-    const response = await API.get('/tasks/overdue/count');
-    return response.data.count; // 返回 { count }
-  } catch (error) {
-    console.error("Failed to fetch overdue count", error);
-    return 0;
-  }
-};
-
 export const getDashboardStats = {
   getStats: async (userId, role) => {
     try {

@@ -60,7 +60,7 @@ namespace ProjectManagement.Infrastructure.Repositories
         // ---------- Dashboard / Stats Methods ----------
         public async Task<int> GetTotalProjectsAsync()
         {
-            return await _context.Project.CountAsync(p => p.Status == "Active");
+            return await _context.Project.CountAsync();
         }
 
         public async Task<int> GetCompletedProjectsAsync()

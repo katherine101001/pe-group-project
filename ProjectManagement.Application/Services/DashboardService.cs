@@ -24,7 +24,7 @@ public class DashboardService : IDashboardService
             TotalProjects = await _projectRepository.GetTotalProjectsAsync(),
             CompletedProjects = await _projectRepository.GetCompletedProjectsAsync(),
             ActiveProjects = await _projectRepository.GetActiveProjectsAsync(),
-            MyTasks = 0, // admin does not have "my tasks"
+            MyTasks = await _projectTaskRepository.GetTotalTasksAsync(),
             OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync()
         };
     }

@@ -34,7 +34,7 @@ export default function StatsGrid() {
     {
       icon: FolderOpen,
       title: "Total Projects",
-      value: stats.totalProjects,
+      value: stats.activeProjects,
       subtitle: role === "ADMIN" ? "projects in portfolio" : "projects you are part of",
       bgColor: "bg-blue-500/10",
       textColor: "text-blue-500",

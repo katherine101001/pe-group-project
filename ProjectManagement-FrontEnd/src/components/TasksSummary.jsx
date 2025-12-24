@@ -1,46 +1,61 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Clock, AlertTriangle, User } from "lucide-react";
-//import { getOverdueTasks, getMyTasks } from "../services/Dashboard/DashboardAPI";
+import { getAllTasks } from "../services/ProjectTask/ProjectTaskAPI";
+import { getAllProjects } from "../services/Project/ProjectAPI";
+import { useSelector } from "react-redux";
 
 export default function TasksSummary() {
-  const user = { id: 'user_1' };
-  const [overdueTasks, setOverdueTasks] = useState([]);
-  const [myTasks, setMyTasks] = useState([]);
+  const { userId, role } = useSelector(state => state.user ?? {});
+  const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-    const fetchSummary = async () => {
+    if (!userId || !role) return;
+
+    const fetchTasks = async () => {
       try {
-        const data = await getTasksSummary();
-        setMyTasks(data.myTasks);
-        setOverdueTasks(data.overdueTasks);
-        setCounts({
-          myTasksCount: data.myTasksCount,
-          overdueTasksCount: data.overdueTasksCount,
-          inProgressCount: data.inProgressTasksCount
-        });
+        const allTasks = await getAllTasks();
+        const allProjects = await getAllProjects();
+
+        let visibleTasks = allTasks;
+
+        if (role === "LEADER") {
+          const leaderProjectIds = allProjects
+            .filter(p => p.leaderId === userId)
+            .map(p => p.id);
+          visibleTasks = allTasks.filter(t => leaderProjectIds.includes(t.projectId));
+        } else if (role === "MEMBER") {
+          visibleTasks = allTasks.filter(t => t.assignToUserId === userId);
+        }
+        // Admin sees all tasks
+
+        setTasks(visibleTasks);
       } catch (err) {
-        console.error(err);
+        console.error("Failed to fetch tasks:", err);
+        setTasks([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchSummary();
-  }, []);
 
+    fetchTasks();
+  }, [userId, role]);
 
   if (loading) return <p className="p-6 text-center">Loading tasks summary...</p>;
 
-  const inProgressTasks = myTasks.filter(i => i.status === 'IN_PROGRESS');
+  const overdueTasks = tasks.filter(
+    t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== "DONE"
+  );
+
+  const inProgressTasks = tasks.filter(t => t.status === "IN_PROGRESS");
 
   const summaryCards = [
     {
-      title: "My Tasks",
-      count: myTasks.length,
+      title: role === "ADMIN" ? "All Tasks" : role === "LEADER" ? "Project Tasks" : "My Tasks",
+      count: tasks.length,
       icon: User,
       color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-400",
-      items: myTasks.slice(0, 3)
+      items: tasks.slice(0, 3)
     },
     {
       title: "Overdue",
@@ -82,13 +97,11 @@ export default function TasksSummary() {
               </p>
             ) : (
               <div className="space-y-3">
-                {card.items.map((issue) => (
-                  <div key={issue.id} className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
-                    <h4 className="text-sm font-medium text-gray-800 dark:text-white truncate">
-                      {issue.title}
-                    </h4>
+                {card.items.map((task) => (
+                  <div key={task.id} className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
+                    <h4 className="text-sm font-medium text-gray-800 dark:text-white truncate">{task.title}</h4>
                     <p className="text-xs text-gray-600 dark:text-zinc-400 capitalize mt-1">
-                      {issue.type} • {issue.priority} priority
+                      {task.type} • {task.priority} priority
                     </p>
                   </div>
                 ))}
