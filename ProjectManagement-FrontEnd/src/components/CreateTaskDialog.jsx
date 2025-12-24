@@ -1,44 +1,98 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { useSelector } from "react-redux";
 import { createTask } from "../services/ProjectTask/ProjectTaskAPI";
+import { getAllUsers } from "../services/Team/team.api";
+import { getProjectUpdateForm } from "../services/Project/ProjectAPI";
 
-export default function CreateTaskDialog({
-  showCreateTask,
-  setShowCreateTask,
-  projectId,
-  members = [],
-}) {
+export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, projectId, onTaskCreated }) {
+  const { role, email, id: userId } = useSelector((state) => state.user ?? {});
+
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [loadingMembers, setLoadingMembers] = useState(true);
+  const [allUsersMap, setAllUsersMap] = useState({}); 
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     type: "TASK",
     status: "TO_DO",
     priority: "MEDIUM",
-    assignToUserId: "", // string | ""
+    assignToUserEmail: "",
     dueDate: "",
   });
+
+  if (!showCreateTask || role === "MEMBER") return null;
+
+  useEffect(() => {
+    if (!showCreateTask || !projectId) return;
+
+    const fetchMembers = async () => {
+      setLoadingMembers(true);
+      try {
+        const allUsersRes = await getAllUsers();
+        const allUsers = allUsersRes.data || [];
+
+        const userMap = {};
+        allUsers.forEach((u) => {
+          userMap[u.email] = u.id;
+        });
+        setAllUsersMap(userMap);
+
+        const projectRes = await getProjectUpdateForm(projectId);
+        const project = projectRes;
+
+        const projectMembers = allUsers.filter(
+          (u) =>
+            project.teamMemberIds?.includes(u.id) ||
+            u.id === project.teamLeadId
+        );
+
+        setMembers(projectMembers);
+
+        if (role === "LEADER" && projectMembers.some((m) => m.email === email)) {
+          setFormData((prev) => ({
+            ...prev,
+            assignToUserEmail: email,
+          }));
+        }
+      } catch (err) {
+        console.error("Failed to fetch project members:", err);
+        setMembers([]);
+      } finally {
+        setLoadingMembers(false);
+      }
+    };
+
+    fetchMembers();
+  }, [showCreateTask, projectId, role, email]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const payload = {
-      projectId,
-      assignToUserId: formData.assignToUserId || null, // null = Unassigned
-      title: formData.title,
-      description: formData.description,
-      type: formData.type,
-      status: formData.status,
-      priority: formData.priority,
-      dueDate: formData.dueDate || null,
-    };
-
-    console.log("Create task payload:", payload);
-
     try {
-      await createTask(payload);
+      const assignToUserId = formData.assignToUserEmail
+        ? allUsersMap[formData.assignToUserEmail]
+        : null;
+
+      const payload = {
+        projectId,
+        assignToUserId,
+        title: formData.title,
+        description: formData.description,
+        type: formData.type,
+        status: formData.status,
+        priority: formData.priority,
+        dueDate: formData.dueDate || null,
+      };
+
+      const createdTask = await createTask(payload);
+
+      onTaskCreated?.(createdTask);
+
       setShowCreateTask(false);
       setFormData({
         title: "",
@@ -46,7 +100,7 @@ export default function CreateTaskDialog({
         type: "TASK",
         status: "TO_DO",
         priority: "MEDIUM",
-        assignToUserId: "",
+        assignToUserEmail: "",
         dueDate: "",
       });
     } catch (err) {
@@ -56,8 +110,6 @@ export default function CreateTaskDialog({
       setIsSubmitting(false);
     }
   };
-
-  if (!showCreateTask) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 dark:bg-black/60 backdrop-blur">
@@ -72,9 +124,7 @@ export default function CreateTaskDialog({
             <label className="text-sm font-medium">Title</label>
             <input
               value={formData.title}
-              onChange={(e) =>
-                setFormData({ ...formData, title: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               required
               className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
             />
@@ -85,9 +135,7 @@ export default function CreateTaskDialog({
             <label className="text-sm font-medium">Description</label>
             <textarea
               value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               className="w-full mt-1 px-3 py-2 rounded border h-24 dark:bg-zinc-900"
             />
           </div>
@@ -98,9 +146,7 @@ export default function CreateTaskDialog({
               <label className="text-sm font-medium">Type</label>
               <select
                 value={formData.type}
-                onChange={(e) =>
-                  setFormData({ ...formData, type: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="TASK">Task</option>
@@ -115,9 +161,7 @@ export default function CreateTaskDialog({
               <label className="text-sm font-medium">Priority</label>
               <select
                 value={formData.priority}
-                onChange={(e) =>
-                  setFormData({ ...formData, priority: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="LOW">Low</option>
@@ -132,21 +176,21 @@ export default function CreateTaskDialog({
             <div>
               <label className="text-sm font-medium">Assignee</label>
               <select
-                value={formData.assignToUserId}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    assignToUserId: e.target.value,
-                  })
-                }
+                value={formData.assignToUserEmail}
+                onChange={(e) => setFormData({ ...formData, assignToUserEmail: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
+                disabled={loadingMembers}
               >
                 <option value="">Unassigned</option>
-                {members.map((m) => (
-                  <option key={m.id} value={m.id}>
-                    {m.email}
-                  </option>
-                ))}
+                {loadingMembers ? (
+                  <option disabled>Loading...</option>
+                ) : (
+                  members.map((m) => (
+                    <option key={m.id} value={m.email}>
+                      {m.email}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
 
@@ -154,9 +198,7 @@ export default function CreateTaskDialog({
               <label className="text-sm font-medium">Status</label>
               <select
                 value={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="TO_DO">To Do</option>
@@ -174,16 +216,12 @@ export default function CreateTaskDialog({
               <input
                 type="date"
                 value={formData.dueDate}
-                onChange={(e) =>
-                  setFormData({ ...formData, dueDate: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
                 className="w-full px-3 py-2 rounded border dark:bg-zinc-900"
               />
             </div>
             {formData.dueDate && (
-              <p className="text-xs text-zinc-500 mt-1">
-                {format(new Date(formData.dueDate), "PPP")}
-              </p>
+              <p className="text-xs text-zinc-500 mt-1">{format(new Date(formData.dueDate), "PPP")}</p>
             )}
           </div>
 
@@ -198,7 +236,7 @@ export default function CreateTaskDialog({
             </button>
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isSubmitting || loadingMembers}
               className="px-4 py-2 bg-blue-600 text-white rounded"
             >
               {isSubmitting ? "Creating..." : "Create Task"}

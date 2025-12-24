@@ -3,6 +3,7 @@ import { Plus, Search, FolderOpen } from "lucide-react";
 import ProjectCard from "../components/ProjectCard";
 import CreateProjectDialog from "../components/CreateProjectDialog";
 import { getAllProjects } from "../services/Project/ProjectAPI";
+import { useSelector } from "react-redux"; 
 
 export default function Projects() {
     const [projects, setProjects] = useState([]);
@@ -14,14 +15,29 @@ export default function Projects() {
         priority: "ALL",
     });
 
-    // 拉取 backend 的所有项目
+    const { role, userId } = useSelector((state) => state.user); 
+
+ 
     const fetchProjects = async () => {
         try {
-            const data = await getAllProjects(); // 调用 backend
-            // 按创建时间排序，最新的项目放在最上面
-            const sorted = data.sort(
+            const data = await getAllProjects(); 
+
+            let visibleProjects = data;
+
+            if (role !== "ADMIN") {
+       
+                visibleProjects = data.filter((project) => {
+                    const memberIds = project.memberIds || [];
+                    return String(project.leaderId) === String(userId) ||
+                        memberIds.some((id) => String(id) === String(userId));
+                });
+            }
+
+    
+            const sorted = visibleProjects.sort(
                 (a, b) => new Date(b.startDate) - new Date(a.startDate)
             );
+
             setProjects(sorted);
         } catch (error) {
             console.error("Failed to fetch projects:", error);
@@ -30,8 +46,9 @@ export default function Projects() {
     };
 
     useEffect(() => {
+        if (!role) return; // 等待用户信息加载
         fetchProjects();
-    }, []);
+    }, [role, userId]);
 
     // 过滤和搜索
     useEffect(() => {
@@ -56,7 +73,7 @@ export default function Projects() {
         setFilteredProjects(filtered);
     }, [projects, searchTerm, filters]);
 
-    // 创建项目成功后回调
+
     const handleProjectCreated = () => {
         fetchProjects();
         setIsDialogOpen(false);
@@ -74,12 +91,15 @@ export default function Projects() {
                         Manage and track your projects
                     </p>
                 </div>
-                <button
-                    onClick={() => setIsDialogOpen(true)}
-                    className="flex items-center px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:opacity-90 transition"
-                >
-                    <Plus className="size-4 mr-2" /> New Project
-                </button>
+                {/* 只有 ADMIN 或 LEADER 可以创建 */}
+                {["ADMIN", "LEADER"].includes(role) && (
+                    <button
+                        onClick={() => setIsDialogOpen(true)}
+                        className="flex items-center px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:opacity-90 transition"
+                    >
+                        <Plus className="size-4 mr-2" /> New Project
+                    </button>
+                )}
                 <CreateProjectDialog
                     isDialogOpen={isDialogOpen}
                     setIsDialogOpen={setIsDialogOpen}
@@ -135,12 +155,14 @@ export default function Projects() {
                         <p className="text-gray-500 dark:text-zinc-400 mb-6 text-sm">
                             Create your first project to get started
                         </p>
-                        <button
-                            onClick={() => setIsDialogOpen(true)}
-                            className="flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mx-auto text-sm"
-                        >
-                            <Plus className="size-4" /> Create Project
-                        </button>
+                        {["ADMIN", "LEADER"].includes(role) && (
+                            <button
+                                onClick={() => setIsDialogOpen(true)}
+                                className="flex items-center gap-1.5 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mx-auto text-sm"
+                            >
+                                <Plus className="size-4" /> Create Project
+                            </button>
+                        )}
                     </div>
                 ) : (
                     filteredProjects.map((project) => (

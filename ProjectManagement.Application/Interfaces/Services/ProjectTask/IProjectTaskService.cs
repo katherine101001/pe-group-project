@@ -26,6 +26,7 @@ namespace ProjectManagement.Application.Interfaces.Services
                 Task<List<MyTaskSidebarDto>> GetTasksByUserAsync(Guid userId);
 
                 Task<List<ProjectTaskDto>> GetTasksByProjectIdAsync(Guid projectId);
+                 Task UpdateTaskStatusAsync(Guid taskId, string newStatus);
                 
         }
 }

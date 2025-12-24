@@ -49,3 +49,13 @@ export const getProjectAnalytics = async (projectId) => {
     return null;
   }
 };
+
+export const getProjectUpdateForm = async (id) => {
+  try {
+    const res = await API.get(`/projects/${id}/update/form`);
+    return res.data; 
+  } catch (error) {
+    console.error("Failed to fetch project update form", error);
+    return null;
+  }
+};
