@@ -201,16 +201,34 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task<int> CountSoonToOverdueTasksAsync()
         {
-            var today = DateTime.Now.Date;
+            var today = DateTime.UtcNow;
             var next7Days = today.AddDays(7);
 
             return await _context.ProjectTask
-                .Where(t => t.DueDate.HasValue
-                            && t.Status != "COMPLETED"
-                            && t.DueDate.Value.Date >= today
-                            && t.DueDate.Value.Date <= next7Days)
+                .Where(t =>
+                    t.DueDate.HasValue &&
+                    t.Status != "COMPLETED" &&
+                    t.DueDate.Value.Date >= today &&
+                    t.DueDate.Value.Date <= next7Days)
                 .CountAsync();
         }
+
+        public async Task<int> CountSoonToOverdueTasksByUserAsync(Guid userId)
+        {
+            var today = DateTime.UtcNow;
+            var next7Days = today.AddDays(7);
+
+            return await _context.ProjectTask
+                .Where(t =>
+                    t.AssignToUserId == userId &&
+                    t.DueDate.HasValue &&
+                    t.Status != "COMPLETED" &&
+                    t.DueDate.Value.Date >= today &&
+                    t.DueDate.Value.Date <= next7Days)
+                .CountAsync();
+        }
+
+
 
 
 

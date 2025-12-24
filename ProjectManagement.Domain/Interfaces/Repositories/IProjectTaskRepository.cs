@@ -41,6 +41,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<List<ProjectTask>> GetRecentTasksAsync(int limit);
         Task<int> CountSoonToOverdueTasksAsync();
+        Task<int> CountSoonToOverdueTasksByUserAsync(Guid userId);
 
         Task<List<ProjectTask>> GetTasksByUserAsync(Guid userId);
 

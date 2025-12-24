@@ -58,9 +58,9 @@ export default function StatsGrid() {
     },
     {
       icon: AlertTriangle,
-      title: "Overdue",
+      title: "Overdue Soon",
       value: stats.overdueIssues,
-      subtitle: role === "ADMIN" ? "all overdue tasks" : "need attention",
+      subtitle: "need attention",
       bgColor: "bg-amber-500/10",
       textColor: "text-amber-500",
     },
