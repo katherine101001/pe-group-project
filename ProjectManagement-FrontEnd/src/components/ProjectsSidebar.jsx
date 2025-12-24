@@ -11,38 +11,55 @@ const ProjectSidebar = () => {
     const [searchParams] = useSearchParams();
     const { role, userId } = useSelector((state) => state.user ?? {});
 
-    const getProjectSubItems = (projectId, role) => {
+    const getProjectSubItems = (project, role, userId) => {
         const items = [
             {
                 title: 'Tasks',
                 icon: KanbanIcon,
-                url: `/app/projectsDetail?id=${projectId}&tab=tasks`
+                url: `/app/projectsDetail?id=${project.id}&tab=tasks`
             },
             {
                 title: 'Calendar',
                 icon: CalendarIcon,
-                url: `/app/projectsDetail?id=${projectId}&tab=calendar`
+                url: `/app/projectsDetail?id=${project.id}&tab=calendar`
             }
         ];
 
-        // Admin & Leader only
-        if (role === "ADMIN" || role === "LEADER") {
+        // ADMIN can always see
+        if (role === "ADMIN") {
             items.push(
                 {
                     title: 'Analytics',
                     icon: ChartColumnIcon,
-                    url: `/app/projectsDetail?id=${projectId}&tab=analytics`
+                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
                 },
                 {
                     title: 'Settings',
                     icon: SettingsIcon,
-                    url: `/app/projectsDetail?id=${projectId}&tab=settings`
+                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
+                }
+            );
+        }
+
+        // LEADER only for their own project
+        if (role === "LEADER" && project.leaderId === userId) {
+            items.push(
+                {
+                    title: 'Analytics',
+                    icon: ChartColumnIcon,
+                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
+                },
+                {
+                    title: 'Settings',
+                    icon: SettingsIcon,
+                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
                 }
             );
         }
 
         return items;
     };
+
 
 
     const toggleProject = (id) => {
@@ -102,7 +119,7 @@ const ProjectSidebar = () => {
 
                         {expandedProjects.has(project.id) && (
                             <div className="ml-5 mt-1 space-y-1">
-                                {getProjectSubItems(project.id, role).map((subItem) => {
+                                {getProjectSubItems(project.id, role, userId).map((subItem) => {
                                     const isActive =
                                         location.pathname === "/app/projectsDetail" &&
                                         searchParams.get('id') === project.id &&
