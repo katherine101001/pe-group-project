@@ -74,7 +74,7 @@ const ProjectSidebar = () => {
 
         const fetchProjects = async () => {
             try {
-                const data = await getAllProjects(); // API returns all projects
+                const data = await getAllProjects();
                 setProjects(data);
             } catch (err) {
                 console.error("Failed to fetch projects:", err);
@@ -82,7 +82,8 @@ const ProjectSidebar = () => {
         };
 
         fetchProjects();
-    }, []);
+    }, [userId, role]);
+
 
     // Filter projects based on role
     const visibleProjects = useMemo(() => {
@@ -119,10 +120,10 @@ const ProjectSidebar = () => {
 
                         {expandedProjects.has(project.id) && (
                             <div className="ml-5 mt-1 space-y-1">
-                                {getProjectSubItems(project.id, role, userId).map((subItem) => {
+                                {getProjectSubItems(project, role, userId).map((subItem) => {
                                     const isActive =
                                         location.pathname === "/app/projectsDetail" &&
-                                        searchParams.get('id') === project.id &&
+                                        String(searchParams.get('id')) === String(project.id) &&
                                         searchParams.get('tab') === subItem.title.toLowerCase();
 
                                     return (
@@ -141,6 +142,7 @@ const ProjectSidebar = () => {
                                 })}
                             </div>
                         )}
+
 
                     </div>
                 ))}
