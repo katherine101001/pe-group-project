@@ -44,15 +44,21 @@ public class ProjectTaskController : ControllerBase
 
 
     [HttpGet("calendar")]
-    public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
+    public async Task<IActionResult> GetTaskCalendar(
+        [FromQuery] Guid projectId,
+        [FromQuery] int year,
+        [FromQuery] int month)
     {
-        if (year <= 0 || month < 1 || month > 12)
-            return BadRequest("Invalid year or month.");
+        if (projectId == Guid.Empty)
+            return BadRequest("projectId is required");
 
-        var result = await _projectTaskService.GetTaskCalendarAsync(year, month);
+        var result = await _projectTaskService
+            .GetTaskCalendarAsync(projectId, year, month);
 
         return Ok(result);
     }
+
+
 
     [HttpGet("overdue")]
     public async Task<IActionResult> GetAllOverdueTasks()

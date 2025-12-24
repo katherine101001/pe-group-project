@@ -137,24 +137,38 @@ public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dt
         }
 
 
-        public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month)
+public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(
+    Guid projectId,
+    int year,
+    int month)
+{
+    var tasks = await _projectTaskRepository
+        .GetTasksByProjectAndMonthAsync(projectId, year, month);
+
+    var grouped = tasks
+        .GroupBy(t => t.DueDate!.Value.Date)
+        .Select(g => new ProjectTaskCalendarDto
         {
-            var startDate = new DateTime(year, month, 1);
-            var endDate = startDate.AddMonths(1).AddDays(-1);
+            Date = g.Key.ToString("yyyy-MM-dd"),
+            TaskCount = g.Count(),
+            Tasks = g.Select(t => new ProjectTaskDto
+            {
+                Id = t.Id,
+                Title = t.Title!,
+                Type = t.Type,
+                Status = t.Status!,
+                Priority = t.Priority!,
+                ProjectId = t.ProjectId,
+                AssignToUserId = t.AssignToUserId,
+                AssigneeName = t.AssignToUser.Name,
+                DueDate = t.DueDate
+            }).ToList()
+        })
+        .ToList();
 
-            var taskCounts = await _projectTaskRepository
-                .GetTaskCountsByDateRangeAsync(startDate, endDate);
+    return grouped;
+}
 
-            var calendarDtos = taskCounts
-                .Select(tc => new ProjectTaskCalendarDto
-                {
-                    Date = tc.Key,     // "yyyy-MM-dd"
-                    TaskCount = tc.Value
-                })
-                .ToList();
-
-            return calendarDtos;
-        }
 
         public async Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync()
         {

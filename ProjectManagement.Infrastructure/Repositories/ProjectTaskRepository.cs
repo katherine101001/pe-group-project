@@ -270,6 +270,22 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Where(t => t.AssignToUserId == userId)
                 .ToListAsync();
         }
+        public async Task<List<ProjectTask>> GetTasksByProjectAndMonthAsync(
+            Guid projectId,
+            int year,
+            int month)
+        {
+            return await _context.ProjectTask
+                .Include(t => t.AssignToUser)
+                .Where(t =>
+                    t.ProjectId == projectId &&
+                    t.DueDate.HasValue &&
+                    t.DueDate.Value.Year == year &&
+                    t.DueDate.Value.Month == month
+                )
+                .ToListAsync();
+        }
+
 
 
 
