@@ -137,44 +137,38 @@ public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dt
         }
 
 
-       public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month, Guid? userId = null, string? role = null)
+public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(
+    Guid projectId,
+    int year,
+    int month)
+{
+    var tasks = await _projectTaskRepository
+        .GetTasksByProjectAndMonthAsync(projectId, year, month);
+
+    var grouped = tasks
+        .GroupBy(t => t.DueDate!.Value.Date)
+        .Select(g => new ProjectTaskCalendarDto
         {
-            List<ProjectTask> tasks;
-
-            if (role == "LEADER" || userId == null)
+            Date = g.Key.ToString("yyyy-MM-dd"),
+            TaskCount = g.Count(),
+            Tasks = g.Select(t => new ProjectTaskDto
             {
-                // Leader 可以看全部任务
-                tasks = await _projectTaskRepository.GetTasksByMonthAsync(year, month);
-            }
-            else
-            {
-                // Member 只看自己的任务
-                tasks = await _projectTaskRepository.GetTasksByMonthForUserAsync(year, month, userId.Value);
-            }
+                Id = t.Id,
+                Title = t.Title!,
+                Type = t.Type,
+                Status = t.Status!,
+                Priority = t.Priority!,
+                ProjectId = t.ProjectId,
+                AssignToUserId = t.AssignToUserId,
+                AssigneeName = t.AssignToUser.Name,
+                DueDate = t.DueDate
+            }).ToList()
+        })
+        .ToList();
 
-            // 按日期分组
-            var calendarDtos = tasks
-                .GroupBy(t => t.DueDate?.Date)
-                .Select(g => new ProjectTaskCalendarDto
-                {
-                    Date = g.Key?.ToString("yyyy-MM-dd"),
-                    TaskCount = g.Count(),
-                    Tasks = g.Select(t => new ProjectTaskDto
-                    {
-                        Id = t.Id,
-                        Title = t.Title,
-                        Type = t.Type,
-                        Status = t.Status,
-                        Priority = t.Priority,
-                        AssignToUserId = t.AssignToUserId,
-                        AssigneeName = t.AssignToUser != null ? t.AssignToUser.Name : null,
-                        DueDate = t.DueDate
-                    }).ToList()
-                })
-                .ToList();
+    return grouped;
+}
 
-            return calendarDtos;
-        }
 
         public async Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync()
         {

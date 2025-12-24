@@ -27,7 +27,7 @@ namespace ProjectManagement.Application.Interfaces.Services
                 Task<List<ProjectTaskDto>> GetTasksByProjectIdAsync(Guid projectId);
                  Task UpdateTaskStatusAsync(Guid taskId, string newStatus);
 
-                Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month, Guid? userId = null, string? role = null);
+                Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(Guid projectId,int year,int month);
                 
         }
 }

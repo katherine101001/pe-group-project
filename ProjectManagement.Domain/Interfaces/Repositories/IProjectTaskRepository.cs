@@ -49,10 +49,7 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
         Task<List<ProjectTask>> GetByProjectIdAsync(Guid projectId);
 
         Task<List<ProjectTask>> GetTasksByUserIdAsync(Guid userId);
-
-
-        Task<List<ProjectTask>> GetTasksByMonthAsync(int year, int month);
-        Task<List<ProjectTask>> GetTasksByMonthForUserAsync(int year, int month, Guid userId);
+        Task<List<ProjectTask>> GetTasksByProjectAndMonthAsync(Guid projectId,int year,int month);
 
     }
 }

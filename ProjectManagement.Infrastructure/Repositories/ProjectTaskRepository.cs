@@ -252,24 +252,19 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .Where(t => t.AssignToUserId == userId)
                 .ToListAsync();
         }
-        public async Task<List<ProjectTask>> GetTasksByMonthAsync(int year, int month)
+        public async Task<List<ProjectTask>> GetTasksByProjectAndMonthAsync(
+            Guid projectId,
+            int year,
+            int month)
         {
             return await _context.ProjectTask
-                .Include(t => t.AssignToUser) // <-- 导入导航属性
-                .Where(t => t.DueDate.HasValue &&
-                            t.DueDate.Value.Year == year &&
-                            t.DueDate.Value.Month == month)
-                .ToListAsync();
-        }
-
-        public async Task<List<ProjectTask>> GetTasksByMonthForUserAsync(int year, int month, Guid userId)
-        {
-            return await _context.ProjectTask
-                .Include(t => t.AssignToUser) // <-- 导入导航属性
-                .Where(t => t.DueDate.HasValue &&
-                            t.DueDate.Value.Year == year &&
-                            t.DueDate.Value.Month == month &&
-                            t.AssignToUserId == userId)
+                .Include(t => t.AssignToUser)
+                .Where(t =>
+                    t.ProjectId == projectId &&
+                    t.DueDate.HasValue &&
+                    t.DueDate.Value.Year == year &&
+                    t.DueDate.Value.Month == month
+                )
                 .ToListAsync();
         }
 

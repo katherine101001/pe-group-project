@@ -56,20 +56,22 @@ export const getTaskById = async (taskId) => {
       return [];
     }
   };
-
-  export const getTaskCalendarByMonth = async (year, month) => {
-    try {
-      const res = await API.get(`/tasks/calendar?year=${year}&month=${month}`);
-      return res.data.map(task => ({
-        ...task,
-        due_date: new Date(task.dueDate || task.due_date),
-        assignee: { name: task.assigneeName || "Unassigned" },
-      }));
-    } catch (error) {
-      console.error("Failed to fetch calendar tasks", error);
-      return [];
-    }
-  };
+    export const getTaskCalendarByMonth = async (projectId, year, month) => {
+      try {
+        const res = await API.get(
+          `/tasks/calendar?projectId=${projectId}&year=${year}&month=${month}`
+        );
+        return res.data.map(day => ({
+          ...day,
+          due_date: new Date(day.date), // make sure it's a proper Date object
+          tasks: day.tasks || [],
+        }));
+      } catch (error) {
+        console.error("Failed to fetch calendar tasks", error);
+        return [];
+      }
+    };
+    
 
   export const getTasksByProjectId = async (projectId) => {
     try {
