@@ -113,10 +113,8 @@ export default function ProjectDetail() {
           {[
             { key: "tasks", label: "Tasks", icon: FileStackIcon },
             { key: "calendar", label: "Calendar", icon: CalendarIcon },
-            // { key: "analytics", label: "Analytics", icon: BarChart3Icon },
             ...(role === "ADMIN" || role === "LEADER" ? [{ key: "analytics", label: "Analytics", icon: BarChart3Icon }] : []),
             ...(role === "ADMIN" || role === "LEADER" ? [{ key: "settings", label: "Settings", icon: SettingsIcon }] : []),
-            // { key: "settings", label: "Settings", icon: SettingsIcon },
           ].map((tabItem) => (
             <button
               key={tabItem.key}
