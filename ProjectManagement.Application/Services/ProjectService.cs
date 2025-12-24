@@ -100,7 +100,7 @@ namespace ProjectManagement.Application.Services
                 Status = project.Status,
                 TotalTasks = project.ProjectTasks.Count,
                 CompletedTasks = project.ProjectTasks.Count(t => t.Status == "COMPLETED"),
-                InProgressTasks = project.ProjectTasks.Count(t => t.Status == "IN_PROGRESS"),
+                InProgressTasks = project.ProjectTasks.Count(t => t.Status != "COMPLETED"),
                 TotalTeamMembers = project.ProjectMembers.Count
             };
 
