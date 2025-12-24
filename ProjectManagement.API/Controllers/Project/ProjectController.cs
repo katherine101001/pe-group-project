@@ -7,10 +7,12 @@ using ProjectManagement.Application.Interfaces.Services;
 public class ProjectsController : ControllerBase
 {
     private readonly IProjectService _projectService;
+    private readonly IUserService _userService;
 
-    public ProjectsController(IProjectService projectService)
+    public ProjectsController(IProjectService projectService, IUserService userService)
     {
         _projectService = projectService;
+        _userService = userService;
     }
 
     // To create project
@@ -55,6 +57,7 @@ public class ProjectsController : ControllerBase
         return Ok(project);
     }
 
+
     // Update the forms
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateProject(Guid id, [FromBody] UpdateProjectDto dto)
@@ -62,5 +65,12 @@ public class ProjectsController : ControllerBase
         await _projectService.UpdateProjectAsync(id, dto);
         return NoContent();
     }
+
+    [HttpGet("{id}/available-members")]
+    public async Task<IActionResult> GetAvailableMembers(Guid id)
+    {
+        return Ok(await _userService.GetAvailableMembersAsync(id));
+    }
+
 
 }

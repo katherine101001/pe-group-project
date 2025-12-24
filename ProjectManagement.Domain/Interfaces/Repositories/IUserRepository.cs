@@ -25,6 +25,8 @@ namespace ProjectManagement.Domain.Interfaces.Repositories
 
         Task<User?> GetByEmailAsyncLogin(string email);
 
+        Task<List<User>> GetUsersNotInProjectAsync(Guid projectId);
+
 
     }
 }

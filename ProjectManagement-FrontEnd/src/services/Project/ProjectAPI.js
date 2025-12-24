@@ -53,9 +53,23 @@ export const getProjectAnalytics = async (projectId) => {
 export const getProjectUpdateForm = async (id) => {
   try {
     const res = await API.get(`/projects/${id}/update/form`);
-    return res.data; 
+    return res.data;
   } catch (error) {
     console.error("Failed to fetch project update form", error);
     return null;
+  }
+};
+
+export const getAvailableProjectMembers = async (projectId) => {
+  try {
+    console.log("Fetching available members for project:", projectId);
+
+    const res = await API.get(`/projects/${projectId}/available-members`);
+
+    console.log("Available members response:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch available project members", error);
+    return [];
   }
 };
