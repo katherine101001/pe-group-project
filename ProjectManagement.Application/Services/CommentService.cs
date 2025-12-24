@@ -10,48 +10,58 @@ namespace ProjectManagement.Application.Services
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IMentionRepository _mentionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public CommentService(
-            ICommentRepository commentRepository,
-            IUserRepository userRepository,
-            IEmailService emailService,
-            IMapper mapper)
+       public CommentService(
+        ICommentRepository commentRepository,
+        IMentionRepository mentionRepository,
+        IUserRepository userRepository,
+        IEmailService emailService,
+        IMapper mapper)
         {
             _commentRepository = commentRepository;
+            _mentionRepository = mentionRepository;
             _userRepository = userRepository;
             _emailService = emailService;
             _mapper = mapper;
         }
-
-       public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
+        public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
         {
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
             var comment = _mapper.Map<Comment>(dto);
 
-            if (dto.MentionedUserIds != null)
+        
+            await _commentRepository.AddAsync(comment);
+
+        
+            if (dto.MentionedUserIds != null && dto.MentionedUserIds.Any())
             {
                 foreach (var userId in dto.MentionedUserIds)
                 {
                     var user = await _userRepository.GetByIdAsync(userId);
                     if (user != null)
                     {
-                        comment.Mentions.Add(new Mention
+                        var mention = new Mention
                         {
                             CommentId = comment.Id,
-                            MentionedUserId = userId
-                        });
+                            MentionedUserId = userId,
+                            MentionedUser = user
+                        };
+                        await _mentionRepository.AddAsync(mention); // ⚡ 单独保存
                     }
                 }
             }
 
-            await _commentRepository.AddAsync(comment);
-
+        
             var fullComment = await _commentRepository.GetByIdWithIncludesAsync(comment.Id);
             var commentDto = _mapper.Map<CommentDto>(fullComment);
 
-            if (dto.MentionedUserIds != null)
+        
+            if (dto.MentionedUserIds != null && dto.MentionedUserIds.Any())
             {
                 foreach (var userId in dto.MentionedUserIds)
                 {
@@ -69,6 +79,9 @@ namespace ProjectManagement.Application.Services
 
             return commentDto;
         }
+
+
+
 
         public async Task<CommentDto?> GetCommentByIdAsync(Guid id)
         {
