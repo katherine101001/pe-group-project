@@ -110,11 +110,21 @@ public class ProjectTaskController : ControllerBase
 
 
     // [HttpPut("{id}")]
-    // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectDto dto)
+    // public async Task<IActionResult> UpdateProject(Guid id, [FromBody] ProjectTaskDto dto)
     // {
     //     await _projectTaskService.UpdateProjectTaskAsync(id, dto);
     //     return NoContent();
     // }
+
+    [HttpPatch("{id}/status")]
+    public async Task<IActionResult> UpdateTaskStatus(Guid id, [FromBody] UpdateTaskStatusDto dto)
+    {
+        await _projectTaskService.UpdateTaskStatusAsync(id, dto.Status);
+        return NoContent();
+    }
+
+
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteProject(Guid id)

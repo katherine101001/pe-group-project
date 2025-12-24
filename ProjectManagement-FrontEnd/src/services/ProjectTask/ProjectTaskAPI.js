@@ -86,10 +86,21 @@ export const getTaskById = async (taskId) => {
     }
 };
 
-export const updateTaskStatus = async (taskId, status) => {
-    const response = await axios.put(`/api/tasks/${taskId}`, { status });
-    return response.data;
+// export const updateTaskStatus = async (taskId, status) => {
+//     const response = await axios.put(`/api/tasks/${taskId}`, { status });
+//     return response.data;
+// };
+
+export const updateTaskStatus = async (taskId, newStatus) => {
+  const response = await API.patch(`/tasks/${taskId}/status`, { status: newStatus });
+  return response.data;
 };
+
+
+
+
+
+
 
 export const deleteTasks = async (taskIds) => {
     const promises = taskIds.map(id => axios.delete(`/api/tasks/${id}`));

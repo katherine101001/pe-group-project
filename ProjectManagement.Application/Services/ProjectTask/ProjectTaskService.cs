@@ -189,6 +189,20 @@ public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dt
             return _mapper.Map<List<MyTaskSidebarDto>>(tasks);
         }
 
+        public async Task UpdateTaskStatusAsync(Guid taskId, string newStatus)
+        {
+            var task = await _projectTaskRepository.GetByIdAsync(taskId);
+
+            if (task == null)
+                throw new NotFoundException("Task not found");
+
+            task.Status = newStatus;
+            task.UpdatedAt = DateTime.UtcNow;
+
+            await _projectTaskRepository.UpdateAsync(task);
+        }
+
+
 
     }
 
