@@ -14,14 +14,13 @@ export const createTask = async (task) => {
 export const getAllTasks = async () => {
     try {
       const res = await API.get("/tasks");
-      return res.data; // 返回所有任务数组
+      return res.data; 
     } catch (error) {
       console.error("Failed to fetch tasks", error);
       return [];
     }
   };
 
-// 简略信息 API
 export const getTaskById = async (taskId) => {
     try {
       const res = await API.get(`/tasks/${taskId}`);
@@ -46,11 +45,11 @@ export const getTaskById = async (taskId) => {
   export const getOverdueTasksByProject = async (projectId) => {
     try {
       const res = await API.get(`/tasks/overdue/${projectId}`);
-      // 确保 due_date 是 Date 对象
+
       return res.data.map(task => ({
         ...task,
         due_date: new Date(task.dueDate || task.due_date),
-        assignee: { name: task.assigneeName || "Unassigned" }, // 根据你的后端字段映射
+        assignee: { name: task.assigneeName || "Unassigned" }, 
       }));
     } catch (error) {
       console.error("Failed to fetch overdue tasks", error);
@@ -74,7 +73,7 @@ export const getTaskById = async (taskId) => {
 
   export const getTasksByProjectId = async (projectId) => {
     try {
-        const res = await API.get(`/tasks/project/${projectId}`); // 注意后端路由要匹配
+        const res = await API.get(`/tasks/project/${projectId}`); 
         return res.data.map(task => ({
             ...task,
             due_date: new Date(task.dueDate || task.due_date),
