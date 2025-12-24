@@ -83,5 +83,22 @@ namespace ProjectManagement.Infrastructure.Repositories
                                  .FirstOrDefaultAsync(u => u.Email == email);
         }
 
+        public async Task<List<User>> GetUsersNotInProjectAsync(Guid projectId)
+        {
+            var memberIds = _context.ProjectMember
+                .Where(pm => pm.ProjectId == projectId)
+                .Select(pm => pm.UserId);
+
+            return await _context.User
+                .Include(u => u.Role)
+                .Where(u =>
+                    !memberIds.Contains(u.Id) &&
+                    u.Role.Name == "MEMBER"
+                )
+                .ToListAsync();
+        }
+
+
+
     }
 }

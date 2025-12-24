@@ -13,7 +13,7 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task DeleteUserAsync(Guid id);
         //Task<UserDto?> AuthenticateAsync(string email, string password);
 
-       Task<User> InviteUserAsync(InviteTeamDto dto);
+        Task<User> InviteUserAsync(InviteTeamDto dto);
         Task<List<DisplayTeamMemberDto>> GetAllUsersSimpleAsync();
 
         Task<List<DisplayTeamMemberDto>> SearchUsersAsync(string keyword);
@@ -22,6 +22,6 @@ namespace ProjectManagement.Application.Interfaces.Services
 
         Task<User?> LoginAsync(LoginDto loginDto);
 
-        
+        Task<List<AvailableUserDto>> GetAvailableMembersAsync(Guid projectId);
     }
 }

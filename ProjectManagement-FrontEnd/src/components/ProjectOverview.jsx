@@ -92,10 +92,7 @@ const ProjectOverview = () => {
         ) : (
           <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
             {projects.slice(0, 5).map((project) => {
-              const progress =
-                project.totalTasks > 0
-                  ? Math.round((project.completedTasks / project.totalTasks) * 100)
-                  : 0;
+              const progress = project.progress || 0;
 
               return (
                 <Link
@@ -151,6 +148,7 @@ const ProjectOverview = () => {
                 </Link>
               );
             })}
+
           </div>
         )}
       </div>

@@ -44,10 +44,10 @@ export default function TasksSummary() {
   if (loading) return <p className="p-6 text-center">Loading tasks summary...</p>;
 
   const overdueTasks = tasks.filter(
-    t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== "DONE"
+    t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== "COMPLETED" && t.status !== "DONE"
   );
 
-  const inProgressTasks = tasks.filter(t => t.status === "IN_PROGRESS");
+  const inProgressTasks = tasks.filter(t => t.status !== "COMPLETED" && t.status !== "DONE");
 
   const summaryCards = [
     {

@@ -11,44 +11,55 @@ const ProjectSidebar = () => {
     const [searchParams] = useSearchParams();
     const { role, userId } = useSelector((state) => state.user ?? {});
 
-    // const getProjectSubItems = (projectId) => [
-    //     { title: 'Tasks', icon: KanbanIcon, url: `/app/projectsDetail?id=${projectId}&tab=tasks` },
-    //     { title: 'Analytics', icon: ChartColumnIcon, url: `/app/projectsDetail?id=${projectId}&tab=analytics` },
-    //     { title: 'Calendar', icon: CalendarIcon, url: `/app/projectsDetail?id=${projectId}&tab=calendar` },
-    //     { title: 'Settings', icon: SettingsIcon, url: `/app/projectsDetail?id=${projectId}&tab=settings` }
-    // ];
-    const getProjectSubItems = (projectId, role) => {
+    const getProjectSubItems = (project, role, userId) => {
         const items = [
             {
                 title: 'Tasks',
                 icon: KanbanIcon,
-                url: `/app/projectsDetail?id=${projectId}&tab=tasks`
+                url: `/app/projectsDetail?id=${project.id}&tab=tasks`
             },
             {
                 title: 'Calendar',
                 icon: CalendarIcon,
-                url: `/app/projectsDetail?id=${projectId}&tab=calendar`
+                url: `/app/projectsDetail?id=${project.id}&tab=calendar`
             }
         ];
 
-        // Admin & Leader only
-        if (role === "ADMIN" || role === "LEADER") {
+        // ADMIN can always see
+        if (role === "ADMIN") {
             items.push(
                 {
                     title: 'Analytics',
                     icon: ChartColumnIcon,
-                    url: `/app/projectsDetail?id=${projectId}&tab=analytics`
+                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
                 },
                 {
                     title: 'Settings',
                     icon: SettingsIcon,
-                    url: `/app/projectsDetail?id=${projectId}&tab=settings`
+                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
+                }
+            );
+        }
+
+        // LEADER only for their own project
+        if (role === "LEADER" && project.leaderId === userId) {
+            items.push(
+                {
+                    title: 'Analytics',
+                    icon: ChartColumnIcon,
+                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
+                },
+                {
+                    title: 'Settings',
+                    icon: SettingsIcon,
+                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
                 }
             );
         }
 
         return items;
     };
+
 
 
     const toggleProject = (id) => {
@@ -106,26 +117,9 @@ const ProjectSidebar = () => {
                             <span className="truncate max-w-40 text-sm">{project.title}</span>
                         </button>
 
-                        {/* {expandedProjects.has(project.id) && (
-                            <div className="ml-5 mt-1 space-y-1">
-                                {getProjectSubItems(project.id).map((subItem) => {
-                                    const isActive =
-                                        location.pathname === "/app/projectsDetail" &&
-                                        searchParams.get('id') === project.id &&
-                                        searchParams.get('tab') === subItem.title.toLowerCase();
-
-                                    return (
-                                        <Link key={subItem.title} to={subItem.url} className={`flex items-center gap-3 px-3 py-1.5 rounded-lg transition-colors duration-200 text-xs ${isActive ? 'bg-blue-100 text-blue-600 hover:bg-blue-200 dark:bg-blue-500/10 dark:text-blue-400 dark:hover:bg-blue-500/20' : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-zinc-800'}`}>
-                                            <subItem.icon className="size-3" />
-                                            {subItem.title}
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        )} */}
                         {expandedProjects.has(project.id) && (
                             <div className="ml-5 mt-1 space-y-1">
-                                {getProjectSubItems(project.id, role).map((subItem) => {
+                                {getProjectSubItems(project.id, role, userId).map((subItem) => {
                                     const isActive =
                                         location.pathname === "/app/projectsDetail" &&
                                         searchParams.get('id') === project.id &&

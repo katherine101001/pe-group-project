@@ -25,7 +25,7 @@ public class DashboardService : IDashboardService
             CompletedProjects = await _projectRepository.GetCompletedProjectsAsync(),
             ActiveProjects = await _projectRepository.GetActiveProjectsAsync(),
             MyTasks = await _projectTaskRepository.GetTotalTasksAsync(),
-            OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync()
+            OverdueTasks = await _projectTaskRepository.CountSoonToOverdueTasksAsync()
         };
     }
 
@@ -41,7 +41,7 @@ public class DashboardService : IDashboardService
 
             // Get only tasks assigned to the user
             MyTasks = await _projectTaskRepository.GetMyTasksCountAsync(userId),
-            OverdueTasks = await _projectTaskRepository.GetOverdueTasksCountAsync(userId)
+            OverdueTasks = await _projectTaskRepository.CountSoonToOverdueTasksByUserAsync(userId)
         };
     }
 

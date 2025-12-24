@@ -49,7 +49,8 @@ namespace ProjectManagement.Infrastructure.Repositories
                 query = query.Include(p => p.ProjectTasks).ThenInclude(t => t.AssignToUser);
 
             if (includeProjectMembers)
-                query = query.Include(p => p.ProjectMembers);
+                query = query.Include(p => p.ProjectMembers)
+                        .ThenInclude(pm => pm.User);
 
             if (includeLeader)
                 query = query.Include(p => p.Leader);
