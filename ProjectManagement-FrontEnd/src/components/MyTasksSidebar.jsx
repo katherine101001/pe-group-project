@@ -36,6 +36,12 @@ function MyTasksSidebar() {
         }
     };
 
+    const sidebarTitle = currentUser?.role === 'ADMIN'
+        ? 'All Tasks'
+        : currentUser?.role === 'LEADER'
+            ? 'Project Tasks'
+            : 'My Tasks';
+
     useEffect(() => {
         const fetchData = async () => {
             if (!currentUser?.userId || !currentUser.role) return;
@@ -89,7 +95,7 @@ function MyTasksSidebar() {
             >
                 <div className="flex items-center gap-2">
                     <CheckSquareIcon className="w-4 h-4 text-gray-500 dark:text-zinc-400" />
-                    <h3 className="text-sm font-medium text-gray-700 dark:text-zinc-300">My Tasks</h3>
+                    <h3 className="text-sm font-medium text-gray-700 dark:text-zinc-300">{sidebarTitle}</h3>
                     <span className="bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300 text-xs px-2 py-0.5 rounded">
                         {myTasks.length}
                     </span>
