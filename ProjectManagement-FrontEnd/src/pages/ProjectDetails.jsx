@@ -89,7 +89,7 @@ export default function ProjectDetail() {
       <div className="grid grid-cols-2 sm:flex flex-wrap gap-6">
         {[
           { label: "Total Tasks", value: project.totalTasks || 0, color: "text-zinc-900 dark:text-white" },
-          { label: "Completed", value: project.completedTasks || 0, color: "text-emerald-700 dark:text-emerald-400" },
+          { label: "Complete", value: project.completedTasks || 0, color: "text-emerald-700 dark:text-emerald-400" },
           { label: "In Progress", value: project.inProgressTasks || 0, color: "text-amber-700 dark:text-amber-400" },
           { label: "Team Members", value: project.totalTeamMembers || 0, color: "text-blue-700 dark:text-blue-400" },
         ].map((card, idx) => (
