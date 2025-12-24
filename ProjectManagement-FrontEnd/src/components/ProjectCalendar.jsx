@@ -190,226 +190,173 @@
 
 
 
-import { useState, useEffect } from "react";
-import { format, isSameDay, isBefore, startOfMonth, endOfMonth, eachDayOfInterval, addMonths, subMonths } from "date-fns";
+import { useState, useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
+import { format, isSameDay, eachDayOfInterval, startOfMonth, endOfMonth, addMonths, subMonths } from "date-fns";
 import { CalendarIcon, Clock, User, ChevronLeft, ChevronRight } from "lucide-react";
-//import { getOverdueTasksByProject, getUpcomingTasksByProject, getTasksForMonth } from "../services/ProjectTask";
-import { getOverdueTasksByProject, getTaskCalendarByMonth } from '../services/ProjectTask/ProjectTaskAPI';
-
-
+import { getTaskCalendarByMonth, getOverdueTasksByProject } from "../services/ProjectTask/ProjectTaskAPI";
 
 const typeColors = {
-    BUG: "bg-red-200 text-red-800 dark:bg-red-500 dark:text-red-900",
-    FEATURE: "bg-blue-200 text-blue-800 dark:bg-blue-500 dark:text-blue-900",
-    TASK: "bg-green-200 text-green-800 dark:bg-green-500 dark:text-green-900",
-    IMPROVEMENT: "bg-purple-200 text-purple-800 dark:bg-purple-500 dark:text-purple-900",
-    OTHER: "bg-amber-200 text-amber-800 dark:bg-amber-500 dark:text-amber-900",
-};
-
-const priorityBorders = {
-    LOW: "border-zinc-300 dark:border-zinc-600",
-    MEDIUM: "border-amber-300 dark:border-amber-500",
-    HIGH: "border-orange-300 dark:border-orange-500",
+  BUG: "bg-red-200 text-red-800 dark:bg-red-500 dark:text-red-900",
+  FEATURE: "bg-blue-200 text-blue-800 dark:bg-blue-500 dark:text-blue-900",
+  TASK: "bg-green-200 text-green-800 dark:bg-green-500 dark:text-green-900",
+  IMPROVEMENT: "bg-purple-200 text-purple-800 dark:bg-purple-500 dark:text-purple-900",
+  OTHER: "bg-amber-200 text-amber-800 dark:bg-amber-500 dark:text-amber-900",
 };
 
 const ProjectCalendar = ({ projectId }) => {
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [currentMonth, setCurrentMonth] = useState(new Date());
-    const [tasks, setTasks] = useState([]);
-    const [upcomingTasks, setUpcomingTasks] = useState([]);
-    const [overdueTasks, setOverdueTasks] = useState([]);
+  const { role, id: userId } = useSelector(state => state.user ?? {});
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [tasks, setTasks] = useState([]);
+  const [overdueTasks, setOverdueTasks] = useState([]);
 
-    const today = new Date();
+  // Fetch tasks and overdue tasks
+  useEffect(() => {
+    if (!projectId) return;
 
-    // ------------------- Fetch data -------------------
-    useEffect(() => {
-        if (!projectId) return;
+    const fetchData = async () => {
+      const year = currentMonth.getFullYear();
+      const month = currentMonth.getMonth() + 1;
 
-        const fetchTasks = async () => {
-            const year = currentMonth.getFullYear();
-            const month = currentMonth.getMonth() + 1; // month 从 0 开始
+      // 日历任务
+      const calRes = await getTaskCalendarByMonth(year, month);
+      const monthTasks = calRes.map(day => ({
+        ...day,
+        due_date: new Date(day.date),
+        tasks: day.tasks || []
+      }));
+      setTasks(monthTasks);
 
-            // Task Calendar
-            const calRes = await API.get(`/tasks/calendar?year=${year}&month=${month}`);
-            const monthTasks = calRes.data.map(t => ({ ...t, due_date: new Date(t.dueDate || t.due_date) }));
-            setTasks(monthTasks);
-
-            // Upcoming Tasks
-            const upcomingRes = await API.get(`/tasks/upcoming/${projectId}`);
-            const upcoming = upcomingRes.data.map(t => ({ ...t, due_date: new Date(t.dueDate || t.due_date) }));
-            setUpcomingTasks(upcoming);
-
-            // Overdue Tasks
-            const overdueRes = await API.get(`/tasks/overdue/${projectId}`);
-            const overdue = overdueRes.data.map(t => ({ ...t, due_date: new Date(t.dueDate || t.due_date) }));
-            setOverdueTasks(overdue);
-        };
-
-        fetchTasks();
-    }, [projectId, currentMonth]);
-
-    const getTasksForDate = (date) => tasks.filter((task) => isSameDay(task.due_date, date));
-
-    const daysInMonth = eachDayOfInterval({
-        start: startOfMonth(currentMonth),
-        end: endOfMonth(currentMonth),
-    });
-
-    const handleMonthChange = (direction) => {
-        setCurrentMonth((prev) => (direction === "next" ? addMonths(prev, 1) : subMonths(prev, 1)));
+      // Overdue 任务
+      const overdueRes = await getOverdueTasksByProject(projectId);
+      const mappedOverdue = overdueRes.map(task => ({
+        ...task,
+        due_date: new Date(task.dueDate)
+      }));
+      setOverdueTasks(mappedOverdue);
     };
 
-    return (
-        <div className="grid lg:grid-cols-3 gap-6">
-            {/* Calendar View */}
-            <div className="lg:col-span-2 ">
-                <div className="not-dark:bg-white dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h2 className="text-zinc-900 dark:text-white text-md flex gap-2 items-center max-sm:hidden">
-                            <CalendarIcon className="size-5" /> Task Calendar
-                        </h2>
-                        <div className="flex gap-2 items-center">
-                            <button onClick={() => handleMonthChange("prev")}>
-                                <ChevronLeft className="size-5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white" />
-                            </button>
-                            <span className="text-zinc-900 dark:text-white">{format(currentMonth, "MMMM yyyy")}</span>
-                            <button onClick={() => handleMonthChange("next")}>
-                                <ChevronRight className="size-5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white" />
-                            </button>
-                        </div>
-                    </div>
+    fetchData();
+  }, [projectId, currentMonth]);
 
-                    <div className="grid grid-cols-7 text-xs text-zinc-600 dark:text-zinc-400 mb-2 text-center">
-                        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-                            <div key={day}>{day}</div>
-                        ))}
-                    </div>
+  // Filter tasks by RBAC
+  const filteredTasks = useMemo(() => {
+    return tasks.map(day => {
+      const filteredDayTasks = day.tasks.filter(task => role === "LEADER" || task.assignToUserId === userId);
+      return {
+        ...day,
+        tasks: filteredDayTasks,
+        taskCount: filteredDayTasks.length
+      };
+    });
+  }, [tasks, role, userId]);
 
-                    <div className="grid grid-cols-7 gap-2">
-                        {daysInMonth.map((day) => {
-                            const dayTasks = getTasksForDate(day);
-                            const isSelected = isSameDay(day, selectedDate);
-                            const hasOverdue = dayTasks.some((t) => t.status !== "DONE" && isBefore(t.due_date, today));
+  const filteredOverdueTasks = useMemo(() => {
+    return overdueTasks.filter(task => role === "LEADER" || task.assignToUserId === userId);
+  }, [overdueTasks, role, userId]);
 
-                            return (
-                                <button
-                                    key={day}
-                                    onClick={() => setSelectedDate(day)}
-                                    className={`sm:h-14 rounded-md flex flex-col items-center justify-center text-sm
-                                    ${isSelected ? "bg-blue-200 text-blue-900 dark:bg-blue-600 dark:text-white" : "bg-zinc-50 text-zinc-900 dark:bg-zinc-800/40 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700"}
-                                    ${hasOverdue ? "border border-red-300 dark:border-red-500" : ""}`}
-                                >
-                                    <span>{format(day, "d")}</span>
-                                    {dayTasks.length > 0 && (
-                                        <span className="text-[10px] text-blue-700 dark:text-blue-400">{dayTasks.length} tasks</span>
-                                    )}
-                                </button>
-                            );
-                        })}
-                    </div>
-                </div>
+  const getTasksForDate = (date) => {
+    const day = filteredTasks.find(d => isSameDay(d.due_date, date));
+    return day ? day.tasks : [];
+  };
 
-                {/* Tasks for Selected Day */}
-                {getTasksForDate(selectedDate).length > 0 && (
-                    <div className="not-dark:bg-white mt-6 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
-                        <h3 className="text-zinc-900 dark:text-white text-lg mb-3">
-                            Tasks for {format(selectedDate, "MMM d, yyyy")}
-                        </h3>
-                        <div className="space-y-3">
-                            {getTasksForDate(selectedDate).map((task) => (
-                                <div
-                                    key={task.id}
-                                    className={`bg-zinc-50 dark:bg-zinc-800/40 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition p-4 rounded border-l-4 ${priorityBorders[task.priority]}`}
-                                >
-                                    <div className="flex justify-between mb-2">
-                                        <h4 className="text-zinc-900 dark:text-white font-medium">{task.title}</h4>
-                                        <span className={`px-2 py-0.5 rounded text-xs ${typeColors[task.type]}`}>
-                                            {task.type}
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between text-xs text-zinc-600 dark:text-zinc-400">
-                                        <span className="capitalize">{task.priority.toLowerCase()} priority</span>
-                                        {task.assignee && (
-                                            <span className="flex items-center gap-1">
-                                                <User className="w-3 h-3" />
-                                                {task.assignee.name}
-                                            </span>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+  const daysInMonth = eachDayOfInterval({
+    start: startOfMonth(currentMonth),
+    end: endOfMonth(currentMonth)
+  });
+
+  const handleMonthChange = (dir) => {
+    setCurrentMonth(prev => dir === "next" ? addMonths(prev, 1) : subMonths(prev, 1));
+  };
+
+  return (
+    <div className="grid lg:grid-cols-3 gap-6">
+      {/* Calendar */}
+      <div className="lg:col-span-2">
+        <div className="bg-white dark:bg-zinc-900 border rounded-lg p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg text-zinc-900 dark:text-white flex items-center gap-2">
+              <CalendarIcon /> Task Calendar
+            </h2>
+            <div className="flex items-center gap-2">
+              <button onClick={() => handleMonthChange("prev")}><ChevronLeft /></button>
+              <span>{format(currentMonth, "MMMM yyyy")}</span>
+              <button onClick={() => handleMonthChange("next")}><ChevronRight /></button>
             </div>
+          </div>
 
-            {/* Sidebar: Upcoming & Overdue Tasks */}
-            <div className="space-y-6">
-                {/* Upcoming Tasks */}
-                <div className="bg-white dark:bg-zinc-950 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-300 dark:border-zinc-800 rounded-lg p-4">
-                    <h3 className="text-zinc-900 dark:text-white text-sm flex items-center gap-2 mb-3">
-                        <Clock className="w-4 h-4" /> Upcoming Tasks
-                    </h3>
-                    {upcomingTasks.length === 0 ? (
-                        <p className="text-zinc-500 dark:text-zinc-400 text-sm text-center">No upcoming tasks</p>
-                    ) : (
-                        <div className="space-y-2">
-                            {upcomingTasks.map((task) => (
-                                <div
-                                    key={task.id}
-                                    className="bg-zinc-50 dark:bg-zinc-800/40 hover:bg-zinc-100 dark:hover:bg-zinc-800 p-3 rounded-lg transition"
-                                >
-                                    <div className="flex justify-between items-start text-sm">
-                                        <span className="text-zinc-900 dark:text-white">{task.title}</span>
-                                        <span className={`text-xs px-2 py-0.5 rounded ${typeColors[task.type]}`}>
-                                            {task.type}
-                                        </span>
-                                    </div>
-                                    <p className="text-xs text-zinc-600 dark:text-zinc-400">{format(task.due_date, "MMM d")}</p>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </div>
+          {/* Week Days */}
+          <div className="grid grid-cols-7 text-xs text-center text-zinc-500 dark:text-zinc-400 mb-2">
+            {["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].map(d => <div key={d}>{d}</div>)}
+          </div>
 
-                {/* Overdue Tasks */}
-                <div className="bg-white dark:bg-zinc-950 border border-red-300 dark:border-red-500 border-l-4 rounded-lg p-4">
-                    <h3 className="text-red-700 dark:text-red-400 text-sm flex items-center gap-2 mb-3">
-                        <Clock className="w-4 h-4" /> Overdue Tasks ({overdueTasks.length})
-                    </h3>
-                    {overdueTasks.length === 0 ? (
-                        <p className="text-zinc-500 dark:text-zinc-400 text-sm text-center">No overdue tasks</p>
-                    ) : (
-                        <div className="space-y-2">
-                            {overdueTasks.slice(0, 5).map((task) => (
-                                <div key={task.id} className="bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30 p-3 rounded-lg transition">
-                                    <div className="flex justify-between text-sm text-zinc-900 dark:text-white">
-                                        <span>{task.title}</span>
-                                        <span className="text-xs px-2 py-0.5 rounded bg-red-200 dark:bg-red-500 text-red-900 dark:text-red-900">
-                                            {task.type}
-                                        </span>
-                                    </div>
-                                    <p className="text-xs text-red-600 dark:text-red-300">
-                                        Due {format(task.due_date, "MMM d")}
-                                    </p>
-                                    {task.assignee?.name && (
-                                        <p className="text-xs text-zinc-600 dark:text-zinc-400 flex items-center gap-1">
-                                            <User className="w-3 h-3" /> {task.assignee.name}
-                                        </p>
-                                    )}
-                                </div>
-                            ))}
-                            {overdueTasks.length > 5 && (
-                                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">
-                                    +{overdueTasks.length - 5} more
-                                </p>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
+          {/* Days */}
+          <div className="grid grid-cols-7 gap-2">
+            {daysInMonth.map(day => {
+              const dayTasks = getTasksForDate(day);
+              const isSelected = isSameDay(day, selectedDate);
+              return (
+                <button
+                  key={day}
+                  onClick={() => setSelectedDate(day)}
+                  className={`h-14 rounded-md flex flex-col items-center justify-center text-sm
+                    ${isSelected ? "bg-blue-200 dark:bg-blue-600 text-blue-900 dark:text-white" : "bg-zinc-50 dark:bg-zinc-800/40 text-zinc-900 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700"}`}>
+                  <span>{format(day,"d")}</span>
+                  {dayTasks.length > 0 && <span className="text-xs text-blue-700 dark:text-blue-400">{dayTasks.length} tasks</span>}
+                </button>
+              );
+            })}
+          </div>
         </div>
-    );
+
+        {/* Tasks for Selected Day */}
+        {getTasksForDate(selectedDate).length > 0 && (
+          <div className="bg-white dark:bg-zinc-900 mt-4 p-4 rounded-lg border">
+            <h3 className="text-lg text-zinc-900 dark:text-white mb-2">Tasks for {format(selectedDate,"MMM d, yyyy")}</h3>
+            <div className="space-y-2">
+              {getTasksForDate(selectedDate).map(task => (
+                <div key={task.id} className="p-3 rounded border-l-4 border-zinc-300 bg-zinc-50 dark:bg-zinc-800/40">
+                  <div className="flex justify-between">
+                    <span className="font-medium text-zinc-900 dark:text-white">{task.title}</span>
+                    <span className={`text-xs px-2 py-0.5 rounded ${typeColors[task.type]}`}>{task.type}</span>
+                  </div>
+                  <div className="text-xs text-zinc-500 dark:text-zinc-400 flex justify-between mt-1">
+                    <span>{task.status}</span>
+                    {task.assigneeName && <span className="flex items-center gap-1"><User className="w-3 h-3"/>{task.assigneeName}</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Sidebar: Overdue */}
+      <div className="space-y-4">
+        <div className="bg-white dark:bg-zinc-950 p-4 rounded-lg border border-red-300 dark:border-red-500">
+          <h3 className="text-sm text-red-700 dark:text-red-400 flex items-center gap-2 mb-2">
+            <Clock className="w-4 h-4"/> Overdue Tasks ({filteredOverdueTasks.length})
+          </h3>
+          {filteredOverdueTasks.length === 0 ? (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center">No overdue tasks</p>
+          ) : (
+            <div className="space-y-2">
+              {filteredOverdueTasks.map(task => (
+                <div key={task.id} className="p-2 bg-red-50 dark:bg-red-900/20 rounded transition">
+                  <div className="flex justify-between text-sm text-zinc-900 dark:text-white">
+                    <span>{task.title}</span>
+                    <span className={`text-xs px-1 py-0.5 rounded ${typeColors[task.type]}`}>{task.type}</span>
+                  </div>
+                  <p className="text-xs text-red-600 dark:text-red-300">Due {format(task.due_date,"MMM d")}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default ProjectCalendar;

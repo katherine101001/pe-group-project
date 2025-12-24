@@ -17,7 +17,6 @@ namespace ProjectManagement.Application.Interfaces.Services
                 Task<List<ProjectTaskDetailsDto>> GetAllProjectTasksBrieflyAsync();
 
                 Task<List<SearchTaskDto>> SearchTasksAsync(string keyword);
-                Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month);
                 Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync();
 
                 Task<List<OverdueTaskDto>> GetOverdueTasksByProjectIdAsync(Guid projectId);
@@ -27,6 +26,8 @@ namespace ProjectManagement.Application.Interfaces.Services
 
                 Task<List<ProjectTaskDto>> GetTasksByProjectIdAsync(Guid projectId);
                  Task UpdateTaskStatusAsync(Guid taskId, string newStatus);
+
+                Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month, Guid? userId = null, string? role = null);
                 
         }
 }

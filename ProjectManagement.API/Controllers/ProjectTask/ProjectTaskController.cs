@@ -44,15 +44,23 @@ public class ProjectTaskController : ControllerBase
 
 
     [HttpGet("calendar")]
-    public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
-    {
-        if (year <= 0 || month < 1 || month > 12)
-            return BadRequest("Invalid year or month.");
+        public async Task<IActionResult> GetTaskCalendar([FromQuery] int year, [FromQuery] int month)
+        {
+            if (year <= 0 || month < 1 || month > 12)
+                return BadRequest("Invalid year or month.");
 
-        var result = await _projectTaskService.GetTaskCalendarAsync(year, month);
+            // 从前端 headers 或 query 获取用户信息
+            // 假设你在前端发送 X-Role 和 X-UserId
+            var role = Request.Headers["X-Role"].ToString(); 
+            var userIdStr = Request.Headers["X-UserId"].ToString();
+            Guid? userId = Guid.TryParse(userIdStr, out var uid) ? uid : null;
 
-        return Ok(result);
-    }
+            // 调用 Service 获取日历数据
+            var calendar = await _projectTaskService.GetTaskCalendarAsync(year, month, userId, role);
+
+            return Ok(calendar);
+        }
+
 
     [HttpGet("overdue")]
     public async Task<IActionResult> GetAllOverdueTasks()

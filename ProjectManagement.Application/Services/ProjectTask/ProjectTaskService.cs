@@ -137,19 +137,39 @@ public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dt
         }
 
 
-        public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month)
+       public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(int year, int month, Guid? userId = null, string? role = null)
         {
-            var startDate = new DateTime(year, month, 1);
-            var endDate = startDate.AddMonths(1).AddDays(-1);
+            List<ProjectTask> tasks;
 
-            var taskCounts = await _projectTaskRepository
-                .GetTaskCountsByDateRangeAsync(startDate, endDate);
+            if (role == "LEADER" || userId == null)
+            {
+                // Leader 可以看全部任务
+                tasks = await _projectTaskRepository.GetTasksByMonthAsync(year, month);
+            }
+            else
+            {
+                // Member 只看自己的任务
+                tasks = await _projectTaskRepository.GetTasksByMonthForUserAsync(year, month, userId.Value);
+            }
 
-            var calendarDtos = taskCounts
-                .Select(tc => new ProjectTaskCalendarDto
+            // 按日期分组
+            var calendarDtos = tasks
+                .GroupBy(t => t.DueDate?.Date)
+                .Select(g => new ProjectTaskCalendarDto
                 {
-                    Date = tc.Key,     // "yyyy-MM-dd"
-                    TaskCount = tc.Value
+                    Date = g.Key?.ToString("yyyy-MM-dd"),
+                    TaskCount = g.Count(),
+                    Tasks = g.Select(t => new ProjectTaskDto
+                    {
+                        Id = t.Id,
+                        Title = t.Title,
+                        Type = t.Type,
+                        Status = t.Status,
+                        Priority = t.Priority,
+                        AssignToUserId = t.AssignToUserId,
+                        AssigneeName = t.AssignToUser != null ? t.AssignToUser.Name : null,
+                        DueDate = t.DueDate
+                    }).ToList()
                 })
                 .ToList();
 
