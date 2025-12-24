@@ -68,7 +68,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
     const menuItems = [
         { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon },
         { name: 'Projects', href: '/app/projects', icon: FolderOpenIcon },
-        ...(role === 'ADMIN' || role === 'LEADER' ? [{ name: 'Team', href: '/app/team', icon: UsersIcon }] : []),
+        // ...(role === 'ADMIN' || role === 'LEADER' ? [
+        { name: 'Team', href: '/app/team', icon: UsersIcon },
+        // ] : [])
     ]
 
     const sidebarRef = useRef(null)
