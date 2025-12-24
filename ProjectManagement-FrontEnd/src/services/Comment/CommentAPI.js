@@ -1,10 +1,9 @@
 import { API } from "../api";
 
-// 获取指定任务的评论
+
 export const getCommentsByTaskId = async (taskId) => {
   try {
     const res = await API.get("/comments");
-    // 只返回当前任务的评论
     return res.data
       .filter(c => c.projectTaskId === taskId)
       .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -14,13 +13,14 @@ export const getCommentsByTaskId = async (taskId) => {
   }
 };
 
-// 添加评论
-export const addCommentToTask = async (taskId, userId, content) => {
+
+export const addCommentToTask = async (taskId, userId, content, mentionedUserIds = []) => {
   try {
     const res = await API.post("/comments", {
-      ProjectTaskId: taskId,
-      UserId: userId,
-      Content: content
+      projectTaskId: taskId,
+      userId: userId,
+      content: content,
+      mentionedUserIds: mentionedUserIds, // ✅ 注意这里
     });
     return res.data;
   } catch (error) {
@@ -28,3 +28,7 @@ export const addCommentToTask = async (taskId, userId, content) => {
     return null;
   }
 };
+
+
+
+

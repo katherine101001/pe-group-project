@@ -10,65 +10,79 @@ namespace ProjectManagement.Application.Services
     public class CommentService : ICommentService
     {
         private readonly ICommentRepository _commentRepository;
+        private readonly IMentionRepository _mentionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IEmailService _emailService;
         private readonly IMapper _mapper;
 
-        public CommentService(
-            ICommentRepository commentRepository,
-            IUserRepository userRepository,
-            IEmailService emailService,
-            IMapper mapper)
+       public CommentService(
+        ICommentRepository commentRepository,
+        IMentionRepository mentionRepository,
+        IUserRepository userRepository,
+        IEmailService emailService,
+        IMapper mapper)
         {
             _commentRepository = commentRepository;
+            _mentionRepository = mentionRepository;
             _userRepository = userRepository;
             _emailService = emailService;
             _mapper = mapper;
         }
+public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
+{
+    if (dto == null) throw new ArgumentNullException(nameof(dto));
 
-       public async Task<CommentDto> AddCommentAsync(CreateCommentDto dto)
+    // 1️⃣ 创建 Comment 实体
+    var comment = _mapper.Map<Comment>(dto);
+
+    // 2️⃣ 保存 Comment 生成 Id
+    await _commentRepository.AddAsync(comment);
+
+    // 3️⃣ 添加 Mentions
+    if (dto.MentionedUserIds != null && dto.MentionedUserIds.Any())
+    {
+        foreach (var userId in dto.MentionedUserIds)
         {
-            var comment = _mapper.Map<Comment>(dto);
-
-            if (dto.MentionedUserIds != null)
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user != null)
             {
-                foreach (var userId in dto.MentionedUserIds)
+                var mention = new Mention
                 {
-                    var user = await _userRepository.GetByIdAsync(userId);
-                    if (user != null)
-                    {
-                        comment.Mentions.Add(new Mention
-                        {
-                            CommentId = comment.Id,
-                            MentionedUserId = userId
-                        });
-                    }
-                }
+                    CommentId = comment.Id,
+                    MentionedUserId = userId,
+                    MentionedUser = user
+                };
+                await _mentionRepository.AddAsync(mention); // ⚡ 单独保存
             }
-
-            await _commentRepository.AddAsync(comment);
-
-            var fullComment = await _commentRepository.GetByIdWithIncludesAsync(comment.Id);
-            var commentDto = _mapper.Map<CommentDto>(fullComment);
-
-            if (dto.MentionedUserIds != null)
-            {
-                foreach (var userId in dto.MentionedUserIds)
-                {
-                    var user = await _userRepository.GetByIdAsync(userId);
-                    if (user != null)
-                    {
-                        await _emailService.SendMentionEmailAsync(
-                            user.Email,
-                            comment.Content ?? "",
-                            user.Name ?? "User"
-                        );
-                    }
-                }
-            }
-
-            return commentDto;
         }
+    }
+
+    // 4️⃣ 重新获取 Comment（包含 Mentions & User）
+    var fullComment = await _commentRepository.GetByIdWithIncludesAsync(comment.Id);
+    var commentDto = _mapper.Map<CommentDto>(fullComment);
+
+    // 5️⃣ 发 Mention 邮件
+    if (dto.MentionedUserIds != null && dto.MentionedUserIds.Any())
+    {
+        foreach (var userId in dto.MentionedUserIds)
+        {
+            var user = await _userRepository.GetByIdAsync(userId);
+            if (user != null)
+            {
+                await _emailService.SendMentionEmailAsync(
+                    user.Email,
+                    comment.Content ?? "",
+                    user.Name ?? "User"
+                );
+            }
+        }
+    }
+
+    return commentDto;
+}
+
+
+
 
         public async Task<CommentDto?> GetCommentByIdAsync(Guid id)
         {
