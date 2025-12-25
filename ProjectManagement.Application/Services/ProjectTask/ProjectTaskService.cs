@@ -137,37 +137,37 @@ public async Task<ProjectTaskDto> CreateProjectTaskAsync(CreateProjectTaskDto dt
         }
 
 
-public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(
-    Guid projectId,
-    int year,
-    int month)
-{
-    var tasks = await _projectTaskRepository
-        .GetTasksByProjectAndMonthAsync(projectId, year, month);
+    public async Task<List<ProjectTaskCalendarDto>> GetTaskCalendarAsync(
+        Guid projectId,
+        int year,
+        int month)
+    {
+        var tasks = await _projectTaskRepository
+            .GetTasksByProjectAndMonthAsync(projectId, year, month);
 
-    var grouped = tasks
-        .GroupBy(t => t.DueDate!.Value.Date)
-        .Select(g => new ProjectTaskCalendarDto
-        {
-            Date = g.Key.ToString("yyyy-MM-dd"),
-            TaskCount = g.Count(),
-            Tasks = g.Select(t => new ProjectTaskDto
+        var grouped = tasks
+            .GroupBy(t => t.DueDate!.Value.Date)
+            .Select(g => new ProjectTaskCalendarDto
             {
-                Id = t.Id,
-                Title = t.Title!,
-                Type = t.Type,
-                Status = t.Status!,
-                Priority = t.Priority!,
-                ProjectId = t.ProjectId,
-                AssignToUserId = t.AssignToUserId,
-                AssigneeName = t.AssignToUser.Name,
-                DueDate = t.DueDate
-            }).ToList()
-        })
-        .ToList();
+                Date = g.Key.ToString("yyyy-MM-dd"),
+                TaskCount = g.Count(),
+                Tasks = g.Select(t => new ProjectTaskDto
+                {
+                    Id = t.Id,
+                    Title = t.Title!,
+                    Type = t.Type,
+                    Status = t.Status!,
+                    Priority = t.Priority!,
+                    ProjectId = t.ProjectId,
+                    AssignToUserId = t.AssignToUserId,
+                    AssigneeName = t.AssignToUser.Name,
+                    DueDate = t.DueDate
+                }).ToList()
+            })
+            .ToList();
 
-    return grouped;
-}
+        return grouped;
+    }
 
 
         public async Task<List<OverdueTaskDto>> GetAllOverdueTasksAsync()
