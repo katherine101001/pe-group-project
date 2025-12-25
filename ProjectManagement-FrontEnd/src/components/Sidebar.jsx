@@ -3,15 +3,18 @@ import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import MyTasksSidebar from './MyTasksSidebar'
 import ProjectSidebar from './ProjectsSidebar'
-import { FolderOpenIcon, LayoutDashboardIcon, UsersIcon } from 'lucide-react'
+import { FolderOpenIcon, LayoutDashboardIcon, UsersIcon, ArchiveIcon } from 'lucide-react'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword }) => {
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProject }) => {
     const { role } = useSelector((state) => state.user ?? {})
 
     const menuItems = [
         { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon },
         { name: 'Projects', href: '/app/projects', icon: FolderOpenIcon },
         { name: 'Team', href: '/app/team', icon: UsersIcon },
+        { name: 'Archive', href:'/app/archive', icon: ArchiveIcon},
     ]
 
     const sidebarRef = useRef(null)
@@ -25,6 +28,24 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword }) => {
         document.addEventListener("mousedown", handleClickOutside)
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [setIsSidebarOpen])
+
+    const handleArchiveToggle = async () => {
+        if (!currentProject) return
+        const projectId = currentProject.id
+        try {
+            if (currentProject.isArchived) {
+                await axios.post(`/api/projects/${projectId}/unarchive`)
+                toast.success('Project unarchived successfully')
+            } else {
+                await axios.post(`/api/projects/${projectId}/archive`)
+                toast.success('Project archived successfully')
+            }
+            // 可选：刷新项目数据或状态
+        } catch (err) {
+            toast.error('Failed to toggle archive status')
+            console.error(err)
+        }
+    }
 
     return (
         <div
@@ -48,7 +69,21 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword }) => {
                                 <p className='text-sm truncate'>{item.name}</p>
                             </NavLink>
                         ))}
+
+                        
+                        {currentProject && (
+                            <button
+                                className='flex w-full items-center gap-3 py-2 px-4 text-gray-800 dark:text-zinc-100 cursor-pointer rounded hover:bg-gray-50 dark:hover:bg-zinc-800/60 transition-all mt-2'
+                                onClick={handleArchiveToggle}
+                            >
+                                <ArchiveIcon size={16} />
+                                <p className='text-sm truncate'>
+                                    {currentProject.isArchived ? 'Unarchive' : 'Archive'}
+                                </p>
+                            </button>
+                        )}
                     </div>
+
                     {/* 传递 searchKeyword 给子组件 */}
                     <MyTasksSidebar searchKeyword={searchKeyword} />
                     <ProjectSidebar searchKeyword={searchKeyword} />

@@ -292,6 +292,9 @@ namespace ProjectManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("LeaderId")
                         .HasColumnType("uniqueidentifier");
 

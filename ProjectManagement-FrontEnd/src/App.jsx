@@ -8,6 +8,7 @@ import ProjectDetails from "./pages/ProjectDetails";
 import TaskDetails from "./pages/TaskDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Archive from "./pages/Archive";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           {/* 所有人都能进 */}
           <Route index element={<Dashboard />} />
           <Route path="projects" element={<Projects />} />
+          <Route path="archive" element={<Archive />} />  
           <Route path="projectsDetail" element={<ProjectDetails />} />
           <Route path="taskDetails" element={<TaskDetails />} />
 
@@ -45,6 +47,9 @@ const App = () => {
             }
           />
         </Route>
+
+        
+
       </Routes>
     </>
   );

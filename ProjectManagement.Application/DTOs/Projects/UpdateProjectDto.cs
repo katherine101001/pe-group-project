@@ -11,6 +11,8 @@ namespace ProjectManagement.Application.DTOs.Projects
         public DateTime? EndDate { get; set; }
         public List<Guid> TeamMemberIds { get; set; } = new(); // user emails
         public Guid? TeamLeadId { get; set; }               // user ID
+        public bool? IsArchived { get; set; } 
+    
     }
 
 }

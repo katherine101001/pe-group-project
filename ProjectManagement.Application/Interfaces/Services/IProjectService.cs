@@ -19,6 +19,8 @@ namespace ProjectManagement.Application.Interfaces.Services
 
         Task<List<SearchProjectDto>> SearchProjectsAsync(string keyword);
 
+        Task<ProjectDto> ArchiveProjectAsync(Guid id);
+        Task<ProjectDto> UnarchiveProjectAsync(Guid id);
 
 
     }

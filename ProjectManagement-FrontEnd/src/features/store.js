@@ -1,6 +1,7 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import themeReducer from "./themeSlice";
 import userReducer from "./userSlice";
+import projectsReducer from "./projectsSlice"; // ✅ 修改路径
 
 import {
     persistStore,
@@ -26,6 +27,7 @@ const persistedUserReducer = persistReducer(persistConfig, userReducer);
 const rootReducer = combineReducers({
     theme: themeReducer,
     user: persistedUserReducer,
+    projects: projectsReducer, // ✅ 添加 projects
 });
 
 export const store = configureStore({

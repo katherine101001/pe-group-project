@@ -144,58 +144,66 @@ namespace ProjectManagement.Application.Services
 
 
         // Update project with nullable DTO fields
-        public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
+        // Update project with nullable DTO fields
+public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
+{
+    // Fetch project with members
+    var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true);
+    if (project == null)
+        throw new NotFoundException("Project not found");
+
+    // --- Update basic fields ---
+    if (dto.Title != null) project.Title = dto.Title;
+    if (dto.Description != null) project.Description = dto.Description;
+    if (dto.Status != null) project.Status = dto.Status;
+    if (dto.Priority != null) project.Priority = dto.Priority;
+    if (dto.StartDate.HasValue) project.StartDate = dto.StartDate;
+    if (dto.EndDate.HasValue) project.EndDate = dto.EndDate;
+    project.Progress = dto.Progress;
+
+    // --- Update archive status only if provided ---
+    if (dto.IsArchived.HasValue)
+    {
+        project.IsArchived = dto.IsArchived.Value;
+    }
+
+    // --- Update team lead only if provided ---
+    if (dto.TeamLeadId.HasValue)
+    {
+        var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
+        if (lead == null)
+            throw new NotFoundException("Team lead not found");
+
+        project.Leader = lead;
+        project.LeaderId = lead.Id;
+    }
+
+    // --- Add new team members only ---
+    if (dto.TeamMemberIds != null)
+    {
+        var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
+
+        foreach (var memberId in dto.TeamMemberIds)
         {
-            // Fetch project with members
-            var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true);
-            if (project == null)
-                throw new NotFoundException("Project not found");
-
-            // --- Update basic fields ---
-            if (dto.Title != null) project.Title = dto.Title;
-            if (dto.Description != null) project.Description = dto.Description;
-            if (dto.Status != null) project.Status = dto.Status;
-            if (dto.Priority != null) project.Priority = dto.Priority;
-            if (dto.StartDate.HasValue) project.StartDate = dto.StartDate;
-            if (dto.EndDate.HasValue) project.EndDate = dto.EndDate;
-            project.Progress = dto.Progress;
-
-            // --- Update team lead only if provided ---
-            if (dto.TeamLeadId.HasValue)
+            if (!existingMemberIds.Contains(memberId))
             {
-                var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
-                if (lead == null)
-                    throw new NotFoundException("Team lead not found");
-
-                project.Leader = lead;
-                project.LeaderId = lead.Id;
-            }
-
-            // --- Add new team members only ---
-            if (dto.TeamMemberIds != null)
-            {
-                var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
-
-                foreach (var memberId in dto.TeamMemberIds)
+                var user = await _userRepository.GetByIdAsync(memberId);
+                if (user != null)
                 {
-                    if (!existingMemberIds.Contains(memberId))
+                    project.ProjectMembers.Add(new ProjectMember
                     {
-                        var user = await _userRepository.GetByIdAsync(memberId);
-                        if (user != null)
-                        {
-                            project.ProjectMembers.Add(new ProjectMember
-                            {
-                                ProjectId = project.Id,
-                                UserId = user.Id
-                            });
-                        }
-                    }
+                        ProjectId = project.Id,
+                        UserId = user.Id
+                    });
                 }
             }
-
-            // --- Save changes ---
-            await _projectRepository.UpdateAsync(project);
         }
+    }
+
+    // Save changes to DB
+    await _projectRepository.UpdateAsync(project);
+}
+
 
 
 
@@ -215,6 +223,30 @@ namespace ProjectManagement.Application.Services
             return _mapper.Map<List<SearchProjectDto>>(projects);
         }
 
+        public async Task<ProjectDto> ArchiveProjectAsync(Guid id)
+{
+    var project = await _projectRepository.GetByIdAsync(id);
+    if (project == null)
+        throw new NotFoundException("Project not found");
+
+    project.IsArchived = true;
+    await _projectRepository.UpdateAsync(project);
+
+    return _mapper.Map<ProjectDto>(project);
+}
+
+
+       public async Task<ProjectDto> UnarchiveProjectAsync(Guid id)
+{
+    var project = await _projectRepository.GetByIdAsync(id);
+    if (project == null)
+        throw new NotFoundException("Project not found");
+
+    project.IsArchived = false;
+    await _projectRepository.UpdateAsync(project);
+
+    return _mapper.Map<ProjectDto>(project);
+}
 
 
     }

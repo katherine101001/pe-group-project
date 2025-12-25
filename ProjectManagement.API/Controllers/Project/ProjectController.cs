@@ -72,5 +72,21 @@ public class ProjectsController : ControllerBase
         return Ok(await _userService.GetAvailableMembersAsync(id));
     }
 
+    [HttpPost("{id}/archive")]
+public async Task<IActionResult> ArchiveProject(Guid id)
+{
+    var project = await _projectService.ArchiveProjectAsync(id); // 返回 ProjectDto
+    return Ok(project);
+}
+
+[HttpPost("{id}/unarchive")]
+public async Task<IActionResult> UnarchiveProject(Guid id)
+{
+    var project = await _projectService.UnarchiveProjectAsync(id); // 返回 ProjectDto
+    return Ok(project);
+}
+
+
+
 
 }

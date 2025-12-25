@@ -139,6 +139,26 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task ArchiveAsync(Guid projectId)
+        {
+            var project = await GetByIdAsync(projectId);
+            if (project == null) return;
+
+            project.IsArchived = true;
+            _context.Project.Update(project);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task RestoreAsync(Guid projectId)
+        {
+            var project = await GetByIdAsync(projectId);
+            if (project == null) return;
+
+            project.IsArchived = false;
+            _context.Project.Update(project);
+            await _context.SaveChangesAsync();
+        }
+
 
     }
 }

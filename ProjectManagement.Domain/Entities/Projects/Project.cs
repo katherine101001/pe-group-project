@@ -25,6 +25,8 @@ namespace ProjectManagement.Domain.Entities.Projects
 
         public Guid LeaderId { get; set; }
         public User? Leader { get; set; }
+
+        public bool IsArchived {get;set;} = false;
         // Navigation property for users 
         public ICollection<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();
         public ICollection<ProjectGoal> Goals { get; set; } = new List<ProjectGoal>();
