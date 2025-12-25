@@ -39,13 +39,27 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-    // POST: api/user/register
-    [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] CreateUserDto dto)
+// POST: api/user/register
+[HttpPost("register")]
+public async Task<IActionResult> Register([FromBody] RegisterDto dto)
+{
+    try
     {
-        var userDto = await _userService.CreateUserAsync(dto);
-        return Ok(userDto);
+        // 即使 dto.Role 是 null，也不会报错误
+        var userDto = await _userService.RegisterAsync(dto);
+        return Ok(new
+        {
+            Message = "Registration successful",
+            User = userDto
+        });
     }
+    catch (Exception ex)
+    {
+        return BadRequest(new { Message = ex.Message });
+    }
+}
+
+
 
     [HttpGet("teamstats")]
     public async Task<ActionResult<DashboardTeam>> GetTeamStats()

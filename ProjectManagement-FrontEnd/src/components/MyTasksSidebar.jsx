@@ -20,7 +20,7 @@ const priorityTexts = {
     HIGH: { background: "bg-emerald-100 dark:bg-emerald-950", prioritycolor: "text-emerald-600 dark:text-emerald-400" },
 };
 
-function MyTasksSidebar() {
+function MyTasksSidebar({ searchKeyword }) {
     const currentUser = useSelector(state => state.user);
     const [showMyTasks, setShowMyTasks] = useState(false);
     const [myTasks, setMyTasks] = useState([]);
@@ -42,15 +42,13 @@ function MyTasksSidebar() {
             ? 'Project Tasks'
             : 'My Tasks';
 
+    // 原有获取任务逻辑
     useEffect(() => {
         const fetchData = async () => {
             if (!currentUser?.userId || !currentUser.role) return;
 
             try {
-                // 1️⃣ 获取所有任务
                 const tasks = await getAllTasks();
-
-                // 2️⃣ 获取所有项目
                 const projects = await getAllProjects();
 
                 let visibleTasks = tasks;
@@ -64,6 +62,7 @@ function MyTasksSidebar() {
                     const leaderProjectIds = projects
                         .filter(p => p.leaderId === currentUser.userId || p.memberIds?.includes(currentUser.userId))
                         .map(p => p.id);
+
                     visibleTasks = tasks.filter(
                         t =>
                             (t.assignToUserId === currentUser.userId || teamIds.includes(t.assignToUserId)) &&
@@ -83,9 +82,17 @@ function MyTasksSidebar() {
         fetchData();
     }, [currentUser.userId, currentUser.role, currentUser.email]);
 
+    // 搜索过滤
+    const filteredTasks = useMemo(() => {
+        if (!searchKeyword) return myTasks;
+        return myTasks.filter(task =>
+            task.title.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+    }, [myTasks, searchKeyword]);
+
     const sortedTasks = useMemo(() => {
-        return [...myTasks].sort((a, b) => new Date(a.dueDate || 0) - new Date(b.dueDate || 0));
-    }, [myTasks]);
+        return [...filteredTasks].sort((a, b) => new Date(a.dueDate || 0) - new Date(b.dueDate || 0));
+    }, [filteredTasks]);
 
     return (
         <div className="mt-6 px-3">
@@ -97,7 +104,7 @@ function MyTasksSidebar() {
                     <CheckSquareIcon className="w-4 h-4 text-gray-500 dark:text-zinc-400" />
                     <h3 className="text-sm font-medium text-gray-700 dark:text-zinc-300">{sidebarTitle}</h3>
                     <span className="bg-gray-200 dark:bg-zinc-700 text-gray-700 dark:text-zinc-300 text-xs px-2 py-0.5 rounded">
-                        {myTasks.length}
+                        {filteredTasks.length}
                     </span>
                 </div>
                 {showMyTasks ? (

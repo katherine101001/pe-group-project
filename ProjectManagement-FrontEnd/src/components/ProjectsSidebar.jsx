@@ -4,7 +4,7 @@ import { ChevronRightIcon, SettingsIcon, KanbanIcon, ChartColumnIcon, CalendarIc
 import { useSelector } from 'react-redux';
 import { getAllProjects } from "../services/Project/ProjectAPI";
 
-const ProjectSidebar = () => {
+const ProjectSidebar = ({ searchKeyword }) => {
     const location = useLocation();
     const [expandedProjects, setExpandedProjects] = useState(new Set());
     const [projects, setProjects] = useState([]);
@@ -13,54 +13,19 @@ const ProjectSidebar = () => {
 
     const getProjectSubItems = (project, role, userId) => {
         const items = [
-            {
-                title: 'Tasks',
-                icon: KanbanIcon,
-                url: `/app/projectsDetail?id=${project.id}&tab=tasks`
-            },
-            {
-                title: 'Calendar',
-                icon: CalendarIcon,
-                url: `/app/projectsDetail?id=${project.id}&tab=calendar`
-            }
+            { title: 'Tasks', icon: KanbanIcon, url: `/app/projectsDetail?id=${project.id}&tab=tasks` },
+            { title: 'Calendar', icon: CalendarIcon, url: `/app/projectsDetail?id=${project.id}&tab=calendar` }
         ];
 
-        // ADMIN can always see
-        if (role === "ADMIN") {
+        if (role === "ADMIN" || (role === "LEADER" && project.leaderId === userId)) {
             items.push(
-                {
-                    title: 'Analytics',
-                    icon: ChartColumnIcon,
-                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
-                },
-                {
-                    title: 'Settings',
-                    icon: SettingsIcon,
-                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
-                }
-            );
-        }
-
-        // LEADER only for their own project
-        if (role === "LEADER" && project.leaderId === userId) {
-            items.push(
-                {
-                    title: 'Analytics',
-                    icon: ChartColumnIcon,
-                    url: `/app/projectsDetail?id=${project.id}&tab=analytics`
-                },
-                {
-                    title: 'Settings',
-                    icon: SettingsIcon,
-                    url: `/app/projectsDetail?id=${project.id}&tab=settings`
-                }
+                { title: 'Analytics', icon: ChartColumnIcon, url: `/app/projectsDetail?id=${project.id}&tab=analytics` },
+                { title: 'Settings', icon: SettingsIcon, url: `/app/projectsDetail?id=${project.id}&tab=settings` }
             );
         }
 
         return items;
     };
-
-
 
     const toggleProject = (id) => {
         const newSet = new Set(expandedProjects);
@@ -68,7 +33,6 @@ const ProjectSidebar = () => {
         setExpandedProjects(newSet);
     };
 
-    // Fetch all projects from API
     useEffect(() => {
         if (!userId || !role) return;
 
@@ -84,17 +48,18 @@ const ProjectSidebar = () => {
         fetchProjects();
     }, [userId, role]);
 
-
-    // Filter projects based on role
     const visibleProjects = useMemo(() => {
         if (!role || !userId) return [];
 
-        if (role === "ADMIN") return projects;
+        let filtered = role === "ADMIN" ? projects : projects.filter(p => p.leaderId === userId || p.memberIds?.includes(userId));
 
-        return projects.filter(project =>
-            project.leaderId === userId || project.memberIds?.includes(userId)
-        );
-    }, [projects, role, userId]);
+        // 搜索过滤
+        if (searchKeyword) {
+            filtered = filtered.filter(p => p.title.toLowerCase().includes(searchKeyword.toLowerCase()));
+        }
+
+        return filtered;
+    }, [projects, role, userId, searchKeyword]);
 
     return (
         <div className="mt-6 px-3">
@@ -142,8 +107,6 @@ const ProjectSidebar = () => {
                                 })}
                             </div>
                         )}
-
-
                     </div>
                 ))}
             </div>

@@ -15,7 +15,7 @@ namespace ProjectManagement.API.Controllers
         public SearchController(IProjectService projectService, IProjectTaskService taskService)
         {
             _projectService = projectService;
-            _taskService = taskService;
+            _taskService = taskService; 
         }
 
         // Search projects by keyword
@@ -46,22 +46,18 @@ namespace ProjectManagement.API.Controllers
 
         // Optional: Combined search endpoint (if you want both in one request)
         [HttpGet("all")]
-            public async Task<IActionResult> SearchAll([FromQuery] string keyword)
+        public async Task<IActionResult> SearchAll([FromQuery] string keyword)
+        {
+            // 如果服务返回 null，直接给空列表
+            var projects = await _projectService.SearchProjectsAsync(keyword) ?? new List<SearchProjectDto>();
+            var tasks = await _taskService.SearchTasksAsync(keyword) ?? new List<SearchTaskDto>();
+
+            return Ok(new
             {
-                var projects = await _projectService.SearchProjectsAsync(keyword);
-                var tasks = await _taskService.SearchTasksAsync(keyword);
-
-                if ((projects == null || !projects.Any()) && (tasks == null || !tasks.Any()))
-                {
-                    return Ok(new { message = "none", projects = new List<SearchProjectDto>(), tasks = new List<SearchTaskDto>() });
-                }
-
-                return Ok(new
-                {
-                    Projects = projects,
-                    Tasks = tasks
-                });
-            }
+                projects,  // 前端用 response.data.projects
+                tasks      // 前端用 response.data.tasks
+            });
+        }
 
     }
 }

@@ -6,6 +6,7 @@ namespace ProjectManagement.Application.Interfaces.Services
     public interface IUserService
     {
         Task<UserDto> CreateUserAsync(CreateUserDto dto);
+        Task<UserDto> RegisterAsync(RegisterDto dto);
 
         Task<UserDto?> GetUserByIdAsync(Guid id);
         Task<List<UserDto>> GetAllUsersAsync();

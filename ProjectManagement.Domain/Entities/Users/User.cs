@@ -21,7 +21,8 @@ namespace ProjectManagement.Domain.Entities.Users
         public Guid RoleId { get; set; }
 
         public Role Role { get; set; } = null!;
-
+        
+        public bool IsActivated { get; set; } = false;
         public ICollection<Project> LeadingProjects { get; set; } = new List<Project>();
 
         public ICollection<ProjectMember> ProjectMembers { get; set; } = new List<ProjectMember>();

@@ -39,14 +39,26 @@ export default function Login() {
       );
 
       // 根据 role 跳转页面
-      navigate('/app');
+      navigate("/app");
+    }catch (err) {
+  console.error("Login error:", err);
 
-    } catch (err) {
-      console.error("Login error:", err);
-      setError(err.response?.data?.message || "Login failed");
-    } finally {
-      setLoading(false);
-    }
+  let msg = "Login failed";
+
+  // ASP.NET Core 异常可能在 data.message 或 data.title
+  if (err.response?.data?.message) {
+    msg = err.response.data.message;
+  } else if (err.response?.data?.title) {
+    msg = err.response.data.title;
+  }
+
+  // 如果是未激活账户
+  if (msg.toLowerCase().includes("activated")) {
+    msg = "Your account is not activated. Please complete registration.";
+  }
+
+  setError(msg);
+}
   };
 
   return (
