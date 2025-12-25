@@ -9,6 +9,7 @@ namespace ProjectManagement.Application.DTOs.Projects
         public int CompletedTasks { get; set; }
         public int InProgressTasks { get; set; }
         public int TotalTeamMembers { get; set; }
+        public int Progress { get; set; }
 
         public string Description { get; set; } = string.Empty;
         public string Priority { get; set; } = "MEDIUM";

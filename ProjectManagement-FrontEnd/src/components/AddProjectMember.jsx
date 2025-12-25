@@ -1,19 +1,14 @@
 // import { useState, useEffect } from "react";
 // import { Mail, UserPlus } from "lucide-react";
-// import { useSearchParams } from "react-router-dom";
 // import { getAvailableProjectMembers } from "../services/Project/ProjectAPI";
 
-
-// const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project }) => {
-//     const [searchParams] = useSearchParams();
-//     const id = searchParams.get('id');
-
-//     const [email, setEmail] = useState('');
+// const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project, selectedMemberIds, setSelectedMemberIds }) => {
+//     const [selectedId, setSelectedId] = useState('');
 //     const [isAdding, setIsAdding] = useState(false);
-
 //     const [availableMembers, setAvailableMembers] = useState([]);
 //     const [isLoading, setIsLoading] = useState(false);
 
+//     // Fetch available members when dialog opens
 //     useEffect(() => {
 //         if (!isDialogOpen || !project?.id) return;
 
@@ -32,18 +27,16 @@
 //         fetchAvailableMembers();
 //     }, [isDialogOpen, project?.id]);
 
-
-
 //     const handleSubmit = async (e) => {
 //         e.preventDefault();
-//         if (!email) return;
+//         if (!selectedId) return;
 
 //         setIsAdding(true);
 //         try {
-//             // Add your logic to add member by email here
-//             // e.g., await onAddMember(email, project.id)
-//             alert(`Member ${email} added to project ${project.title}`);
-//             setEmail('');
+//             if (!selectedMemberIds.includes(selectedId)) {
+//                 setSelectedMemberIds([...selectedMemberIds, selectedId]);
+//             }
+//             setSelectedId('');
 //             setIsDialogOpen(false);
 //         } catch (err) {
 //             console.error("Add member failed:", err);
@@ -64,40 +57,37 @@
 //                         <UserPlus className="size-5 text-zinc-900 dark:text-zinc-200" /> Add Member to Project
 //                     </h2>
 //                     <p className="text-sm text-zinc-700 dark:text-zinc-400">
-//                         Adding to Project: <span className="text-blue-600 dark:text-blue-400">{project.name}</span>
+//                         Adding to Project: <span className="text-blue-600 dark:text-blue-400">{project.title}</span>
 //                     </p>
 //                 </div>
 
 //                 {/* Form */}
 //                 <form onSubmit={handleSubmit} className="space-y-4">
-//                     {/* Email */}
 //                     <div className="space-y-2">
-//                         <label htmlFor="email" className="text-sm font-medium text-zinc-900 dark:text-zinc-200">
-//                             Email Address
+//                         <label htmlFor="member" className="text-sm font-medium text-zinc-900 dark:text-zinc-200">
+//                             Select Member
 //                         </label>
 //                         <div className="relative">
 //                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400 w-4 h-4" />
-
 //                             <select
-//                                 id="email"
-//                                 value={email}
-//                                 onChange={(e) => setEmail(e.target.value)}
+//                                 id="member"
+//                                 value={selectedId}
+//                                 onChange={(e) => setSelectedId(e.target.value)}
 //                                 className="pl-10 mt-1 w-full rounded border border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-200 text-sm py-2 focus:outline-none focus:border-blue-500"
 //                                 required
 //                             >
 //                                 <option value="">Select a member</option>
-
-//                                 {availableMembers.map((member) => (
-//                                     <option key={member.id} value={member.id}>
-//                                         {member.email}
-//                                     </option>
-//                                 ))}
+//                                 {availableMembers
+//                                     .filter(m => !selectedMemberIds.includes(m.id))
+//                                     .map(member => (
+//                                         <option key={member.id} value={member.id}>
+//                                             {member.email}
+//                                         </option>
+//                                     ))}
 //                             </select>
 //                         </div>
-
 //                     </div>
 
-//                     {/* Footer */}
 //                     <div className="flex justify-end gap-3 pt-2">
 //                         <button
 //                             type="button"
@@ -132,7 +122,6 @@ const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project, selectedMemb
     const [availableMembers, setAvailableMembers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Fetch available members when dialog opens
     useEffect(() => {
         if (!isDialogOpen || !project?.id) return;
 
@@ -175,7 +164,6 @@ const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project, selectedMemb
     return (
         <div className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur flex items-center justify-center z-50">
             <div className="bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl p-6 w-full max-w-md text-zinc-900 dark:text-zinc-200">
-                {/* Header */}
                 <div className="mb-4">
                     <h2 className="text-xl font-bold flex items-center gap-2">
                         <UserPlus className="size-5 text-zinc-900 dark:text-zinc-200" /> Add Member to Project
@@ -185,7 +173,6 @@ const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project, selectedMemb
                     </p>
                 </div>
 
-                {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <label htmlFor="email" className="text-sm font-medium text-zinc-900 dark:text-zinc-200">
@@ -202,9 +189,9 @@ const AddProjectMember = ({ isDialogOpen, setIsDialogOpen, project, selectedMemb
                             >
                                 <option value="">Select a member</option>
                                 {availableMembers
-                                    .filter(m => !selectedMemberIds.includes(m.id))
+                                    .filter(m => !selectedMemberIds.includes(m.email))
                                     .map(member => (
-                                        <option key={member.id} value={member.id}>
+                                        <option key={member.id} value={member.email}>
                                             {member.email}
                                         </option>
                                     ))}

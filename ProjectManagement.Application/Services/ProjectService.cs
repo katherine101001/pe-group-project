@@ -106,6 +106,7 @@ namespace ProjectManagement.Application.Services
                 CompletedTasks = project.ProjectTasks.Count(t => t.Status == "COMPLETED"),
                 InProgressTasks = project.ProjectTasks.Count(t => t.Status != "COMPLETED"),
                 TotalTeamMembers = project.ProjectMembers.Count,
+                Progress = project.Progress,               // new
                 TeamMemberEmails = project.ProjectMembers
                         .Where(pm => pm.User != null)
                         .Select(pm => pm.User.Email)
