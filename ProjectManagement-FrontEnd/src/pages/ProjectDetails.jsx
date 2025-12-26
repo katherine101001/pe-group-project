@@ -1,6 +1,14 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowLeftIcon, PlusIcon, SettingsIcon, BarChart3Icon, CalendarIcon, FileStackIcon, ZapIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  PlusIcon,
+  SettingsIcon,
+  BarChart3Icon,
+  CalendarIcon,
+  FileStackIcon,
+  ZapIcon,
+} from "lucide-react";
 import ProjectAnalyticsWrapper from "../components/ProjectAnalyticsWrapper";
 import ProjectSettings from "../components/ProjectSettings";
 import CreateTaskDialog from "../components/CreateTaskDialog";
@@ -14,7 +22,7 @@ export default function ProjectDetail() {
   const tab = searchParams.get("tab");
   const id = searchParams.get("id");
 
-  const { role, userId } = useSelector(state => state.user);
+  const { role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const [project, setProject] = useState(null);
@@ -35,7 +43,9 @@ export default function ProjectDetail() {
     if (!id) return;
     setLoading(true);
     getProjectById(id)
-      .then((data) => setProject(data))
+      .then((data) => {
+        setProject({ ...data, isArchived: Boolean(data.isArchived) });
+      })
       .catch((err) => {
         console.error("Failed to fetch project:", err);
         setProject(null);
@@ -43,31 +53,48 @@ export default function ProjectDetail() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Update activeTab when URL changes
   useEffect(() => {
     if (tab) setActiveTab(tab);
   }, [tab]);
 
-  // Compute project management permission after project is loaded
   const canManageProject = project
     ? role === "ADMIN" || (role === "LEADER" && project.leaderId === userId)
     : false;
 
-  // Prevent user from accessing tabs they cannot manage
+  const isArchived = project?.isArchived || false;
+
+  // Prevent unauthorized access to Settings tab only when archived
   useEffect(() => {
-    if ((activeTab === "analytics" || activeTab === "settings") && !canManageProject) {
+    if (activeTab === "settings" && isArchived) {
       setActiveTab("tasks");
       setSearchParams({ id, tab: "tasks" });
     }
-  }, [activeTab, canManageProject, id, setSearchParams]);
+  }, [activeTab, isArchived, id, setSearchParams]);
 
-  if (loading) {
-    return (
-      <div className="p-6 text-center text-zinc-900 dark:text-zinc-200">
-        Loading project...
-      </div>
-    );
-  }
+  // Archive / Unarchive handlers
+  const handleArchiveProject = async () => {
+    if (!window.confirm("Do you want to archive this project?")) return;
+    try {
+      await fetch(`http://localhost:5272/api/projects/${id}/archive`, { method: "POST" });
+      setProject({ ...project, isArchived: true });
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to archive project");
+    }
+  };
+
+  const handleUnarchiveProject = async () => {
+    if (!window.confirm("Do you want to unarchive this project?")) return;
+    try {
+      await fetch(`http://localhost:5272/api/projects/${id}/unarchive`, { method: "POST" });
+      setProject({ ...project, isArchived: false });
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Failed to unarchive project");
+    }
+  };
+
+  if (loading) return <div className="p-6 text-center text-zinc-900 dark:text-zinc-200">Loading project...</div>;
 
   if (!project) {
     return (
@@ -103,16 +130,37 @@ export default function ProjectDetail() {
             </span>
           </div>
         </div>
-        {canManageProject && (
-          <button
-            onClick={() => setShowCreateTask(true)}
-            className="flex items-center gap-2 px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white"
-          >
-            <PlusIcon className="size-4" />
-            New Task
-          </button>
-        )}
 
+        {/* Buttons */}
+        <div className="flex gap-2">
+          {canManageProject && !isArchived && (
+            <button
+              onClick={() => setShowCreateTask(true)}
+              className="flex items-center gap-2 px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white"
+            >
+              <PlusIcon className="size-4" />
+              New Task
+            </button>
+          )}
+
+          {canManageProject && !isArchived && (
+            <button
+              onClick={handleArchiveProject}
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-red-500 text-white hover:bg-red-600"
+            >
+              Archive
+            </button>
+          )}
+
+          {canManageProject && isArchived && (
+            <button
+              onClick={handleUnarchiveProject}
+              className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-green-500 text-white hover:bg-green-600"
+            >
+              Unarchive
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Info Cards */}
@@ -123,10 +171,7 @@ export default function ProjectDetail() {
           { label: "In Progress", value: project.inProgressTasks || 0, color: "text-amber-700 dark:text-amber-400" },
           { label: "Team Members", value: project.totalTeamMembers || 0, color: "text-blue-700 dark:text-blue-400" },
         ].map((card, idx) => (
-          <div
-            key={idx}
-            className="dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-200 dark:border-zinc-800 flex justify-between sm:min-w-60 p-4 py-2.5 rounded"
-          >
+          <div key={idx} className="dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-200 dark:border-zinc-800 flex justify-between sm:min-w-60 p-4 py-2.5 rounded">
             <div>
               <div className="text-sm text-zinc-600 dark:text-zinc-400">{card.label}</div>
               <div className={`text-2xl font-bold ${card.color}`}>{card.value}</div>
@@ -137,54 +182,47 @@ export default function ProjectDetail() {
       </div>
 
       {/* Tabs */}
-      <div>
-        <div className="inline-flex flex-wrap max-sm:grid grid-cols-3 gap-2 border border-zinc-200 dark:border-zinc-800 rounded overflow-hidden">
-          {[
-            { key: "tasks", label: "Tasks", icon: FileStackIcon },
-            { key: "calendar", label: "Calendar", icon: CalendarIcon },
-            { key: "analytics", label: "Analytics", icon: BarChart3Icon, hide: !canManageProject },
-            { key: "settings", label: "Settings", icon: SettingsIcon, hide: !canManageProject },
-          ]
-            .filter(tab => !tab.hide)
-            .map((tabItem) => (
-              <button
-                key={tabItem.key}
-                onClick={() => {
-                  setActiveTab(tabItem.key);
-                  setSearchParams({ id, tab: tabItem.key });
-                }}
-                className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                  }`}
-              >
-                <tabItem.icon className="size-3.5" />
-                {tabItem.label}
-              </button>
-            ))}
-        </div>
+      <div className="inline-flex flex-wrap max-sm:grid grid-cols-3 gap-2 border border-zinc-200 dark:border-zinc-800 rounded overflow-hidden">
+        {[
+          { key: "tasks", label: "Tasks", icon: FileStackIcon },
+          { key: "calendar", label: "Calendar", icon: CalendarIcon },
+          { key: "analytics", label: "Analytics", icon: BarChart3Icon, hide: !canManageProject },
+          { key: "settings", label: "Settings", icon: SettingsIcon, hide: isArchived || !canManageProject },
+        ]
+          .filter((tab) => !tab.hide)
+          .map((tabItem) => (
+            <button
+              key={tabItem.key}
+              onClick={() => { setActiveTab(tabItem.key); setSearchParams({ id, tab: tabItem.key }); }}
+              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${
+                activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+              }`}
+            >
+              <tabItem.icon className="size-3.5" />
+              {tabItem.label}
+            </button>
+          ))}
+      </div>
 
-        <div className="mt-6">
-          <div style={{ display: activeTab === "tasks" ? "block" : "none" }}>
-            <ProjectTasks projectId={id} />
-          </div>
-          <div style={{ display: activeTab === "analytics" && canManageProject ? "block" : "none" }}>
-            <ProjectAnalyticsWrapper project={project} />
-          </div>
-          <div style={{ display: activeTab === "calendar" ? "block" : "none" }}>
-            <ProjectCalendar project={project} />
-          </div>
-          <div style={{ display: activeTab === "settings" && canManageProject ? "block" : "none" }}>
-            <ProjectSettings project={project} />
-          </div>
+      {/* Tab Content */}
+      <div className="mt-6">
+        <div style={{ display: activeTab === "tasks" ? "block" : "none" }}>
+          <ProjectTasks projectId={id} />
+        </div>
+        <div style={{ display: activeTab === "calendar" ? "block" : "none" }}>
+          <ProjectCalendar project={project} />
+        </div>
+        <div style={{ display: activeTab === "analytics" && canManageProject ? "block" : "none" }}>
+          <ProjectAnalyticsWrapper project={project} />
+        </div>
+        <div style={{ display: activeTab === "settings" && canManageProject && !isArchived ? "block" : "none" }}>
+          <ProjectSettings project={project} />
         </div>
       </div>
 
       {/* Create Task Modal */}
-      {showCreateTask && (
-        <CreateTaskDialog
-          showCreateTask={showCreateTask}
-          setShowCreateTask={setShowCreateTask}
-          projectId={id}
-        />
+      {showCreateTask && !isArchived && (
+        <CreateTaskDialog showCreateTask={showCreateTask} setShowCreateTask={setShowCreateTask} projectId={id} />
       )}
     </div>
   );

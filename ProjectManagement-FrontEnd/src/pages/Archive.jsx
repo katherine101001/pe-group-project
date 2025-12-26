@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, FolderOpen, Archive } from "lucide-react";
+import { Search, FolderOpen } from "lucide-react"; // 移除 Archive
 import ProjectCard from "../components/ProjectCard";
-import CreateProjectDialog from "../components/CreateProjectDialog";
 import { getAllProjects } from "../services/Project/ProjectAPI";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -12,7 +11,6 @@ export default function ArchivePage() {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({ status: "ALL", priority: "ALL" });
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { role, userId } = useSelector((state) => state.user);
 
@@ -24,6 +22,7 @@ export default function ArchivePage() {
       // 只显示归档项目
       let visibleProjects = data.filter((p) => p.isArchived === true);
 
+      // 非管理员只显示自己参与的项目
       if (role !== "ADMIN") {
         visibleProjects = visibleProjects.filter((project) => {
           const memberIds = project.memberIds || [];
@@ -71,19 +70,6 @@ export default function ArchivePage() {
     setFilteredProjects(filtered);
   }, [projects, searchTerm, filters]);
 
-  // ===================== Unarchive 项目 =====================
-  const handleUnarchive = async (projectId) => {
-    if (!window.confirm("Do you want to unarchive this project?")) return;
-    try {
-      await axios.post(`http://localhost:5272/api/projects/${projectId}/unarchive`);
-      toast.success("Project unarchived successfully");
-      fetchProjects();
-    } catch (err) {
-      console.error(err);
-      toast.error("Failed to unarchive project");
-    }
-  };
-
   // ===================== 页面 =====================
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
@@ -94,24 +80,9 @@ export default function ArchivePage() {
             Archived Projects
           </h1>
           <p className="text-gray-500 dark:text-zinc-400 text-sm">
-            Manage and restore your archived projects
+            Manage and view your archived projects
           </p>
         </div>
-
-        {["ADMIN", "LEADER"].includes(role) && (
-          <button
-            onClick={() => setIsDialogOpen(true)}
-            className="flex items-center px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:opacity-90 transition"
-          >
-            <Plus className="size-4 mr-2" /> New Project
-          </button>
-        )}
-
-        <CreateProjectDialog
-          isDialogOpen={isDialogOpen}
-          setIsDialogOpen={setIsDialogOpen}
-          onProjectCreated={fetchProjects}
-        />
       </div>
 
       {/* 搜索和过滤 */}
@@ -167,15 +138,10 @@ export default function ArchivePage() {
           </div>
         ) : (
           filteredProjects.map((project) => (
-            <div key={project.id}>
-              <ProjectCard project={project} />
-              <button
-                onClick={() => handleUnarchive(project.id)}
-                className="flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2 text-sm"
-              >
-                <Archive size={16} /> Unarchive
-              </button>
-            </div>
+            <ProjectCard
+              key={project.id}
+              project={{ ...project, isReadOnly: true }}
+            />
           ))
         )}
       </div>

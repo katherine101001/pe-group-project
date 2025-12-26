@@ -153,29 +153,31 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
 
           {/* Start & End Date */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm">Start Date</label>
-              <input
-                type="date"
-                value={formData.start_date}
-                onChange={(e) =>
-                  setFormData({ ...formData, start_date: e.target.value })
-                }
-                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
-              />
-            </div>
-            <div>
-              <label className="text-sm">End Date</label>
-              <input
-                type="date"
-                value={formData.end_date}
-                onChange={(e) =>
-                  setFormData({ ...formData, end_date: e.target.value })
-                }
-                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
-              />
-            </div>
+          <div>
+            <label className="text-sm">Start Date</label>
+            <input
+              type="date"
+              value={formData.start_date}
+              onChange={(e) =>
+                setFormData({ ...formData, start_date: e.target.value })
+              }
+              className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+            />
           </div>
+          <div>
+            <label className="text-sm">End Date</label>
+            <input
+              type="date"
+              value={formData.end_date}
+              min={formData.start_date || undefined} // 限制最小值
+              onChange={(e) =>
+                setFormData({ ...formData, end_date: e.target.value })
+              }
+              className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+            />
+          </div>
+        </div>
+
 
           {/* Status & Priority */}
           <div className="grid grid-cols-2 gap-4">

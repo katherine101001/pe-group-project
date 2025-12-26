@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, Search, FolderOpen, Archive } from "lucide-react";
+import { Plus, Search, FolderOpen } from "lucide-react"; // 移除了 Archive
 import ProjectCard from "../components/ProjectCard";
 import CreateProjectDialog from "../components/CreateProjectDialog";
 import { getAllProjects } from "../services/Project/ProjectAPI";
@@ -73,21 +73,6 @@ export default function Projects() {
   const handleProjectCreated = () => {
     fetchProjects();
     setIsDialogOpen(false);
-  };
-
-  // ===================== Archive 项目 =====================
-  const handleArchiveProject = async (projectId) => {
-    if (!window.confirm("Do you want to archive this project?")) return;
-
-    try {
-      await fetch(`http://localhost:5272/api/projects/${projectId}/archive`, {
-        method: "POST",
-      });
-      fetchProjects();
-    } catch (err) {
-      console.error(err);
-      alert(err.message || "Failed to archive project");
-    }
   };
 
   // ===================== 页面 =====================
@@ -174,15 +159,7 @@ export default function Projects() {
           </div>
         ) : (
           filteredProjects.map((project) => (
-            <div key={project.id}>
-              <ProjectCard project={project} />
-              <button
-                onClick={() => handleArchiveProject(project.id)}
-                className="flex items-center gap-1.5 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mt-2 text-sm"
-              >
-                <Archive size={16} /> Archive
-              </button>
-            </div>
+            <ProjectCard key={project.id} project={project} />
           ))
         )}
       </div>

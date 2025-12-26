@@ -99,6 +99,7 @@ namespace ProjectManagement.Application.Services
                 Title = project.Title,
                 Description = project.Description,
                 Status = project.Status,
+                IsArchived = project.IsArchived,
                 Priority = project.Priority,               // new
                 StartDate = project.StartDate,             // new
                 EndDate = project.EndDate,                 // new
