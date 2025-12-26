@@ -1,18 +1,27 @@
 import { Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import StatsGrid from '../components/StatsGrid';
 import ProjectOverview from '../components/ProjectOverview';
 import RecentActivity from '../components/RecentActivity';
 import TasksSummary from '../components/TasksSummary';
 import CreateProjectDialog from '../components/CreateProjectDialog';
+import { getCurrentUserName } from '../services/Dashboard/DashboardAPI';
 
 const Dashboard = () => {
-
-    const user = useSelector((state) => state.user); // get user from Redux
+    const user = useSelector((state) => state.user);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [userName, setUserName] = useState('User');
 
-    // Only ADMIN and LEADER can create projects
+    // ✅ 关键修复在这里
+    useEffect(() => {
+        if (user?.userId) { // ❗ 改这里
+            getCurrentUserName(user.userId).then(name => { // ❗ 改这里
+                if (name) setUserName(name);
+            });
+        }
+    }, [user.userId]); // ❗ dependency 也顺手修一下
+
     const canCreateProject = ["ADMIN", "LEADER"].includes(user.role);
 
     return (
@@ -20,7 +29,7 @@ const Dashboard = () => {
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 ">
                 <div>
                     <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-1">
-                        Welcome back, {user?.name || 'User'}
+                        Welcome back, {userName}
                     </h1>
                     <p className="text-gray-500 dark:text-zinc-400 text-sm">
                         Here's what's happening with your projects today
@@ -30,14 +39,16 @@ const Dashboard = () => {
                 {canCreateProject && (
                     <button
                         onClick={() => setIsDialogOpen(true)}
-                        className="flex items-center gap-2 px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white space-x-2 hover:opacity-90 transition"
+                        className="flex items-center gap-2 px-5 py-2 text-sm rounded bg-gradient-to-br from-blue-500 to-blue-600 text-white hover:opacity-90 transition"
                     >
                         <Plus size={16} /> New Project
                     </button>
                 )}
 
-                {/* Dialog rendered regardless, but will only open when button clicked */}
-                <CreateProjectDialog isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+                <CreateProjectDialog
+                    isDialogOpen={isDialogOpen}
+                    setIsDialogOpen={setIsDialogOpen}
+                />
             </div>
 
             <StatsGrid />

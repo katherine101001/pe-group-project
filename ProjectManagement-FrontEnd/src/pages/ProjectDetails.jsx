@@ -57,8 +57,9 @@ export default function ProjectDetail() {
     if (tab) setActiveTab(tab);
   }, [tab]);
 
+  // Leader as project owner or Admin can manage project
   const canManageProject = project
-    ? role === "ADMIN" || (role === "LEADER" && project.leaderId === userId)
+    ? role === "ADMIN" || (role === "LEADER" && String(project.leaderId) === String(userId))
     : false;
 
   const isArchived = project?.isArchived || false;
@@ -133,6 +134,7 @@ export default function ProjectDetail() {
 
         {/* Buttons */}
         <div className="flex gap-2">
+          {/* Leader or Admin can add task if not archived */}
           {canManageProject && !isArchived && (
             <button
               onClick={() => setShowCreateTask(true)}
@@ -143,6 +145,7 @@ export default function ProjectDetail() {
             </button>
           )}
 
+          {/* Leader or Admin can archive */}
           {canManageProject && !isArchived && (
             <button
               onClick={handleArchiveProject}

@@ -6,13 +6,26 @@ import { createTask } from "../services/ProjectTask/ProjectTaskAPI";
 import { getAllUsers } from "../services/Team/team.api";
 import { getProjectUpdateForm } from "../services/Project/ProjectAPI";
 
-export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, projectId, onTaskCreated }) {
-  const { role, email, id: userId } = useSelector((state) => state.user ?? {});
+export default function CreateTaskDialog({
+  showCreateTask,
+  setShowCreateTask,
+  projectId,
+  onTaskCreated
+}) {
+  const { role, email, id: userId } = useSelector(
+    (state) => state.user ?? {}
+  );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [members, setMembers] = useState([]);
   const [loadingMembers, setLoadingMembers] = useState(true);
-  const [allUsersMap, setAllUsersMap] = useState({}); 
+  const [allUsersMap, setAllUsersMap] = useState({});
+
+  // ✅ 新增：项目时间范围（不影响其他逻辑）
+  const [projectDateRange, setProjectDateRange] = useState({
+    startDate: null,
+    endDate: null,
+  });
 
   const [formData, setFormData] = useState({
     title: "",
@@ -44,6 +57,12 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
         const projectRes = await getProjectUpdateForm(projectId);
         const project = projectRes;
 
+        // ✅ 保存项目开始 / 结束日期
+        setProjectDateRange({
+          startDate: project.startDate,
+          endDate: project.endDate,
+        });
+
         const projectMembers = allUsers.filter(
           (u) =>
             project.teamMemberIds?.includes(u.id) ||
@@ -52,7 +71,10 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
 
         setMembers(projectMembers);
 
-        if (role === "LEADER" && projectMembers.some((m) => m.email === email)) {
+        if (
+          role === "LEADER" &&
+          projectMembers.some((m) => m.email === email)
+        ) {
           setFormData((prev) => ({
             ...prev,
             assignToUserEmail: email,
@@ -74,6 +96,23 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
     setIsSubmitting(true);
 
     try {
+      // ✅ 提交前校验 Due Date 是否在项目范围内
+      if (
+        formData.dueDate &&
+        projectDateRange.startDate &&
+        projectDateRange.endDate
+      ) {
+        const due = new Date(formData.dueDate);
+        const start = new Date(projectDateRange.startDate);
+        const end = new Date(projectDateRange.endDate);
+
+        if (due < start || due > end) {
+          alert("Task due date must be within project duration");
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       const assignToUserId = formData.assignToUserEmail
         ? allUsersMap[formData.assignToUserEmail]
         : null;
@@ -124,7 +163,9 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
             <label className="text-sm font-medium">Title</label>
             <input
               value={formData.title}
-              onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, title: e.target.value })
+              }
               required
               className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
             />
@@ -135,7 +176,12 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
             <label className="text-sm font-medium">Description</label>
             <textarea
               value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              onChange={(e) =>
+                setFormData({
+                  ...formData,
+                  description: e.target.value,
+                })
+              }
               className="w-full mt-1 px-3 py-2 rounded border h-24 dark:bg-zinc-900"
             />
           </div>
@@ -146,7 +192,9 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
               <label className="text-sm font-medium">Type</label>
               <select
                 value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="TASK">Task</option>
@@ -161,7 +209,12 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
               <label className="text-sm font-medium">Priority</label>
               <select
                 value={formData.priority}
-                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    priority: e.target.value,
+                  })
+                }
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="LOW">Low</option>
@@ -177,7 +230,12 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
               <label className="text-sm font-medium">Assignee</label>
               <select
                 value={formData.assignToUserEmail}
-                onChange={(e) => setFormData({ ...formData, assignToUserEmail: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    assignToUserEmail: e.target.value,
+                  })
+                }
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
                 disabled={loadingMembers}
               >
@@ -198,7 +256,12 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
               <label className="text-sm font-medium">Status</label>
               <select
                 value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    status: e.target.value,
+                  })
+                }
                 className="w-full mt-1 px-3 py-2 rounded border dark:bg-zinc-900"
               >
                 <option value="TO_DO">To Do</option>
@@ -216,12 +279,30 @@ export default function CreateTaskDialog({ showCreateTask, setShowCreateTask, pr
               <input
                 type="date"
                 value={formData.dueDate}
-                onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
+                min={
+                  projectDateRange.startDate
+                    ? projectDateRange.startDate.split("T")[0]
+                    : undefined
+                }
+                max={
+                  projectDateRange.endDate
+                    ? projectDateRange.endDate.split("T")[0]
+                    : undefined
+                }
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    dueDate: e.target.value,
+                  })
+                }
                 className="w-full px-3 py-2 rounded border dark:bg-zinc-900"
               />
             </div>
+
             {formData.dueDate && (
-              <p className="text-xs text-zinc-500 mt-1">{format(new Date(formData.dueDate), "PPP")}</p>
+              <p className="text-xs text-zinc-500 mt-1">
+                {format(new Date(formData.dueDate), "PPP")}
+              </p>
             )}
           </div>
 

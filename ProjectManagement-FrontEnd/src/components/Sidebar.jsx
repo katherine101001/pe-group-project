@@ -14,7 +14,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
         { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon },
         { name: 'Projects', href: '/app/projects', icon: FolderOpenIcon },
         { name: 'Team', href: '/app/team', icon: UsersIcon },
-        { name: 'Archive', href:'/app/archive', icon: ArchiveIcon},
+        { name: 'Archive', href:'/app/archive', icon: ArchiveIcon, roles: ['LEADER', 'ADMIN'] }, // 只允许 LEADER / ADMIN
     ]
 
     const sidebarRef = useRef(null)
@@ -40,7 +40,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
                 await axios.post(`/api/projects/${projectId}/archive`)
                 toast.success('Project archived successfully')
             }
-            // 可选：刷新项目数据或状态
         } catch (err) {
             toast.error('Failed to toggle archive status')
             console.error(err)
@@ -56,22 +55,23 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
             <div className='flex-1 overflow-y-scroll no-scrollbar flex flex-col'>
                 <div>
                     <div className='p-4'>
-                        {menuItems.map((item) => (
-                            <NavLink
-                                to={item.href}
-                                key={item.name}
-                                className={({ isActive }) =>
-                                    `flex items-center gap-3 py-2 px-4 text-gray-800 dark:text-zinc-100 cursor-pointer rounded transition-all  
-                                    ${isActive ? 'bg-gray-100 dark:bg-zinc-900 dark:bg-gradient-to-br dark:from-zinc-800 dark:to-zinc-800/50 dark:ring-zinc-800' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/60'}`
-                                }
-                            >
-                                <item.icon size={16} />
-                                <p className='text-sm truncate'>{item.name}</p>
-                            </NavLink>
+                        {menuItems
+                            .filter(item => !item.roles || item.roles.includes(role)) // 根据角色过滤菜单
+                            .map((item) => (
+                                <NavLink
+                                    to={item.href}
+                                    key={item.name}
+                                    className={({ isActive }) =>
+                                        `flex items-center gap-3 py-2 px-4 text-gray-800 dark:text-zinc-100 cursor-pointer rounded transition-all  
+                                        ${isActive ? 'bg-gray-100 dark:bg-zinc-900 dark:bg-gradient-to-br dark:from-zinc-800 dark:to-zinc-800/50 dark:ring-zinc-800' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/60'}`
+                                    }
+                                >
+                                    <item.icon size={16} />
+                                    <p className='text-sm truncate'>{item.name}</p>
+                                </NavLink>
                         ))}
 
-                        
-                        {currentProject && (
+                        {currentProject && role !== 'MEMBER' && (
                             <button
                                 className='flex w-full items-center gap-3 py-2 px-4 text-gray-800 dark:text-zinc-100 cursor-pointer rounded hover:bg-gray-50 dark:hover:bg-zinc-800/60 transition-all mt-2'
                                 onClick={handleArchiveToggle}

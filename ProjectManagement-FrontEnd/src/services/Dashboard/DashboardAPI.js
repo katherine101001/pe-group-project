@@ -38,4 +38,12 @@ export const getDashboardStats = {
   },
 };
 
-
+export const getCurrentUserName = async (userId) => {
+  try {
+    const res = await API.get(`/user/me?userId=${userId}`); // 动态传入 userId
+    return res.data.name; // 注意小写 name
+  } catch (err) {
+    console.error("Failed to fetch current user name", err);
+    return null;
+  }
+};

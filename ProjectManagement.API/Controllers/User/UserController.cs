@@ -85,4 +85,18 @@ public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         }
     }
 
+    [HttpGet("me")]
+    public async Task<IActionResult> GetCurrentUserName([FromQuery] Guid userId)
+    {
+        if (userId == Guid.Empty)
+            return BadRequest("Missing userId");
+
+        var user = await _userService.GetUserByIdAsync(userId);
+        if (user == null) return NotFound();
+
+        return Ok(new { Name = user.Name });
+    }
+
+
+
 }
