@@ -58,11 +58,14 @@ export default function ProjectDetail() {
   }, [tab]);
 
   // Leader as project owner or Admin can manage project
-  const canManageProject = project
-    ? role === "ADMIN" || (role === "LEADER" && String(project.leaderId) === String(userId))
-    : false;
+  // const canManageProject = project
+  //   ? role === "ADMIN" || (role === "LEADER" && String(project.leaderId) === String(userId))
+  //   : false;
 
   const isArchived = project?.isArchived || false;
+  const canManageProject = project
+    ? role === "ADMIN" || (role === "LEADER")
+    : false;
 
   // Prevent unauthorized access to Settings tab only when archived
   useEffect(() => {
@@ -197,9 +200,8 @@ export default function ProjectDetail() {
             <button
               key={tabItem.key}
               onClick={() => { setActiveTab(tabItem.key); setSearchParams({ id, tab: tabItem.key }); }}
-              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${
-                activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-              }`}
+              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                }`}
             >
               <tabItem.icon className="size-3.5" />
               {tabItem.label}
