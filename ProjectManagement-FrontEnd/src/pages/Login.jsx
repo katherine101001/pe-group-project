@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { API } from "../services/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
+import { store } from "../features/store";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,33 +33,36 @@ export default function Login() {
       dispatch(
         setUser({
           userId: res.data.userId,
-          userName: res.data.userName,
+          name: res.data.userName,
           email: res.data.email,
           role: res.data.role || role,
         })
       );
 
+      console.log("Redux user state:", store.getState().user);
+
+
       // 根据 role 跳转页面
       navigate("/app");
-    }catch (err) {
-  console.error("Login error:", err);
+    } catch (err) {
+      console.error("Login error:", err);
 
-  let msg = "Login failed";
+      let msg = "Login failed";
 
-  // ASP.NET Core 异常可能在 data.message 或 data.title
-  if (err.response?.data?.message) {
-    msg = err.response.data.message;
-  } else if (err.response?.data?.title) {
-    msg = err.response.data.title;
-  }
+      // ASP.NET Core 异常可能在 data.message 或 data.title
+      if (err.response?.data?.message) {
+        msg = err.response.data.message;
+      } else if (err.response?.data?.title) {
+        msg = err.response.data.title;
+      }
 
-  // 如果是未激活账户
-  if (msg.toLowerCase().includes("activated")) {
-    msg = "Your account is not activated. Please complete registration.";
-  }
+      // 如果是未激活账户
+      if (msg.toLowerCase().includes("activated")) {
+        msg = "Your account is not activated. Please complete registration.";
+      }
 
-  setError(msg);
-}
+      setError(msg);
+    }
   };
 
   return (

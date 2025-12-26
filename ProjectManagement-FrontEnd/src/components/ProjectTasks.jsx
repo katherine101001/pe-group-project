@@ -46,15 +46,15 @@ const ProjectTasks = ({ projectId, setProject }) => {
     [tasks]
   );
 
- 
+
   const filteredTasks = useMemo(
     () =>
       tasks.filter(task => {
         const { status, type, priority, assignee } = filters;
         return (!status || task.status === status) &&
-               (!type || task.type === type) &&
-               (!priority || task.priority === priority) &&
-               (!assignee || task.assigneeName === assignee);
+          (!type || task.type === type) &&
+          (!priority || task.priority === priority) &&
+          (!assignee || task.assigneeName === assignee);
       }),
     [tasks, filters]
   );
