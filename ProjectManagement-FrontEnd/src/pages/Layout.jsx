@@ -6,9 +6,11 @@ import { useDispatch } from 'react-redux'
 import { loadTheme } from '../features/themeSlice'
 
 const Layout = () => {
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-    const [searchKeyword, setSearchKeyword] = useState("") // 搜索关键字状态
-    const dispatch = useDispatch()
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState(""); // 搜索关键字状态
+    const [refreshKey, setRefreshKey] = useState(0);
+    const dispatch = useDispatch();
+    const handleRefresh = () => setRefreshKey(prev => prev + 1);
 
     // 初始加载主题
     useEffect(() => {
@@ -21,6 +23,7 @@ const Layout = () => {
                 isSidebarOpen={isSidebarOpen}
                 setIsSidebarOpen={setIsSidebarOpen}
                 searchKeyword={searchKeyword} // 将搜索关键字传给 Sidebar
+                refreshKey={refreshKey}
             />
             <div className="flex-1 flex flex-col h-screen">
                 <Navbar
@@ -29,7 +32,7 @@ const Layout = () => {
                     onSearch={setSearchKeyword} // 搜索时更新 searchKeyword
                 />
                 <div className="flex-1 h-full p-6 xl:p-10 xl:px-16 overflow-y-scroll">
-                    <Outlet />
+                    <Outlet context={{ refreshKey, handleRefresh }} />
                 </div>
             </div>
         </div>

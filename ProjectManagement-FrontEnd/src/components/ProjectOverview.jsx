@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import CreateProjectDialog from "./CreateProjectDialog";
 import { getAllProjects } from "../services/Project/ProjectAPI";
 
-const ProjectOverview = () => {
+const ProjectOverview = ({ userId, refreshKey }) => {
   const statusColors = {
     PLANNING: "bg-zinc-200 text-zinc-800 dark:bg-zinc-600 dark:text-zinc-200",
     ACTIVE: "bg-emerald-200 text-emerald-800 dark:bg-emerald-500 dark:text-emerald-900",
@@ -22,10 +22,10 @@ const ProjectOverview = () => {
   };
 
   const [projects, setProjects] = useState([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const { role, userId } = useSelector((state) => state.user); // get user info
-
+  // const { role, userId } = useSelector((state) => state.user); // get user info
+  const { role } = useSelector((state) => state.user); // get user info
   const fetchProjects = async () => {
     const data = await getAllProjects();
 
@@ -45,15 +45,20 @@ const ProjectOverview = () => {
 
 
 
+  // useEffect(() => {
+  //   if (!role) return; // wait for Redux state
+  //   fetchProjects();
+  // }, [role, userId]);
   useEffect(() => {
-    if (!role) return; // wait for Redux state
+    if (!role || !userId) return;
     fetchProjects();
-  }, [role, userId]);
+  }, [role, userId, refreshKey]); // ✅ ADD refreshKey
 
-  const handleProjectCreated = () => {
-    fetchProjects();
-    setIsDialogOpen(false);
-  };
+
+  // const handleProjectCreated = () => {
+  //   fetchProjects();
+  //   setIsDialogOpen(false);
+  // };
 
   return (
     <div className="bg-white dark:bg-zinc-950 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 rounded-lg overflow-hidden">
@@ -76,18 +81,18 @@ const ProjectOverview = () => {
             <p className="text-zinc-600 dark:text-zinc-400">No projects yet</p>
             {/* Only allow ADMIN or LEADER to create */}
             {["ADMIN", "LEADER"].includes(role) && (
-              <button
-                onClick={() => setIsDialogOpen(true)}
+              <Link
+                to="/app/projects"
                 className="mt-4 px-4 py-2 text-sm bg-gradient-to-br from-blue-500 to-blue-600 text-white dark:text-zinc-200 rounded hover:opacity-90 transition"
               >
                 Create your First Project
-              </button>
+              </Link>
             )}
-            <CreateProjectDialog
+            {/* <CreateProjectDialog
               isDialogOpen={isDialogOpen}
               setIsDialogOpen={setIsDialogOpen}
               onProjectCreated={handleProjectCreated}
-            />
+            /> */}
           </div>
         ) : (
           <div className="divide-y divide-zinc-200 dark:divide-zinc-800">

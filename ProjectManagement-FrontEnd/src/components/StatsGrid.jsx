@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { getDashboardStats } from "../services/Dashboard/DashboardAPI";
 
-export default function StatsGrid() {
+export default function StatsGrid({ refreshKey }) {
   const { role, userId } = useSelector((state) => state.user ?? {});
   const [stats, setStats] = useState({
     totalProjects: 0,
@@ -26,7 +26,7 @@ export default function StatsGrid() {
     };
 
     fetchStats();
-  }, [role, userId]);
+  }, [role, userId, refreshKey]);
 
   // Build stat cards
   const statCards = [

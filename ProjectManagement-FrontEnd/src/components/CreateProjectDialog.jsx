@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { createProject } from "../services/Project/ProjectAPI";
 import { getAllUsersSimple } from "../services/Team/team.api";
 
-const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
+const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen, onProjectCreated }) => {
   const { role, email } = useSelector((state) => state.user ?? {});
 
   const [allUsers, setAllUsers] = useState([]);
@@ -91,6 +91,7 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen }) => {
 
       await createProject(payload);
 
+      onProjectCreated(); // Notify parent component
       alert("Project created successfully!");
       setIsDialogOpen(false);
 

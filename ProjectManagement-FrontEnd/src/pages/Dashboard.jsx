@@ -7,11 +7,16 @@ import RecentActivity from '../components/RecentActivity';
 import TasksSummary from '../components/TasksSummary';
 import CreateProjectDialog from '../components/CreateProjectDialog';
 import { getCurrentUserName } from '../services/Dashboard/DashboardAPI';
+import { useOutletContext } from 'react-router-dom';
+
 
 const Dashboard = () => {
     const user = useSelector((state) => state.user);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [userName, setUserName] = useState('User');
+    // const [refreshKey, setRefreshKey] = useState(0);
+    const { refreshKey, handleRefresh } = useOutletContext();
+
 
     // ✅ 关键修复在这里
     useEffect(() => {
@@ -21,6 +26,11 @@ const Dashboard = () => {
             });
         }
     }, [user.userId]); // ❗ dependency 也顺手修一下
+
+    const handleProjectCreated = () => {
+        setRefreshKey(prev => prev + 1);
+    };
+
 
     const canCreateProject = ["ADMIN", "LEADER"].includes(user.role);
 
@@ -48,18 +58,21 @@ const Dashboard = () => {
                 <CreateProjectDialog
                     isDialogOpen={isDialogOpen}
                     setIsDialogOpen={setIsDialogOpen}
+                    onProjectCreated={handleRefresh}
                 />
             </div>
 
-            <StatsGrid />
+            <StatsGrid refreshKey={refreshKey} />
 
             <div className="grid lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 space-y-8">
-                    <ProjectOverview />
-                    <RecentActivity />
+                    <ProjectOverview userId={user.userId} refreshKey={refreshKey} />
+                    <RecentActivity userId={user.userId} refreshKey={refreshKey} />
                 </div>
                 <div>
                     <TasksSummary />
+                    {/* <TasksSummary userId={user.userId} refreshKey={refreshKey} /> */}
+
                 </div>
             </div>
         </div>

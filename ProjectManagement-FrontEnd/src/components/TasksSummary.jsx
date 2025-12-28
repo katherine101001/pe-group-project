@@ -4,7 +4,7 @@ import { getAllTasks } from "../services/ProjectTask/ProjectTaskAPI";
 import { getAllProjects } from "../services/Project/ProjectAPI";
 import { useSelector } from "react-redux";
 
-export default function TasksSummary() {
+export default function TasksSummary({ refreshKey }) {
   const { userId, role } = useSelector(state => state.user ?? {});
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ export default function TasksSummary() {
     };
 
     fetchTasks();
-  }, [userId, role]);
+  }, [userId, role, refreshKey]);
 
   if (loading) return <p className="p-6 text-center">Loading tasks summary...</p>;
 

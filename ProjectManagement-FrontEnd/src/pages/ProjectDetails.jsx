@@ -29,6 +29,7 @@ export default function ProjectDetail() {
   const [showCreateTask, setShowCreateTask] = useState(false);
   const [activeTab, setActiveTab] = useState(tab || "tasks");
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const statusColors = {
     PLANNING: "bg-zinc-200 text-zinc-900 dark:bg-zinc-600 dark:text-zinc-200",
@@ -57,10 +58,10 @@ export default function ProjectDetail() {
     if (tab) setActiveTab(tab);
   }, [tab]);
 
-  // Leader as project owner or Admin can manage project
-  // const canManageProject = project
-  //   ? role === "ADMIN" || (role === "LEADER" && String(project.leaderId) === String(userId))
-  //   : false;
+  const handleTaskCreated = () => {
+    setRefreshKey(prev => prev + 1);
+    setShowCreateTask(false);
+  };
 
   const isArchived = project?.isArchived || false;
   const canManageProject = project
@@ -212,7 +213,7 @@ export default function ProjectDetail() {
       {/* Tab Content */}
       <div className="mt-6">
         <div style={{ display: activeTab === "tasks" ? "block" : "none" }}>
-          <ProjectTasks projectId={id} />
+          <ProjectTasks projectId={id} refreshKey={refreshKey} />
         </div>
         <div style={{ display: activeTab === "calendar" ? "block" : "none" }}>
           <ProjectCalendar project={project} />
@@ -227,7 +228,12 @@ export default function ProjectDetail() {
 
       {/* Create Task Modal */}
       {showCreateTask && !isArchived && (
-        <CreateTaskDialog showCreateTask={showCreateTask} setShowCreateTask={setShowCreateTask} projectId={id} />
+        <CreateTaskDialog
+          showCreateTask={showCreateTask}
+          setShowCreateTask={setShowCreateTask}
+          projectId={id}
+          onTaskCreated={handleTaskCreated}
+        />
       )}
     </div>
   );

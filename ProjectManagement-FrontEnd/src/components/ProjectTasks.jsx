@@ -20,7 +20,7 @@ const priorityTexts = {
   HIGH: { background: "bg-emerald-100 dark:bg-emerald-950", prioritycolor: "text-emerald-600 dark:text-emerald-400" },
 };
 
-const ProjectTasks = ({ projectId, setProject }) => {
+const ProjectTasks = ({ projectId, setProject, refreshKey }) => {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState([]);
   const [filters, setFilters] = useState({ status: "", type: "", priority: "", assignee: "" });
@@ -39,7 +39,7 @@ const ProjectTasks = ({ projectId, setProject }) => {
     };
 
     fetchTasks();
-  }, [projectId]);
+  }, [projectId, refreshKey]);
 
   const assigneeList = useMemo(
     () => Array.from(new Set(tasks.map(t => t.assigneeName).filter(Boolean))),

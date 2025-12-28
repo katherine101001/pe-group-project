@@ -4,7 +4,7 @@ import { ChevronRightIcon, SettingsIcon, KanbanIcon, ChartColumnIcon, CalendarIc
 import { useSelector } from 'react-redux';
 import { getAllProjects } from "../services/Project/ProjectAPI";
 
-const ProjectSidebar = ({ searchKeyword }) => {
+const ProjectSidebar = ({ searchKeyword, refreshKey }) => {
     const location = useLocation();
     const [expandedProjects, setExpandedProjects] = useState(new Set());
     const [projects, setProjects] = useState([]);
@@ -46,7 +46,7 @@ const ProjectSidebar = ({ searchKeyword }) => {
         };
 
         fetchProjects();
-    }, [userId, role]);
+    }, [userId, role, refreshKey]);
 
     const visibleProjects = useMemo(() => {
         if (!role || !userId) return [];
