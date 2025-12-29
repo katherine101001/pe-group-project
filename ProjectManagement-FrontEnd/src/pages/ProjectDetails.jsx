@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useOutletContext } from "react-router-dom";
+
 import {
   ArrowLeftIcon,
   PlusIcon,
@@ -24,6 +25,8 @@ export default function ProjectDetail() {
 
   const { role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const { handleRefresh } = useOutletContext();
 
   const [project, setProject] = useState(null);
   const [showCreateTask, setShowCreateTask] = useState(false);
@@ -59,6 +62,7 @@ export default function ProjectDetail() {
   }, [tab]);
 
   const handleTaskCreated = () => {
+    handleRefresh();
     setRefreshKey(prev => prev + 1);
     setShowCreateTask(false);
   };
