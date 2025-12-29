@@ -84,6 +84,7 @@ export default function ProjectDetail() {
     try {
       await fetch(`http://localhost:5272/api/projects/${id}/archive`, { method: "POST" });
       setProject({ ...project, isArchived: true });
+      handleRefresh();
     } catch (err) {
       console.error(err);
       alert(err.message || "Failed to archive project");
@@ -95,6 +96,7 @@ export default function ProjectDetail() {
     try {
       await fetch(`http://localhost:5272/api/projects/${id}/unarchive`, { method: "POST" });
       setProject({ ...project, isArchived: false });
+      handleRefresh();
     } catch (err) {
       console.error(err);
       alert(err.message || "Failed to unarchive project");

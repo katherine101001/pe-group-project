@@ -24,6 +24,7 @@ const Layout = () => {
                 setIsSidebarOpen={setIsSidebarOpen}
                 searchKeyword={searchKeyword} // 将搜索关键字传给 Sidebar
                 refreshKey={refreshKey}
+                setRefreshKey={setRefreshKey}
             />
             <div className="flex-1 flex flex-col h-screen">
                 <Navbar
