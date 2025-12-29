@@ -229,7 +229,7 @@ export default function ProjectSettings({ project }) {
             <div className="space-y-6">
                 <div className={cardClasses}>
                     <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-300 mb-2">Team Lead</h2>
-                    <select
+                    {/* <select
                         value={teamLeadId}
                         onChange={e => setTeamLeadId(e.target.value)}
                         className={inputClasses}
@@ -246,7 +246,35 @@ export default function ProjectSettings({ project }) {
                                 {l.name} ({l.email})
                             </option>
                         ))}
-                    </select>
+                    </select> */}
+                    <div className="relative">
+                        <select
+                            className={`${inputClasses} pr-8 appearance-none`}
+                            value={teamLeadId}
+                            onChange={e => setTeamLeadId(e.target.value)}
+                        >
+                            <option value="">Select Team Lead</option>
+                            {availableLeaders.map(l => (
+                                <option key={l.id} value={l.id}>
+                                    {l.name} ({l.email})
+                                </option>
+                            ))}
+                        </select>
+
+                        {/* Custom arrow using Tailwind */}
+                        <div className="pointer-events-none absolute inset-y-0 right-2 flex items-center translate-y-1">
+                            <svg
+                                className="w-4 h-4 text-zinc-500"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </div>
+                    </div>
+
 
                     <div className="flex items-center justify-between mt-6 gap-4">
                         <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-300 mb-4">
