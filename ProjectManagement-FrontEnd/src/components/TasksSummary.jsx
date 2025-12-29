@@ -8,6 +8,7 @@ export default function TasksSummary({ refreshKey }) {
   const { userId, role } = useSelector(state => state.user ?? {});
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedCards, setExpandedCards] = useState({}); // track expanded cards
 
   useEffect(() => {
     if (!userId || !role) return;
@@ -73,6 +74,13 @@ export default function TasksSummary({ refreshKey }) {
     }
   ];
 
+  const toggleExpand = (title) => {
+    setExpandedCards(prev => ({
+      ...prev,
+      [title]: !prev[title],
+    }));
+  };
+
   return (
     <div className="space-y-6">
       {summaryCards.map((card) => (
@@ -97,7 +105,10 @@ export default function TasksSummary({ refreshKey }) {
               </p>
             ) : (
               <div className="space-y-3">
-                {card.items.map((task) => (
+                {(expandedCards[card.title] ? 
+                  (card.title === "All Tasks" ? tasks : card.title === "Overdue" ? overdueTasks : inProgressTasks)
+                  : card.items
+                ).map((task) => (
                   <div key={task.id} className="p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer">
                     <h4 className="text-sm font-medium text-gray-800 dark:text-white truncate">{task.title}</h4>
                     <p className="text-xs text-gray-600 dark:text-zinc-400 capitalize mt-1">
@@ -106,8 +117,12 @@ export default function TasksSummary({ refreshKey }) {
                   </div>
                 ))}
                 {card.count > 3 && (
-                  <button className="flex items-center justify-center w-full text-sm text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-white mt-2">
-                    View {card.count - 3} more <ArrowRight className="w-3 h-3 ml-2" />
+                  <button
+                    onClick={() => toggleExpand(card.title)}
+                    className="flex items-center justify-center w-full text-sm text-gray-500 dark:text-zinc-400 hover:text-gray-800 dark:hover:text-white mt-2"
+                  >
+                    {expandedCards[card.title] ? "Collapse" : `View ${card.count - 3} more`} 
+                    {!expandedCards[card.title] && <ArrowRight className="w-3 h-3 ml-2" />}
                   </button>
                 )}
               </div>
