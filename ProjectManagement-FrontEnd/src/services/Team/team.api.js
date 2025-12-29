@@ -36,3 +36,5 @@ export const getAllUsersWithRole = async () => {
       return [];
     }
   };
+
+  export const deleteUser = (id) => API.delete(`/user/${id}`);
