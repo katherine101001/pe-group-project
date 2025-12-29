@@ -22,17 +22,34 @@ const ProjectOverview = ({ userId, refreshKey }) => {
   };
 
   const [projects, setProjects] = useState([]);
-  // const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // const { role, userId } = useSelector((state) => state.user); // get user info
   const { role } = useSelector((state) => state.user); // get user info
+
+  // const fetchProjects = async () => {
+  //   const data = await getAllProjects();
+
+  //   let visibleProjects = data;
+
+  //   if (role !== "ADMIN") {
+  //     visibleProjects = data.filter(project => {
+  //       const memberIds = project.memberIds || []; // ensure array exists
+  //       return String(project.leaderId) === String(userId) ||
+  //         memberIds.some(id => String(id) === String(userId));
+  //     });
+  //   }
+
+  //   console.log("Visible projects after filtering:", visibleProjects);
+  //   setProjects(visibleProjects);
+  // };
   const fetchProjects = async () => {
     const data = await getAllProjects();
 
-    let visibleProjects = data;
+    // First, exclude archived projects
+    let visibleProjects = data.filter(project => !project.isArchived);
 
+    // Then, apply user-specific filtering if not ADMIN
     if (role !== "ADMIN") {
-      visibleProjects = data.filter(project => {
+      visibleProjects = visibleProjects.filter(project => {
         const memberIds = project.memberIds || []; // ensure array exists
         return String(project.leaderId) === String(userId) ||
           memberIds.some(id => String(id) === String(userId));
@@ -45,20 +62,11 @@ const ProjectOverview = ({ userId, refreshKey }) => {
 
 
 
-  // useEffect(() => {
-  //   if (!role) return; // wait for Redux state
-  //   fetchProjects();
-  // }, [role, userId]);
   useEffect(() => {
     if (!role || !userId) return;
     fetchProjects();
   }, [role, userId, refreshKey]); // ✅ ADD refreshKey
 
-
-  // const handleProjectCreated = () => {
-  //   fetchProjects();
-  //   setIsDialogOpen(false);
-  // };
 
   return (
     <div className="bg-white dark:bg-zinc-950 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-200 rounded-lg overflow-hidden">
@@ -88,11 +96,6 @@ const ProjectOverview = ({ userId, refreshKey }) => {
                 Create your First Project
               </Link>
             )}
-            {/* <CreateProjectDialog
-              isDialogOpen={isDialogOpen}
-              setIsDialogOpen={setIsDialogOpen}
-              onProjectCreated={handleProjectCreated}
-            /> */}
           </div>
         ) : (
           <div className="divide-y divide-zinc-200 dark:divide-zinc-800">

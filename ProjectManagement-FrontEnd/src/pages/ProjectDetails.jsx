@@ -184,9 +184,9 @@ export default function ProjectDetail() {
 
                     try {
                       // 前端示例：后续替换为后端 DELETE 接口
-                      // await fetch(`http://localhost:5272/api/projects/${id}`, { method: "DELETE" });
+                      await fetch(`http://localhost:5272/api/projects/${id}`, { method: "DELETE" });
 
-                      toast.success("Project deleted (frontend only)");
+                      toast.success("Project deleted successfully");
                       navigate("/app/projects"); // 删除后返回列表
                     } catch (err) {
                       console.error(err);
