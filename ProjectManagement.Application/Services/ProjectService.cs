@@ -84,15 +84,52 @@ namespace ProjectManagement.Application.Services
 
 
         // When clicking into the project overview
+        // public async Task<ProjectOverviewDto?> GetProjectByIdAsync(Guid id)
+        // {
+        //     // Fetch project including related tasks and team members
+        //     var project = await _projectRepository.GetByIdAsync(id, includeTasks: true, includeProjectMembers: true);
+
+        //     if (project == null)
+        //         return null;
+
+        //     // Map to ProjectOverviewDto manually (because we need calculated fields)
+        //     var overview = new ProjectOverviewDto
+        //     {
+        //         Id = project.Id,
+        //         Title = project.Title,
+        //         Description = project.Description,
+        //         Status = project.Status,
+        //         IsArchived = project.IsArchived,
+        //         Priority = project.Priority,               // new
+        //         StartDate = project.StartDate,             // new
+        //         EndDate = project.EndDate,                 // new
+        //         TotalTasks = project.ProjectTasks.Count,
+        //         CompletedTasks = project.ProjectTasks.Count(t => t.Status == "COMPLETED"),
+        //         InProgressTasks = project.ProjectTasks.Count(t => t.Status != "COMPLETED"),
+        //         TotalTeamMembers = project.ProjectMembers.Count,
+        //         Progress = project.Progress,               // new
+        //         TeamMemberEmails = project.ProjectMembers
+        //                 .Where(pm => pm.User != null)
+        //                 .Select(pm => pm.User.Email)
+        //                 .ToList(),
+        //         // new
+        //     };
+
+        //     return overview;
+        // }
         public async Task<ProjectOverviewDto?> GetProjectByIdAsync(Guid id)
         {
-            // Fetch project including related tasks and team members
-            var project = await _projectRepository.GetByIdAsync(id, includeTasks: true, includeProjectMembers: true);
+            // Fetch project including tasks, members, and leader
+            var project = await _projectRepository.GetByIdAsync(
+                id,
+                includeTasks: true,
+                includeProjectMembers: true,
+                includeLeader: true
+            );
 
             if (project == null)
                 return null;
 
-            // Map to ProjectOverviewDto manually (because we need calculated fields)
             var overview = new ProjectOverviewDto
             {
                 Id = project.Id,
@@ -100,23 +137,25 @@ namespace ProjectManagement.Application.Services
                 Description = project.Description,
                 Status = project.Status,
                 IsArchived = project.IsArchived,
-                Priority = project.Priority,               // new
-                StartDate = project.StartDate,             // new
-                EndDate = project.EndDate,                 // new
+                Priority = project.Priority,
+                StartDate = project.StartDate,
+                EndDate = project.EndDate,
                 TotalTasks = project.ProjectTasks.Count,
                 CompletedTasks = project.ProjectTasks.Count(t => t.Status == "COMPLETED"),
                 InProgressTasks = project.ProjectTasks.Count(t => t.Status != "COMPLETED"),
                 TotalTeamMembers = project.ProjectMembers.Count,
-                Progress = project.Progress,               // new
+                Progress = project.Progress,
                 TeamMemberEmails = project.ProjectMembers
-                        .Where(pm => pm.User != null)
-                        .Select(pm => pm.User.Email)
-                        .ToList(),
-                // new
+                    .Where(pm => pm.User != null && pm.User.Id != project.Leader?.Id) // exclude leader
+                    .Select(pm => pm.User.Email)
+                    .ToList(),
+
+                TeamLeadEmail = project.Leader?.Email // <-- leader email
             };
 
             return overview;
         }
+
 
 
         // To display ALL Projects when clicking at the project button at side bar
@@ -146,64 +185,64 @@ namespace ProjectManagement.Application.Services
 
         // Update project with nullable DTO fields
         // Update project with nullable DTO fields
-public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
-{
-    // Fetch project with members
-    var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true);
-    if (project == null)
-        throw new NotFoundException("Project not found");
-
-    // --- Update basic fields ---
-    if (dto.Title != null) project.Title = dto.Title;
-    if (dto.Description != null) project.Description = dto.Description;
-    if (dto.Status != null) project.Status = dto.Status;
-    if (dto.Priority != null) project.Priority = dto.Priority;
-    if (dto.StartDate.HasValue) project.StartDate = dto.StartDate;
-    if (dto.EndDate.HasValue) project.EndDate = dto.EndDate;
-    project.Progress = dto.Progress;
-
-    // --- Update archive status only if provided ---
-    if (dto.IsArchived.HasValue)
-    {
-        project.IsArchived = dto.IsArchived.Value;
-    }
-
-    // --- Update team lead only if provided ---
-    if (dto.TeamLeadId.HasValue)
-    {
-        var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
-        if (lead == null)
-            throw new NotFoundException("Team lead not found");
-
-        project.Leader = lead;
-        project.LeaderId = lead.Id;
-    }
-
-    // --- Add new team members only ---
-    if (dto.TeamMemberIds != null)
-    {
-        var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
-
-        foreach (var memberId in dto.TeamMemberIds)
+        public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
         {
-            if (!existingMemberIds.Contains(memberId))
+            // Fetch project with members
+            var project = await _projectRepository.GetByIdAsync(id, includeProjectMembers: true);
+            if (project == null)
+                throw new NotFoundException("Project not found");
+
+            // --- Update basic fields ---
+            if (dto.Title != null) project.Title = dto.Title;
+            if (dto.Description != null) project.Description = dto.Description;
+            if (dto.Status != null) project.Status = dto.Status;
+            if (dto.Priority != null) project.Priority = dto.Priority;
+            if (dto.StartDate.HasValue) project.StartDate = dto.StartDate;
+            if (dto.EndDate.HasValue) project.EndDate = dto.EndDate;
+            project.Progress = dto.Progress;
+
+            // --- Update archive status only if provided ---
+            if (dto.IsArchived.HasValue)
             {
-                var user = await _userRepository.GetByIdAsync(memberId);
-                if (user != null)
+                project.IsArchived = dto.IsArchived.Value;
+            }
+
+            // --- Update team lead only if provided ---
+            if (dto.TeamLeadId.HasValue)
+            {
+                var lead = await _userRepository.GetByIdAsync(dto.TeamLeadId.Value);
+                if (lead == null)
+                    throw new NotFoundException("Team lead not found");
+
+                project.Leader = lead;
+                project.LeaderId = lead.Id;
+            }
+
+            // --- Add new team members only ---
+            if (dto.TeamMemberIds != null)
+            {
+                var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
+
+                foreach (var memberId in dto.TeamMemberIds)
                 {
-                    project.ProjectMembers.Add(new ProjectMember
+                    if (!existingMemberIds.Contains(memberId))
                     {
-                        ProjectId = project.Id,
-                        UserId = user.Id
-                    });
+                        var user = await _userRepository.GetByIdAsync(memberId);
+                        if (user != null)
+                        {
+                            project.ProjectMembers.Add(new ProjectMember
+                            {
+                                ProjectId = project.Id,
+                                UserId = user.Id
+                            });
+                        }
+                    }
                 }
             }
-        }
-    }
 
-    // Save changes to DB
-    await _projectRepository.UpdateAsync(project);
-}
+            // Save changes to DB
+            await _projectRepository.UpdateAsync(project);
+        }
 
 
 
@@ -225,29 +264,29 @@ public async Task UpdateProjectAsync(Guid id, UpdateProjectDto dto)
         }
 
         public async Task<ProjectDto> ArchiveProjectAsync(Guid id)
-{
-    var project = await _projectRepository.GetByIdAsync(id);
-    if (project == null)
-        throw new NotFoundException("Project not found");
+        {
+            var project = await _projectRepository.GetByIdAsync(id);
+            if (project == null)
+                throw new NotFoundException("Project not found");
 
-    project.IsArchived = true;
-    await _projectRepository.UpdateAsync(project);
+            project.IsArchived = true;
+            await _projectRepository.UpdateAsync(project);
 
-    return _mapper.Map<ProjectDto>(project);
-}
+            return _mapper.Map<ProjectDto>(project);
+        }
 
 
-       public async Task<ProjectDto> UnarchiveProjectAsync(Guid id)
-{
-    var project = await _projectRepository.GetByIdAsync(id);
-    if (project == null)
-        throw new NotFoundException("Project not found");
+        public async Task<ProjectDto> UnarchiveProjectAsync(Guid id)
+        {
+            var project = await _projectRepository.GetByIdAsync(id);
+            if (project == null)
+                throw new NotFoundException("Project not found");
 
-    project.IsArchived = false;
-    await _projectRepository.UpdateAsync(project);
+            project.IsArchived = false;
+            await _projectRepository.UpdateAsync(project);
 
-    return _mapper.Map<ProjectDto>(project);
-}
+            return _mapper.Map<ProjectDto>(project);
+        }
 
 
     }

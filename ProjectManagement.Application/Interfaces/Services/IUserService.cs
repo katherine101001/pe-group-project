@@ -24,5 +24,6 @@ namespace ProjectManagement.Application.Interfaces.Services
         Task<User?> LoginAsync(LoginDto loginDto);
 
         Task<List<AvailableUserDto>> GetAvailableMembersAsync(Guid projectId);
+        Task<List<CompleteUserDto>> GetAllCompleteUsersAsync();
     }
 }

@@ -155,6 +155,19 @@ namespace ProjectManagement.Application.Services
             }).ToList();
         }
 
+        public async Task<List<CompleteUserDto>> GetAllCompleteUsersAsync()
+        {
+            var users = await _userRepository.GetAllAsyncRole();
+
+            return users.Select(u => new CompleteUserDto
+            {
+                Id = u.Id,
+                Name = u.Name ?? "Unknown",
+                Email = u.Email ?? string.Empty,
+                Role = u.Role != null ? u.Role.Name : "Unknown"
+            }).ToList();
+        }
+
 
         public async Task<List<DisplayTeamMemberDto>> SearchUsersAsync(string keyword)
         {
@@ -188,24 +201,24 @@ namespace ProjectManagement.Application.Services
 
 
         public async Task<User?> LoginAsync(LoginDto dto)
-{
-    if (dto == null) return null;
+        {
+            if (dto == null) return null;
 
-    var user = await _userRepository.GetByEmailAsyncLogin(dto.Email);
-    if (user == null) return null;
+            var user = await _userRepository.GetByEmailAsyncLogin(dto.Email);
+            if (user == null) return null;
 
-    if (user.Password != dto.Password) return null;
+            if (user.Password != dto.Password) return null;
 
-    // 🔒 如果未激活，直接返回 null
-    if (!user.IsActivated)
-        throw new Exception("Account not activated. Please complete registration.");
+            // 🔒 如果未激活，直接返回 null
+            if (!user.IsActivated)
+                throw new Exception("Account not activated. Please complete registration.");
 
-    if (user.Role == null) return null;
-    if (!string.Equals(user.Role.Name, dto.Role, StringComparison.OrdinalIgnoreCase))
-        return null;
+            if (user.Role == null) return null;
+            if (!string.Equals(user.Role.Name, dto.Role, StringComparison.OrdinalIgnoreCase))
+                return null;
 
-    return user;
-}
+            return user;
+        }
 
 
 
@@ -224,36 +237,36 @@ namespace ProjectManagement.Application.Services
 
 
 
-public async Task<UserDto> RegisterAsync(RegisterDto dto)
-{
-    // 1. 查找邀请用户
-    var user = await _userRepository.GetByEmailAsync(dto.Email);
-    if (user == null)
-        throw new Exception("Invalid invitation email.");
+        public async Task<UserDto> RegisterAsync(RegisterDto dto)
+        {
+            // 1. 查找邀请用户
+            var user = await _userRepository.GetByEmailAsync(dto.Email);
+            if (user == null)
+                throw new Exception("Invalid invitation email.");
 
-    // 2. 检查是否已经激活
-    if (user.IsActivated)
-        throw new Exception("User already activated.");
+            // 2. 检查是否已经激活
+            if (user.IsActivated)
+                throw new Exception("User already activated.");
 
-    // 3. 验证 invitation 密码
-    if (user.Password != dto.Password)
-        throw new Exception("Invalid invitation password.");
+            // 3. 验证 invitation 密码
+            if (user.Password != dto.Password)
+                throw new Exception("Invalid invitation password.");
 
-    // 4. 验证新密码确认
-    if (dto.NewPassword != dto.ConfirmPassword)
-        throw new Exception("New password and confirm password do not match.");
+            // 4. 验证新密码确认
+            if (dto.NewPassword != dto.ConfirmPassword)
+                throw new Exception("New password and confirm password do not match.");
 
-    // 5. 更新姓名和密码，同时标记激活
-    user.Name = dto.Name;
-    user.Password = dto.NewPassword;
-    user.IsActivated = true;
-    user.UpdatedAt = DateTime.UtcNow;
+            // 5. 更新姓名和密码，同时标记激活
+            user.Name = dto.Name;
+            user.Password = dto.NewPassword;
+            user.IsActivated = true;
+            user.UpdatedAt = DateTime.UtcNow;
 
-    // 6. 保存更新
-    await _userRepository.UpdateAsync(user);
+            // 6. 保存更新
+            await _userRepository.UpdateAsync(user);
 
-    return _mapper.Map<UserDto>(user);
-}
+            return _mapper.Map<UserDto>(user);
+        }
 
 
 

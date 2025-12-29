@@ -22,6 +22,13 @@ public class UserController : ControllerBase
         return Ok(users);
     }
 
+    [HttpGet("complete")]
+    public async Task<IActionResult> GetAllCompleteUsers()
+    {
+        var users = await _userService.GetAllCompleteUsersAsync();
+        return Ok(users);
+    }
+
     // GET: api/user
     [HttpGet]
     public async Task<IActionResult> GetAllUsers()
@@ -39,25 +46,25 @@ public class UserController : ControllerBase
         return Ok(user);
     }
 
-// POST: api/user/register
-[HttpPost("register")]
-public async Task<IActionResult> Register([FromBody] RegisterDto dto)
-{
-    try
+    // POST: api/user/register
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        // 即使 dto.Role 是 null，也不会报错误
-        var userDto = await _userService.RegisterAsync(dto);
-        return Ok(new
+        try
         {
-            Message = "Registration successful",
-            User = userDto
-        });
+            // 即使 dto.Role 是 null，也不会报错误
+            var userDto = await _userService.RegisterAsync(dto);
+            return Ok(new
+            {
+                Message = "Registration successful",
+                User = userDto
+            });
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(new { Message = ex.Message });
+        }
     }
-    catch (Exception ex)
-    {
-        return BadRequest(new { Message = ex.Message });
-    }
-}
 
 
 

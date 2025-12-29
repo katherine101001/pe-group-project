@@ -17,5 +17,6 @@ namespace ProjectManagement.Application.DTOs.Projects
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public List<string> TeamMemberEmails { get; set; } = new();
+        public string TeamLeadEmail { get; set; } = string.Empty;
     }
 }

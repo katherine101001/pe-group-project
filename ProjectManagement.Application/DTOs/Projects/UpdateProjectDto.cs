@@ -9,10 +9,10 @@ namespace ProjectManagement.Application.DTOs.Projects
         public int Progress { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public List<Guid> TeamMemberIds { get; set; } = new(); // user emails
+        public List<Guid> TeamMemberIds { get; set; } = new(); // user IDs
         public Guid? TeamLeadId { get; set; }               // user ID
-        public bool? IsArchived { get; set; } 
-    
+        public bool? IsArchived { get; set; }
+
     }
 
 }

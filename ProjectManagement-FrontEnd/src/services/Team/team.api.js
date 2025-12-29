@@ -9,30 +9,32 @@ export const registerUser = (dto) => API.post("/User/invite", dto);
 
 export const getAllUsers = () => API.get("/user");
 
-export const getAllUsersWithRole = async () => {
-    try {
-      const [allUsersRes, teamRes] = await Promise.all([
-        API.get("/user"),
-        API.get("/user/team")
-      ]);
-  
-      const allUsers = allUsersRes.data; 
-      const teamUsers = teamRes.data;    
-  
+export const getAllUsersComplete = () => API.get("/user/complete");
 
-      const merged = allUsers.map(user => {
-        const teamInfo = teamUsers.find(t => t.email === user.email);
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: teamInfo?.role || "Member" 
-        };
-      });
-  
-      return merged;
-    } catch (err) {
-      console.error("Failed to fetch users with role", err);
-      return [];
-    }
-  };
+export const getAllUsersWithRole = async () => {
+  try {
+    const [allUsersRes, teamRes] = await Promise.all([
+      API.get("/user"),
+      API.get("/user/team")
+    ]);
+
+    const allUsers = allUsersRes.data;
+    const teamUsers = teamRes.data;
+
+
+    const merged = allUsers.map(user => {
+      const teamInfo = teamUsers.find(t => t.email === user.email);
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: teamInfo?.role || "Member"
+      };
+    });
+
+    return merged;
+  } catch (err) {
+    console.error("Failed to fetch users with role", err);
+    return [];
+  }
+};

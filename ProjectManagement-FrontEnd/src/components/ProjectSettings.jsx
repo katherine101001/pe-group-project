@@ -1,8 +1,8 @@
-import { format } from "date-fns";
-import { Plus, Save } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { Plus, Save, X } from "lucide-react";
+import { format } from "date-fns";
 import AddProjectMember from "./AddProjectMember";
+import { getAllUsersComplete } from "../services/Team/team.api";
 import { updateProject } from "../services/Project/ProjectAPI";
 
 export default function ProjectSettings({ project }) {
@@ -16,13 +16,18 @@ export default function ProjectSettings({ project }) {
         progress: 0,
     });
 
+    const [allUsersMap, setAllUsersMap] = useState({});
+    const [teamLeadId, setTeamLeadId] = useState("");
+    const [teamMembers, setTeamMembers] = useState([]);
+    const [availableLeaders, setAvailableLeaders] = useState([]);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const { role, userId } = useSelector((state) => state.user);
 
-    const [selectedMemberIds, setSelectedMemberIds] = useState([]);
-    const [selectedTeamLeadId, setSelectedTeamLeadId] = useState(null);
+    // Confirmation dialog state
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const [memberToRemove, setMemberToRemove] = useState(null);
 
+    // Initialize project form and users
     useEffect(() => {
         if (!project) return;
 
@@ -36,34 +41,71 @@ export default function ProjectSettings({ project }) {
             progress: project.progress || 0,
         });
 
-        // Use emails as IDs
-        setSelectedMemberIds(project.teamMemberEmails || []);
+        const fetchUsers = async () => {
+            try {
+                const response = await getAllUsersComplete(); // Axios response
+                const users = response.data;
+
+                const map = {};
+                users.forEach(u => (map[u.id] = u));
+                setAllUsersMap(map);
+
+                // Map leader
+                const lead = users.find(u => u.email === project.teamLeadEmail);
+                setTeamLeadId(lead?.id || "");
+
+                // Map members
+                const members = users
+                    .filter(u => project.teamMemberEmails.includes(u.email))
+                    .map(u => u.id);
+                setTeamMembers(members);
+
+                // Available leaders
+                setAvailableLeaders(users.filter(u => u.role === "Leader" && u.email !== project.teamLeadEmail));
+            } catch (err) {
+                console.error("Failed to fetch users:", err);
+            }
+        };
+
+        fetchUsers();
     }, [project]);
 
-    const handleSubmit = async (e) => {
+    // Remove member with confirmation
+    const handleRemoveMember = (id) => {
+        setMemberToRemove(id);
+        setIsConfirmOpen(true);
+    };
+
+    const confirmRemoveMember = () => {
+        setTeamMembers(teamMembers.filter(m => m !== memberToRemove));
+        if (teamLeadId === memberToRemove) setTeamLeadId("");
+        setMemberToRemove(null);
+        setIsConfirmOpen(false);
+    };
+
+    const handleSubmit = async e => {
         e.preventDefault();
         if (!project) return;
 
         setIsSubmitting(true);
         try {
             const payload = {
-                title: formData.name || null,
-                description: formData.description || null,
+                title: formData.name,
+                description: formData.description,
                 status: formData.status,
                 priority: formData.priority,
                 startDate: formData.start_date ? new Date(formData.start_date).toISOString() : null,
                 endDate: formData.end_date ? new Date(formData.end_date).toISOString() : null,
                 progress: formData.progress,
-                teamMemberIds: selectedMemberIds,
-                teamLeadId: selectedTeamLeadId,
+                teamLeadId: teamLeadId || null,
+                teamMemberIds: teamMembers,
             };
 
             console.log("PUT payload:", payload);
             await updateProject(project.id, payload);
-
             alert("Project updated successfully!");
-        } catch (error) {
-            console.error("Failed to update project:", error);
+        } catch (err) {
+            console.error("Failed to update project:", err);
             alert("Failed to update project.");
         } finally {
             setIsSubmitting(false);
@@ -71,8 +113,10 @@ export default function ProjectSettings({ project }) {
     };
 
     const inputClasses = "w-full px-3 py-2 rounded mt-2 border text-sm dark:bg-zinc-900 border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-300";
-    const cardClasses = "rounded-lg border p-6 not-dark:bg-white dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border-zinc-300 dark:border-zinc-800";
+    const cardClasses = "rounded-lg border p-6 dark:bg-gradient-to-br dark:from-zinc-800/70 dark:to-zinc-900/50 border-zinc-300 dark:border-zinc-800";
     const labelClasses = "text-sm text-zinc-600 dark:text-zinc-400";
+
+    if (!project || Object.keys(allUsersMap).length === 0) return <div>Loading...</div>;
 
     return (
         <div className="grid lg:grid-cols-2 gap-8">
@@ -80,12 +124,12 @@ export default function ProjectSettings({ project }) {
             <div className={cardClasses}>
                 <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-300 mb-4">Project Details</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
-                    {/* Name */}
+                    {/* Project Name */}
                     <div className="space-y-2">
                         <label className={labelClasses}>Project Name</label>
                         <input
                             value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            onChange={e => setFormData({ ...formData, name: e.target.value })}
                             className={inputClasses}
                             required
                         />
@@ -96,7 +140,7 @@ export default function ProjectSettings({ project }) {
                         <label className={labelClasses}>Description</label>
                         <textarea
                             value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                            onChange={e => setFormData({ ...formData, description: e.target.value })}
                             className={`${inputClasses} h-24`}
                         />
                     </div>
@@ -107,7 +151,7 @@ export default function ProjectSettings({ project }) {
                             <label className={labelClasses}>Status</label>
                             <select
                                 value={formData.status}
-                                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                onChange={e => setFormData({ ...formData, status: e.target.value })}
                                 className={inputClasses}
                             >
                                 <option value="PLANNING">Planning</option>
@@ -121,7 +165,7 @@ export default function ProjectSettings({ project }) {
                             <label className={labelClasses}>Priority</label>
                             <select
                                 value={formData.priority}
-                                onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
+                                onChange={e => setFormData({ ...formData, priority: e.target.value })}
                                 className={inputClasses}
                             >
                                 <option value="LOW">Low</option>
@@ -132,13 +176,15 @@ export default function ProjectSettings({ project }) {
                     </div>
 
                     {/* Timeline */}
-                    <div className="space-y-4 grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <label className={labelClasses}>Start Date</label>
                             <input
                                 type="date"
                                 value={formData.start_date ? format(new Date(formData.start_date), "yyyy-MM-dd") : ""}
-                                onChange={(e) => setFormData({ ...formData, start_date: e.target.value ? new Date(e.target.value) : null })}
+                                onChange={e =>
+                                    setFormData({ ...formData, start_date: e.target.value ? new Date(e.target.value) : null })
+                                }
                                 className={inputClasses}
                             />
                         </div>
@@ -147,7 +193,9 @@ export default function ProjectSettings({ project }) {
                             <input
                                 type="date"
                                 value={formData.end_date ? format(new Date(formData.end_date), "yyyy-MM-dd") : ""}
-                                onChange={(e) => setFormData({ ...formData, end_date: e.target.value ? new Date(e.target.value) : null })}
+                                onChange={e =>
+                                    setFormData({ ...formData, end_date: e.target.value ? new Date(e.target.value) : null })
+                                }
                                 className={inputClasses}
                             />
                         </div>
@@ -162,12 +210,11 @@ export default function ProjectSettings({ project }) {
                             max="100"
                             step="5"
                             value={formData.progress}
-                            onChange={(e) => setFormData({ ...formData, progress: Number(e.target.value) })}
+                            onChange={e => setFormData({ ...formData, progress: Number(e.target.value) })}
                             className="w-full accent-blue-500 dark:accent-blue-400"
                         />
                     </div>
 
-                    {/* Save Button */}
                     <button
                         type="submit"
                         disabled={isSubmitting}
@@ -178,12 +225,32 @@ export default function ProjectSettings({ project }) {
                 </form>
             </div>
 
-            {/* Team Members */}
+            {/* Team Lead & Members */}
             <div className="space-y-6">
                 <div className={cardClasses}>
-                    <div className="flex items-center justify-between gap-4">
+                    <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-300 mb-2">Team Lead</h2>
+                    <select
+                        value={teamLeadId}
+                        onChange={e => setTeamLeadId(e.target.value)}
+                        className={inputClasses}
+                        required
+                    >
+                        <option value="">Select Team Lead</option>
+                        {teamLeadId && allUsersMap[teamLeadId] && (
+                            <option value={teamLeadId}>
+                                {allUsersMap[teamLeadId].name} ({allUsersMap[teamLeadId].email})
+                            </option>
+                        )}
+                        {availableLeaders.map(l => (
+                            <option key={l.id} value={l.id}>
+                                {l.name} ({l.email})
+                            </option>
+                        ))}
+                    </select>
+
+                    <div className="flex items-center justify-between mt-6 gap-4">
                         <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-300 mb-4">
-                            Team Members <span className="text-sm text-zinc-600 dark:text-zinc-400">({selectedMemberIds.length})</span>
+                            Team Members <span className="text-sm text-zinc-600 dark:text-zinc-400">({teamMembers.length})</span>
                         </h2>
                         <button
                             type="button"
@@ -192,25 +259,65 @@ export default function ProjectSettings({ project }) {
                         >
                             <Plus className="size-4 text-zinc-900 dark:text-zinc-300" />
                         </button>
+
                         <AddProjectMember
                             isDialogOpen={isDialogOpen}
                             setIsDialogOpen={setIsDialogOpen}
                             project={project}
-                            selectedMemberIds={selectedMemberIds}
-                            setSelectedMemberIds={setSelectedMemberIds}
+                            selectedMemberIds={teamMembers}
+                            setSelectedMemberIds={setTeamMembers}
                         />
                     </div>
 
-                    {/* Member List */}
                     <div className="space-y-2 mt-2 max-h-32 overflow-y-auto">
-                        {selectedMemberIds.map(email => (
-                            <div key={email} className="flex items-center justify-between px-3 py-2 rounded dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-300">
-                                <span>{email}</span>
-                            </div>
-                        ))}
+                        {teamMembers.map(id => {
+                            const user = allUsersMap[id];
+                            return (
+                                <div key={id} className="flex items-center justify-between px-3 py-2 rounded dark:bg-zinc-800 text-sm text-zinc-900 dark:text-zinc-300">
+                                    <span>{user ? `${user.name} (${user.email})` : id}</span>
+                                    <button onClick={() => handleRemoveMember(id)} className="p-1 rounded hover:bg-zinc-700">
+                                        <X className="w-4 h-4 text-red-500" />
+                                    </button>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
+
+            {/* Confirmation Dialog */}
+            {isConfirmOpen && (
+                <div className="fixed inset-0 bg-black/20 dark:bg-black/50 backdrop-blur flex items-center justify-center z-50">
+                    <div className="bg-white dark:bg-zinc-950 rounded-xl shadow-lg w-full max-w-md p-6 border border-zinc-300 dark:border-zinc-700 text-zinc-900 dark:text-zinc-200">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-lg font-semibold">Remove Member</h3>
+                            <button
+                                onClick={() => setIsConfirmOpen(false)}
+                                className="p-1 rounded hover:bg-zinc-200 dark:hover:bg-zinc-800"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <p className="mb-6 text-sm text-zinc-600 dark:text-zinc-400">
+                            Are you sure you want to remove this member from the project?
+                        </p>
+                        <div className="flex justify-end gap-3">
+                            <button
+                                onClick={() => setIsConfirmOpen(false)}
+                                className="px-4 py-2 rounded border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={confirmRemoveMember}
+                                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
