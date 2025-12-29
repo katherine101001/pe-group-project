@@ -12,6 +12,8 @@ export default function Projects() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [filters, setFilters] = useState({ status: "ALL", priority: "ALL" });
 
+  const [refreshKey, setRefreshKey] = useState(0);
+
   const { role, userId } = useSelector((state) => state.user);
 
   // ===================== 获取项目 =====================
@@ -72,8 +74,10 @@ export default function Projects() {
   // ===================== 创建项目回调 =====================
   const handleProjectCreated = () => {
     fetchProjects();
+    setRefreshKey(prev => prev + 1); // triggers refresh in sidebar
     setIsDialogOpen(false);
   };
+
 
   // ===================== 页面 =====================
   return (
