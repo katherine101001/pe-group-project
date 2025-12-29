@@ -4,6 +4,7 @@ import ProjectCard from "../components/ProjectCard";
 import CreateProjectDialog from "../components/CreateProjectDialog";
 import { getAllProjects } from "../services/Project/ProjectAPI";
 import { useSelector } from "react-redux";
+import { useOutletContext } from "react-router-dom";
 
 export default function Projects() {
   const [projects, setProjects] = useState([]);
@@ -15,6 +16,7 @@ export default function Projects() {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const { role, userId } = useSelector((state) => state.user);
+  const { handleRefresh } = useOutletContext();
 
   // ===================== 获取项目 =====================
   const fetchProjects = async () => {
@@ -74,7 +76,8 @@ export default function Projects() {
   // ===================== 创建项目回调 =====================
   const handleProjectCreated = () => {
     fetchProjects();
-    setRefreshKey(prev => prev + 1); // triggers refresh in sidebar
+    handleRefresh(); 
+    //setRefreshKey(prev => prev + 1); // triggers refresh in sidebar
     setIsDialogOpen(false);
   };
 
