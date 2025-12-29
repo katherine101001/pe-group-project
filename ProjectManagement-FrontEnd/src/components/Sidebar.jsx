@@ -7,7 +7,7 @@ import { FolderOpenIcon, LayoutDashboardIcon, UsersIcon, ArchiveIcon } from 'luc
 import axios from 'axios'
 import { toast } from 'react-hot-toast'
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProject, refreshKey }) => {
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProject, refreshKey, setRefreshKey }) => {
     const { role } = useSelector((state) => state.user ?? {})
 
     const menuItems = [
@@ -40,6 +40,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
                 await axios.post(`/api/projects/${projectId}/archive`)
                 toast.success('Project archived successfully')
             }
+            setRefreshKey(prev => prev + 1)
         } catch (err) {
             toast.error('Failed to toggle archive status')
             console.error(err)
