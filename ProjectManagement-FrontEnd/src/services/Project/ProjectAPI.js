@@ -40,6 +40,36 @@ export const updateProject = async (projectId, payload) => {
   }
 };
 
+export const archiveProject = async (projectId) => {
+  try {
+    const res = await API.post(`/projects/${projectId}/archive`);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to archive project", error);
+    throw error;
+  }
+};
+
+export const unarchiveProject = async (projectId) => {
+  try {
+    const res = await API.post(`/projects/${projectId}/unarchive`);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to unarchive project", error);
+    throw error;
+  }
+};
+
+
+export const deleteProject = async (projectId) => {
+  try {
+    await API.delete(`/projects/${projectId}`);
+  } catch (error) {
+    console.error("Failed to delete project", error);
+    throw error;
+  }
+};
+
 export const getProjectAnalytics = async (projectId) => {
   try {
     const res = await API.get(`/projects/${projectId}/analytics/overview`);
@@ -49,6 +79,7 @@ export const getProjectAnalytics = async (projectId) => {
     return null;
   }
 };
+
 
 export const getProjectUpdateForm = async (id) => {
   try {
@@ -62,11 +93,7 @@ export const getProjectUpdateForm = async (id) => {
 
 export const getAvailableProjectMembers = async (projectId) => {
   try {
-    console.log("Fetching available members for project:", projectId);
-
     const res = await API.get(`/projects/${projectId}/available-members`);
-
-    console.log("Available members response:", res.data);
     return res.data;
   } catch (error) {
     console.error("Failed to fetch available project members", error);

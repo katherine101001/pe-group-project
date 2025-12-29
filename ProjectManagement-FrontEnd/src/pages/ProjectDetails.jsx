@@ -15,16 +15,21 @@ import ProjectSettings from "../components/ProjectSettings";
 import CreateTaskDialog from "../components/CreateTaskDialog";
 import ProjectCalendar from "../components/ProjectCalendar";
 import ProjectTasks from "../components/ProjectTasks";
-import { getProjectById } from "../services/Project/ProjectAPI";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
+import {
+  getProjectById,
+  archiveProject,
+  unarchiveProject,
+  deleteProject
+} from "../services/Project/ProjectAPI";
 
 export default function ProjectDetail() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tab = searchParams.get("tab");
   const id = searchParams.get("id");
 
-  const { role, userId } = useSelector((state) => state.user);
+  const { role } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const { handleRefresh } = useOutletContext();
 
@@ -41,6 +46,9 @@ export default function ProjectDetail() {
     COMPLETED: "bg-blue-200 text-blue-900 dark:bg-blue-500 dark:text-blue-900",
     CANCELLED: "bg-red-200 text-red-900 dark:bg-red-500 dark:text-red-900",
   };
+
+  const isArchived = project?.isArchived || false;
+  const canManageProject = project ? role === "ADMIN" || role === "LEADER" : false;
 
   // Fetch project data
   useEffect(() => {
@@ -61,16 +69,11 @@ export default function ProjectDetail() {
 
   const handleTaskCreated = () => {
     handleRefresh();
-    setRefreshKey(prev => prev + 1);
+    setRefreshKey((prev) => prev + 1);
     setShowCreateTask(false);
   };
 
-  const isArchived = project?.isArchived || false;
-  const canManageProject = project
-    ? role === "ADMIN" || role === "LEADER"
-    : false;
-
-  // Prevent unauthorized access to Settings tab when archived
+  // Prevent access to Settings tab when archived
   useEffect(() => {
     if (activeTab === "settings" && isArchived) {
       setActiveTab("tasks");
@@ -78,28 +81,44 @@ export default function ProjectDetail() {
     }
   }, [activeTab, isArchived, id, setSearchParams]);
 
-  // Archive / Unarchive handlers
+  // Archive
   const handleArchiveProject = async () => {
     if (!window.confirm("Do you want to archive this project?")) return;
     try {
-      await fetch(`http://localhost:5272/api/projects/${id}/archive`, { method: "POST" });
-      setProject({ ...project, isArchived: true });
+      const updatedProject = await archiveProject(id);
+      setProject(updatedProject);
       handleRefresh();
+      toast.success("Project archived");
     } catch (err) {
       console.error(err);
-      alert(err.message || "Failed to archive project");
+      toast.error("Failed to archive project");
     }
   };
 
+  // Unarchive
   const handleUnarchiveProject = async () => {
     if (!window.confirm("Do you want to unarchive this project?")) return;
     try {
-      await fetch(`http://localhost:5272/api/projects/${id}/unarchive`, { method: "POST" });
-      setProject({ ...project, isArchived: false });
+      const updatedProject = await unarchiveProject(id);
+      setProject(updatedProject);
       handleRefresh();
+      toast.success("Project unarchived");
     } catch (err) {
       console.error(err);
-      alert(err.message || "Failed to unarchive project");
+      toast.error("Failed to unarchive project");
+    }
+  };
+
+  // Delete
+  const handleDeleteProject = async () => {
+    if (!window.confirm("Do you want to delete this project?")) return;
+    try {
+      await deleteProject(id);
+      toast.success("Project deleted");
+      navigate("/app/projects");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to delete project");
     }
   };
 
@@ -146,7 +165,6 @@ export default function ProjectDetail() {
 
         {/* Buttons */}
         <div className="flex gap-2">
-          {/* Leader/Admin can add task if not archived */}
           {canManageProject && !isArchived && (
             <button
               onClick={() => setShowCreateTask(true)}
@@ -157,7 +175,6 @@ export default function ProjectDetail() {
             </button>
           )}
 
-          {/* Archive button */}
           {canManageProject && !isArchived && (
             <button
               onClick={handleArchiveProject}
@@ -167,7 +184,6 @@ export default function ProjectDetail() {
             </button>
           )}
 
-          {/* Unarchive + Delete buttons */}
           {canManageProject && isArchived && (
             <>
               <button
@@ -179,20 +195,7 @@ export default function ProjectDetail() {
 
               {role === "ADMIN" && (
                 <button
-                  onClick={async () => {
-                    if (!window.confirm("Do you want to delete this project?")) return;
-
-                    try {
-                      // 前端示例：后续替换为后端 DELETE 接口
-                      await fetch(`http://localhost:5272/api/projects/${id}`, { method: "DELETE" });
-
-                      toast.success("Project deleted");
-                      navigate("/app/projects"); // 删除后返回列表
-                    } catch (err) {
-                      console.error(err);
-                      toast.error("Failed to delete project");
-                    }
-                  }}
+                  onClick={handleDeleteProject}
                   className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-red-700 text-white hover:bg-red-800"
                 >
                   <Trash2 className="size-4" />
