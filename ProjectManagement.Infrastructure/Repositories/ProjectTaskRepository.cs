@@ -113,8 +113,11 @@ namespace ProjectManagement.Infrastructure.Repositories
 
         public async Task<int> GetTotalTasksAsync()
         {
-            return await _context.ProjectTask.CountAsync();
+            return await _context.ProjectTask
+                .Where(t => !t.Project.IsArchived)  // ignore archived projects
+                .CountAsync();
         }
+
 
         public async Task<List<ProjectTask>> SearchAsync(string keyword)
         {
@@ -134,7 +137,7 @@ namespace ProjectManagement.Infrastructure.Repositories
         public async Task<int> GetMyTasksCountAsync(Guid userId)
         {
             return await _context.ProjectTask
-                .Where(t => t.AssignToUserId == userId)
+                .Where(t => t.AssignToUserId == userId && !t.Project.IsArchived)
                 .CountAsync();
         }
 
@@ -143,6 +146,7 @@ namespace ProjectManagement.Infrastructure.Repositories
             return await _context.ProjectTask
                 .Where(t =>
                     t.AssignToUserId == userId &&
+                    !t.Project.IsArchived &&       // ignore archived projects
                     t.DueDate < DateTime.UtcNow &&
                     t.Status != "COMPLETED")
                 .CountAsync();
@@ -152,10 +156,12 @@ namespace ProjectManagement.Infrastructure.Repositories
         {
             return await _context.ProjectTask
                 .Where(t =>
+                    !t.Project.IsArchived &&      // ignore archived projects
                     t.DueDate < DateTime.UtcNow &&
                     t.Status != "COMPLETED")
                 .CountAsync();
         }
+
 
         public async Task<Dictionary<string, int>> GetTaskCountsByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
@@ -206,6 +212,7 @@ namespace ProjectManagement.Infrastructure.Repositories
 
             return await _context.ProjectTask
                 .Where(t =>
+                    !t.Project.IsArchived &&       // exclude archived projects
                     t.DueDate.HasValue &&
                     t.Status != "COMPLETED" &&
                     t.DueDate.Value.Date >= today &&
@@ -220,6 +227,7 @@ namespace ProjectManagement.Infrastructure.Repositories
 
             return await _context.ProjectTask
                 .Where(t =>
+                    !t.Project.IsArchived &&       // exclude archived projects
                     t.AssignToUserId == userId &&
                     t.DueDate.HasValue &&
                     t.Status != "COMPLETED" &&
@@ -227,6 +235,7 @@ namespace ProjectManagement.Infrastructure.Repositories
                     t.DueDate.Value.Date <= next7Days)
                 .CountAsync();
         }
+
 
 
 

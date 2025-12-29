@@ -58,23 +58,70 @@ namespace ProjectManagement.Infrastructure.Repositories
             return await query.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        // ---------- Dashboard / Stats Methods ----------
+        // Admin stats
         public async Task<int> GetTotalProjectsAsync()
         {
-            return await _context.Project.CountAsync();
+            return await _context.Project
+                .Where(p => !p.IsArchived) // exclude archived
+                .CountAsync();
         }
 
         public async Task<int> GetCompletedProjectsAsync()
         {
-            return await _context.Project.CountAsync(p => p.Status == "COMPLETED");
+            return await _context.Project
+                .Where(p => !p.IsArchived && p.Status == "COMPLETED") // exclude archived
+                .CountAsync();
         }
 
         public async Task<int> GetActiveProjectsAsync()
         {
             return await _context.Project
-                .Where(p => p.Status != "COMPLETED" && p.Status != "CANCELLED")
+                .Where(p => !p.IsArchived && p.Status != "COMPLETED" && p.Status != "CANCELLED") // exclude archived
                 .CountAsync();
         }
+
+        // User-specific stats
+        public async Task<int> GetTotalProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => !p.IsArchived && (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId)))
+                .CountAsync();
+        }
+
+        public async Task<int> GetCompletedProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => !p.IsArchived && (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+                            && p.Status == "COMPLETED")
+                .CountAsync();
+        }
+
+        public async Task<int> GetActiveProjectsByUserAsync(Guid userId)
+        {
+            return await _context.Project
+                .Where(p => !p.IsArchived && (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+                            && p.Status != "COMPLETED" && p.Status != "CANCELLED")
+                .CountAsync();
+        }
+
+
+        // ---------- Dashboard / Stats Methods ----------
+        // public async Task<int> GetTotalProjectsAsync()
+        // {
+        //     return await _context.Project.CountAsync();
+        // }
+
+        // public async Task<int> GetCompletedProjectsAsync()
+        // {
+        //     return await _context.Project.CountAsync(p => p.Status == "COMPLETED");
+        // }
+
+        // public async Task<int> GetActiveProjectsAsync()
+        // {
+        //     return await _context.Project
+        //         .Where(p => p.Status != "COMPLETED" && p.Status != "CANCELLED")
+        //         .CountAsync();
+        // }
 
         public async Task<int> CountTeamMembersAsync(Guid projectId)
         {
@@ -108,28 +155,28 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<int> GetTotalProjectsByUserAsync(Guid userId)
-        {
-            return await _context.Project
-                .Where(p => p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
-                .CountAsync();
-        }
+        // public async Task<int> GetTotalProjectsByUserAsync(Guid userId)
+        // {
+        //     return await _context.Project
+        //         .Where(p => p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+        //         .CountAsync();
+        // }
 
-        public async Task<int> GetCompletedProjectsByUserAsync(Guid userId)
-        {
-            return await _context.Project
-                .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
-                            && p.Status == "COMPLETED")
-                .CountAsync();
-        }
+        // public async Task<int> GetCompletedProjectsByUserAsync(Guid userId)
+        // {
+        //     return await _context.Project
+        //         .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+        //                     && p.Status == "COMPLETED")
+        //         .CountAsync();
+        // }
 
-        public async Task<int> GetActiveProjectsByUserAsync(Guid userId)
-        {
-            return await _context.Project
-                .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
-                            && p.Status != "COMPLETED")
-                .CountAsync();
-        }
+        // public async Task<int> GetActiveProjectsByUserAsync(Guid userId)
+        // {
+        //     return await _context.Project
+        //         .Where(p => (p.LeaderId == userId || p.ProjectMembers.Any(m => m.UserId == userId))
+        //                     && p.Status != "COMPLETED")
+        //         .CountAsync();
+        // }
 
         public async Task<Project?> GetByIdWithRelationsAsync(Guid id)
         {
