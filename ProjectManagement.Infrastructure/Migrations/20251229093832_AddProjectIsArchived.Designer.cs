@@ -12,7 +12,7 @@ using ProjectManagement.Infrastructure.Data;
 namespace ProjectManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251225072807_AddProjectIsArchived")]
+    [Migration("20251229093832_AddProjectIsArchived")]
     partial class AddProjectIsArchived
     {
         /// <inheritdoc />

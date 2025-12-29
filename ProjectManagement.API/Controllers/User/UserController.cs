@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Application.DTOs.Users;
 using ProjectManagement.Application.Interfaces.Services;
+using ProjectManagement.Shared.Exceptions;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -102,6 +104,28 @@ public class UserController : ControllerBase
         if (user == null) return NotFound();
 
         return Ok(new { Name = user.Name });
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteUser(Guid id)
+    {
+        try
+        {
+            await _userService.DeleteUserAsync(id);
+            return Ok(new { message = "User deleted successfully" });
+        }
+        catch (InvalidOperationException ex) // 用户在项目或任务中
+        {
+            return BadRequest(new { message = ex.Message });
+        }
+        catch (NotFoundException ex) // 用户不存在
+        {
+            return NotFound(new { message = ex.Message });
+        }
+        catch (Exception ex) // 其他异常
+        {
+            return StatusCode(500, new { message = ex.Message });
+        }
     }
 
 

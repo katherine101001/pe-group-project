@@ -86,15 +86,50 @@ namespace ProjectManagement.Application.Services
             await _userRepository.UpdateAsync(existingUser);
         }
 
-        public async Task DeleteUserAsync(Guid id)
-        {
-            var existingUser = await _userRepository.GetByIdAsync(id);
+        // 计算用户被指派的任务数量
+private async Task<int> GetTotalTasksByUserAsync(Guid userId)
+{
+    // 获取所有项目
+    var projects = await _projectRepository.GetAllAsync();
 
-            if (existingUser == null)
-                throw new NotFoundException("User not found");
+    // 找出用户参与的项目（leader 或成员）
+    var userProjects = projects.Where(p =>
+        p.LeaderId == userId || p.ProjectMembers.Any(pm => pm.UserId == userId)
+    );
 
-            await _userRepository.DeleteAsync(existingUser);
-        }
+    // 累加用户在这些项目里被指派的任务数量
+    int totalTasks = userProjects.Sum(p =>
+        p.ProjectTasks.Count(t => t.AssignToUserId == userId)
+    );
+
+    return totalTasks;
+}
+
+
+        public async Task DeleteUserAsync(Guid userId)
+{
+    // 1️⃣ 检查用户是否参与任何项目
+    var totalProjects = await _projectRepository.GetTotalProjectsByUserAsync(userId);
+
+    // 2️⃣ 检查用户是否有指派的任务
+    var totalTasks = await GetTotalTasksByUserAsync(userId);
+
+    // 3️⃣ 如果有项目或任务，阻止删除
+    if (totalProjects > 0 || totalTasks > 0)
+    {
+        throw new InvalidOperationException(
+            $"Cannot delete user: assigned to {totalProjects} project(s)."
+        );
+    }
+
+    // 4️⃣ 获取用户实体并删除
+    var user = await _userRepository.GetByIdAsync(userId);
+    if (user == null)
+        throw new NotFoundException("User not found.");
+
+    await _userRepository.DeleteAsync(user);
+}
+
 
         // public async Task<UserDto?> AuthenticateAsync(string email, string password)
         // {

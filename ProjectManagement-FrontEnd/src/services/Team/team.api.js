@@ -21,7 +21,6 @@ export const getAllUsersWithRole = async () => {
     const allUsers = allUsersRes.data;
     const teamUsers = teamRes.data;
 
-
     const merged = allUsers.map(user => {
       const teamInfo = teamUsers.find(t => t.email === user.email);
       return {
@@ -38,3 +37,6 @@ export const getAllUsersWithRole = async () => {
     return [];
   }
 };
+
+
+export const deleteUser = (id) => API.delete(`/user/${id}`);
