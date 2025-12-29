@@ -108,7 +108,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
     const { role } = useSelector((state) => state.user ?? {})
 
     const menuItems = [
-        { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon },
+        { name: 'Dashboard', href: '/app', icon: LayoutDashboardIcon, end: true },
         { name: 'Projects', href: '/app/projects', icon: FolderOpenIcon },
         { name: 'Team', href: '/app/team', icon: UsersIcon },
         { name: 'Archive', href: '/app/archive', icon: ArchiveIcon, roles: ['LEADER', 'ADMIN'] },
@@ -157,6 +157,7 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, searchKeyword, currentProjec
                             .map((item) => (
                                 <NavLink
                                     to={item.href}
+                                    end={item.end}
                                     key={item.name}
                                     className={({ isActive }) =>
                                         `flex items-center gap-3 py-2 px-4 text-gray-800 dark:text-zinc-100 cursor-pointer rounded transition-all  
