@@ -4,12 +4,14 @@ import { API } from "../services/api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../features/userSlice";
 import { store } from "../features/store";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState("MEMBER"); // 默认 MEMBER
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -62,6 +64,8 @@ export default function Login() {
       }
 
       setError(msg);
+
+      setLoading(false);
     }
   };
 
@@ -91,16 +95,44 @@ export default function Login() {
           </div>
 
           {/* Password */}
-          <div>
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2.5 border-b border-gray-300 focus:outline-none focus:border-blue-500 bg-transparent placeholder-gray-400 transition-colors"
-              required
-            />
-          </div>
+          <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="
+              w-full
+              px-3
+              py-2.5
+              pr-10
+              border-b
+              border-gray-300
+              focus:outline-none
+              focus:border-blue-500
+              bg-transparent
+              placeholder-gray-400
+              transition-colors
+            "
+            required
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="
+              absolute
+              right-2
+              top-1/2
+              -translate-y-1/2
+              text-gray-400
+              hover:text-gray-600
+            "
+          >
+            {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
+          </button>
+        </div>
+
 
           {/* Role 下拉 */}
           <div>
