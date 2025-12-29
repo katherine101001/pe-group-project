@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, useOutletContext } from "react-router-dom";
-
 import {
   ArrowLeftIcon,
   PlusIcon,
@@ -9,6 +8,7 @@ import {
   CalendarIcon,
   FileStackIcon,
   ZapIcon,
+  Trash2
 } from "lucide-react";
 import ProjectAnalyticsWrapper from "../components/ProjectAnalyticsWrapper";
 import ProjectSettings from "../components/ProjectSettings";
@@ -17,6 +17,7 @@ import ProjectCalendar from "../components/ProjectCalendar";
 import ProjectTasks from "../components/ProjectTasks";
 import { getProjectById } from "../services/Project/ProjectAPI";
 import { useSelector } from "react-redux";
+import { toast } from "react-hot-toast";
 
 export default function ProjectDetail() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,7 +26,6 @@ export default function ProjectDetail() {
 
   const { role, userId } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
   const { handleRefresh } = useOutletContext();
 
   const [project, setProject] = useState(null);
@@ -47,9 +47,7 @@ export default function ProjectDetail() {
     if (!id) return;
     setLoading(true);
     getProjectById(id)
-      .then((data) => {
-        setProject({ ...data, isArchived: Boolean(data.isArchived) });
-      })
+      .then((data) => setProject({ ...data, isArchived: Boolean(data.isArchived) }))
       .catch((err) => {
         console.error("Failed to fetch project:", err);
         setProject(null);
@@ -69,10 +67,10 @@ export default function ProjectDetail() {
 
   const isArchived = project?.isArchived || false;
   const canManageProject = project
-    ? role === "ADMIN" || (role === "LEADER")
+    ? role === "ADMIN" || role === "LEADER"
     : false;
 
-  // Prevent unauthorized access to Settings tab only when archived
+  // Prevent unauthorized access to Settings tab when archived
   useEffect(() => {
     if (activeTab === "settings" && isArchived) {
       setActiveTab("tasks");
@@ -103,9 +101,14 @@ export default function ProjectDetail() {
     }
   };
 
-  if (loading) return <div className="p-6 text-center text-zinc-900 dark:text-zinc-200">Loading project...</div>;
+  if (loading)
+    return (
+      <div className="p-6 text-center text-zinc-900 dark:text-zinc-200">
+        Loading project...
+      </div>
+    );
 
-  if (!project) {
+  if (!project)
     return (
       <div className="p-6 text-center text-zinc-900 dark:text-zinc-200">
         <p className="text-3xl md:text-5xl mt-40 mb-10">Project not found</p>
@@ -117,7 +120,6 @@ export default function ProjectDetail() {
         </button>
       </div>
     );
-  }
 
   return (
     <div className="space-y-5 max-w-6xl mx-auto text-zinc-900 dark:text-white">
@@ -142,7 +144,7 @@ export default function ProjectDetail() {
 
         {/* Buttons */}
         <div className="flex gap-2">
-          {/* Leader or Admin can add task if not archived */}
+          {/* Leader/Admin can add task if not archived */}
           {canManageProject && !isArchived && (
             <button
               onClick={() => setShowCreateTask(true)}
@@ -153,7 +155,7 @@ export default function ProjectDetail() {
             </button>
           )}
 
-          {/* Leader or Admin can archive */}
+          {/* Archive button */}
           {canManageProject && !isArchived && (
             <button
               onClick={handleArchiveProject}
@@ -163,13 +165,39 @@ export default function ProjectDetail() {
             </button>
           )}
 
+          {/* Unarchive + Delete buttons */}
           {canManageProject && isArchived && (
-            <button
-              onClick={handleUnarchiveProject}
-              className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-green-500 text-white hover:bg-green-600"
-            >
-              Unarchive
-            </button>
+            <>
+              <button
+                onClick={handleUnarchiveProject}
+                className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-green-500 text-white hover:bg-green-600"
+              >
+                Unarchive
+              </button>
+
+              {role === "ADMIN" && (
+                <button
+                  onClick={async () => {
+                    if (!window.confirm("Do you want to delete this project?")) return;
+
+                    try {
+                      // 前端示例：后续替换为后端 DELETE 接口
+                      // await fetch(`http://localhost:5272/api/projects/${id}`, { method: "DELETE" });
+
+                      toast.success("Project deleted (frontend only)");
+                      navigate("/app/projects"); // 删除后返回列表
+                    } catch (err) {
+                      console.error(err);
+                      toast.error("Failed to delete project");
+                    }
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 text-sm rounded bg-red-700 text-white hover:bg-red-800"
+                >
+                  <Trash2 className="size-4" />
+                  Delete
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -200,13 +228,12 @@ export default function ProjectDetail() {
           { key: "analytics", label: "Analytics", icon: BarChart3Icon, hide: !canManageProject },
           { key: "settings", label: "Settings", icon: SettingsIcon, hide: isArchived || !canManageProject },
         ]
-          .filter((tab) => !tab.hide)
-          .map((tabItem) => (
+          .filter(tab => !tab.hide)
+          .map(tabItem => (
             <button
               key={tabItem.key}
               onClick={() => { setActiveTab(tabItem.key); setSearchParams({ id, tab: tabItem.key }); }}
-              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                }`}
+              className={`flex items-center gap-2 px-4 py-2 text-sm transition-all ${activeTab === tabItem.key ? "bg-zinc-100 dark:bg-zinc-800/80" : "hover:bg-zinc-50 dark:hover:bg-zinc-700"}`}
             >
               <tabItem.icon className="size-3.5" />
               {tabItem.label}
