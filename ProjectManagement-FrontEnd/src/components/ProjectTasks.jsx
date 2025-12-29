@@ -173,9 +173,11 @@ const ProjectTasks = ({ projectId, setProject, refreshKey }) => {
                   >
                     <td className="pl-2 pr-1">{idx + 1}</td>
                     <td className="px-4 pl-0 py-2">{task.title}</td>
-                    <td className="px-4 py-2 flex items-center gap-2">
-                      {Icon && <Icon className={`size-4 ${color}`} />}
-                      <span className={`uppercase text-xs ${color}`}>{task.type}</span>
+                    <td className="px-4 py-2 align-middle">
+                      <div className="flex items-center gap-2">
+                        {Icon && <Icon className={`size-4 ${color}`} />}
+                        <span className={`uppercase text-xs ${color}`}>{task.type}</span>
+                      </div>
                     </td>
                     <td className="px-4 py-2">
                       <span className={`text-xs px-2 py-1 rounded ${background} ${prioritycolor}`}>
