@@ -219,11 +219,47 @@ namespace ProjectManagement.Application.Services
             }
 
             // --- Add new team members only ---
+            // if (dto.TeamMemberIds != null)
+            // {
+            //     var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
+
+            //     foreach (var memberId in dto.TeamMemberIds)
+            //     {
+            //         if (!existingMemberIds.Contains(memberId))
+            //         {
+            //             var user = await _userRepository.GetByIdAsync(memberId);
+            //             if (user != null)
+            //             {
+            //                 project.ProjectMembers.Add(new ProjectMember
+            //                 {
+            //                     ProjectId = project.Id,
+            //                     UserId = user.Id
+            //                 });
+            //             }
+            //         }
+            //     }
+            // }
+            // --- Sync team members (ADD + REMOVE) ---
             if (dto.TeamMemberIds != null)
             {
-                var existingMemberIds = project.ProjectMembers.Select(pm => pm.UserId).ToHashSet();
+                var newMemberIds = dto.TeamMemberIds.ToHashSet();
 
-                foreach (var memberId in dto.TeamMemberIds)
+                // 1. REMOVE members that are no longer in the DTO
+                var membersToRemove = project.ProjectMembers
+                    .Where(pm => !newMemberIds.Contains(pm.UserId))
+                    .ToList();
+
+                foreach (var member in membersToRemove)
+                {
+                    project.ProjectMembers.Remove(member);
+                }
+
+                // 2. ADD new members that are missing
+                var existingMemberIds = project.ProjectMembers
+                    .Select(pm => pm.UserId)
+                    .ToHashSet();
+
+                foreach (var memberId in newMemberIds)
                 {
                     if (!existingMemberIds.Contains(memberId))
                     {
@@ -239,6 +275,7 @@ namespace ProjectManagement.Application.Services
                     }
                 }
             }
+
 
             // Save changes to DB
             await _projectRepository.UpdateAsync(project);
