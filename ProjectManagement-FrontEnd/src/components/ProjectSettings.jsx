@@ -61,7 +61,7 @@ export default function ProjectSettings({ project }) {
                 setTeamMembers(members);
 
                 // Available leaders
-                setAvailableLeaders(users.filter(u => u.role === "Leader");
+                setAvailableLeaders(users.filter(u => u.role === "Leader"));
             } catch (err) {
                 console.error("Failed to fetch users:", err);
             }
