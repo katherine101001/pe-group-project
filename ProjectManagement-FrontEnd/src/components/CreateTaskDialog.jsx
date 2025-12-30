@@ -21,7 +21,6 @@ export default function CreateTaskDialog({
   const [loadingMembers, setLoadingMembers] = useState(true);
   const [allUsersMap, setAllUsersMap] = useState({});
 
-  // ✅ 新增：项目时间范围（不影响其他逻辑）
   const [projectDateRange, setProjectDateRange] = useState({
     startDate: null,
     endDate: null,
@@ -96,7 +95,6 @@ export default function CreateTaskDialog({
     setIsSubmitting(true);
 
     try {
-      // ✅ 提交前校验 Due Date 是否在项目范围内
       if (
         formData.dueDate &&
         projectDateRange.startDate &&
@@ -144,7 +142,7 @@ export default function CreateTaskDialog({
       });
     } catch (err) {
       console.error("Failed to create task:", err);
-      alert("Failed to create task");
+      alert("Task due date must be within project duration");
     } finally {
       setIsSubmitting(false);
     }
