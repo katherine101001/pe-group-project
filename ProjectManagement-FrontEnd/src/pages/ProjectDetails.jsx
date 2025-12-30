@@ -249,7 +249,7 @@ export default function ProjectDetail() {
       {/* Tab Content */}
       <div className="mt-6">
         <div style={{ display: activeTab === "tasks" ? "block" : "none" }}>
-          <ProjectTasks projectId={id} refreshKey={refreshKey} />
+          <ProjectTasks projectId={id} refreshKey={refreshKey} setProject={setProject} />
         </div>
         <div style={{ display: activeTab === "calendar" ? "block" : "none" }}>
           <ProjectCalendar project={project} />

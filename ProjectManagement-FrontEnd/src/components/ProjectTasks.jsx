@@ -59,36 +59,66 @@ const ProjectTasks = ({ projectId, setProject, refreshKey }) => {
     [tasks, filters]
   );
 
+  // Refresh project info in parent (triggers info card re-render)
+  const refreshProjectInfo = async () => {
+    if (!setProject) return;
+    try {
+      const updatedProject = await getProjectById(projectId);
+      setProject(updatedProject); // triggers parent re-render
+    } catch (err) {
+      console.error("Failed to refresh project info:", err);
+    }
+  };
+
+
   const handleFilterChange = e => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
   };
 
+  // const handleStatusChange = async (taskId, newStatus) => {
+  //   try {
+
+  //     setTasks(prev =>
+  //       prev.map(t => (t.id === taskId ? { ...t, status: newStatus } : t))
+  //     );
+
+  //     await updateTaskStatus(taskId, newStatus);
+
+
+  //     if (setProject) {
+  //       const updatedProject = await getProjectById(projectId);
+  //       setProject(updatedProject);
+  //     }
+
+  //     toast.success("Status updated successfully");
+  //   } catch (error) {
+  //     toast.error("Failed to update status");
+  //     setTasks(prev =>
+  //       prev.map(t =>
+  //         t.id === taskId ? { ...t, status: tasks.find(task => task.id === taskId)?.status } : t
+  //       )
+  //     );
+  //   }
+  // };
+
+  // Handle task status change
   const handleStatusChange = async (taskId, newStatus) => {
     try {
-
-      setTasks(prev =>
-        prev.map(t => (t.id === taskId ? { ...t, status: newStatus } : t))
-      );
+      // Optimistic update
+      setTasks(prev => prev.map(t => t.id === taskId ? { ...t, status: newStatus } : t));
 
       await updateTaskStatus(taskId, newStatus);
 
-
-      if (setProject) {
-        const updatedProject = await getProjectById(projectId);
-        setProject(updatedProject);
-      }
+      // <-- NEW: refresh parent project info
+      await refreshProjectInfo();
 
       toast.success("Status updated successfully");
-    } catch (error) {
+    } catch (err) {
       toast.error("Failed to update status");
-      setTasks(prev =>
-        prev.map(t =>
-          t.id === taskId ? { ...t, status: tasks.find(task => task.id === taskId)?.status } : t
-        )
-      );
     }
   };
+
 
   return (
     <div>
