@@ -71,4 +71,12 @@
     input[type="checkbox"]:checked {
         background-color: #3b82f6;
     }
+
+    select {
+        @apply border rounded px-3 py-2 text-sm dark:bg-zinc-900 dark:text-white;
+    }
+
+    select:disabled {
+        @apply opacity-60 cursor-not-allowed;
+    }
 }
