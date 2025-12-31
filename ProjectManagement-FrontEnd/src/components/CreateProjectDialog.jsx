@@ -192,29 +192,35 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen, onProjectCreated }
 
           {/* Status & Priority */}
           <div className="grid grid-cols-2 gap-4">
-            <select
-              value={formData.status}
-              onChange={(e) =>
-                setFormData({ ...formData, status: e.target.value })
-              }
-              className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
-            >
-              <option value="PLANNING">Planning</option>
-              <option value="ACTIVE">Active</option>
-              <option value="COMPLETED">Completed</option>
-            </select>
+            <div>
+              <label className="text-sm">Status</label>
+              <select
+                value={formData.status}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.value })
+                }
+                className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+              >
+                <option value="PLANNING">Planning</option>
+                <option value="ACTIVE">Active</option>
+                <option value="COMPLETED">Completed</option>
+              </select>
+            </div>
 
-            <select
-              value={formData.priority}
-              onChange={(e) =>
-                setFormData({ ...formData, priority: e.target.value })
-              }
-              className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
-            >
-              <option value="LOW">Low</option>
-              <option value="MEDIUM">Medium</option>
-              <option value="HIGH">High</option>
-            </select>
+            <div>
+              <label className="text-sm">Priority</label>
+              <select
+                value={formData.priority}
+                onChange={(e) =>
+                  setFormData({ ...formData, priority: e.target.value })
+                }
+                className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+              >
+                <option value="LOW">Low</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="HIGH">High</option>
+              </select>
+            </div>
           </div>
 
           {/* Project Lead */}
