@@ -236,15 +236,11 @@ namespace ProjectManagement.Infrastructure.Repositories
                 .CountAsync();
         }
 
-
-
-
-
-
         public async Task<List<ProjectTask>> GetRecentTasksAsync(int limit)
         {
             return await _context.ProjectTask
                 .Include(t => t.AssignToUser)
+                .Include(t => t.Project)
                 .OrderByDescending(t => t.UpdatedAt)
                 .Take(limit)
                 .ToListAsync();
