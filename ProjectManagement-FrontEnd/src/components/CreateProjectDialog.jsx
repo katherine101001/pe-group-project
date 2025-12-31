@@ -195,12 +195,15 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen, onProjectCreated }
             <div>
               <label className="text-sm">Status</label>
               <select
-                value={formData.status}
+                value={formData.status || ""}
                 onChange={(e) =>
                   setFormData({ ...formData, status: e.target.value })
                 }
-                className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
               >
+                <option value="" disabled>
+                  Select Status
+                </option>
                 <option value="PLANNING">Planning</option>
                 <option value="ACTIVE">Active</option>
                 <option value="COMPLETED">Completed</option>
@@ -210,18 +213,22 @@ const CreateProjectDialog = ({ isDialogOpen, setIsDialogOpen, onProjectCreated }
             <div>
               <label className="text-sm">Priority</label>
               <select
-                value={formData.priority}
+                value={formData.priority || ""}
                 onChange={(e) =>
                   setFormData({ ...formData, priority: e.target.value })
                 }
-                className="px-3 py-2 border rounded text-sm dark:bg-zinc-900"
+                className="w-full mt-1 px-3 py-2 border rounded text-sm dark:bg-zinc-900"
               >
+                <option value="" disabled>
+                  Select Priority
+                </option>
                 <option value="LOW">Low</option>
                 <option value="MEDIUM">Medium</option>
                 <option value="HIGH">High</option>
               </select>
             </div>
           </div>
+
 
           {/* Project Lead */}
           <div>
