@@ -1,0 +1,16 @@
+services:
+  backend-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5000:8080"
+
+  frontend-ui:
+    build:
+      context: ./ProjectManagement-FrontEnd
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend-api

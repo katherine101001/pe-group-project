@@ -1,0 +1,18 @@
+# 阶段 1: 使用 .NET 9.0 SDK
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+# 拷贝所有项目文件
+COPY . .
+
+# 还原依赖并发布
+RUN dotnet restore "ProjectManagement.API/ProjectManagement.API.csproj"
+RUN dotnet publish "ProjectManagement.API/ProjectManagement.API.csproj" -c Release -o /app/publish
+
+# 阶段 2: 使用 .NET 9.0 运行时
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
+WORKDIR /app
+COPY --from=build /app/publish .
+
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "ProjectManagement.API.dll"]s
