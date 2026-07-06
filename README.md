@@ -6,12 +6,13 @@
 
 ## 📸 Screenshots
 
-<!-- TODO: Add screenshots here -->
-<!-- Recommended: Dashboard, Project Details, Analytics, Task Board, Dark Mode -->
-
-| Dashboard | Project Analytics | Task Board |
+| Login | Dashboard | Projects |
 |:---:|:---:|:---:|
-| ![Dashboard](screenshots/dashboard.png) | ![Analytics](screenshots/analytics.png) | ![Tasks](screenshots/tasks.png) |
+| ![Login](screenshots/01-login.png) | ![Dashboard](screenshots/02-dashboard.png) | ![Projects](screenshots/04-projects.png) |
+
+| Project Detail | Dark Mode |
+|:---:|:---:|
+| ![Project Detail](screenshots/05-project-detail.png) | ![Dark Mode](screenshots/07-dashboard-dark.png) |
 
 ---
 
